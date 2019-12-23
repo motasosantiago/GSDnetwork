@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<style>
+
+.links line {
+  stroke: #999;
+  stroke-opacity: 0.8;
+  stroke-width: 2px;
+}
+
+.nodes circle {
+  stroke: black;
+  fill: white;
+  stroke-width: 1.5px;
+}
+
+#graph {
+  width: 99vw;
+  height: 99vh;
+}
+
+</style>
+<svg id="graph"></svg>
+<script>
+
+var width = $(window).width();
+var height = $(window).height();
+
+var svg = d3.select("svg")
+    .attr("height", height)
+    .attr("width", width);
+
+var color = d3.scaleOrdinal(d3.schemeCategory20c);
+
+var simulation = d3.forceSimulation()
+    .velocityDecay(0.6)
+    .force("link", d3.forceLink().id(function(d) { return d.id; }))
+    .force("charge", d3.forceManyBody())
+    .force("center", d3.forceCenter(width / 2, height / 2));
+
+var graph = {
+  "nodes": [
+    {
+      "label": "Becoming places: urbanism/architecture/identity/power",
+      "id": "15587233053702399582",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2009-0-01113-9&isbn=9781134117369&format=googlePreviewPdf",
+      "title": "Becoming places: urbanism/architecture/identity/power",
+      "authors": "K Dovey",
+      "year": "2009",
+      "cited_by": 487,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15587233053702399582&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Notes around the Doppler Effect and other Moods of Modernism",
+      "id": "12941369689650326452",
+      "title": "Notes around the Doppler Effect and other Moods of Modernism"
+    },
+    {
+      "label": "Place: an introduction",
+      "id": "16781108293812742613",
+      "url": "https://books.google.com/books?hl=en&lr=&id=sdzhBQAAQBAJ&oi=fnd&pg=PR9&ots=KgW7_AwjpX&sig=jp_CcWbLBpE5LwbKaXdV0qPS_RY",
+      "title": "Place: an introduction",
+      "authors": "T Cresswell",
+      "year": "2014",
+      "cited_by": 5017,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16781108293812742613&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Public places-Urban spaces",
+      "id": "5143919825678837114",
+      "url": "https://www.taylorfrancis.com/books/9780080515427",
+      "title": "Public places-Urban spaces",
+      "authors": "M Carmona, T Heath, T Oc, S Tiesdell",
+      "year": "2012",
+      "cited_by": 2456,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5143919825678837114&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Assemblage and critical urbanism",
+      "id": "9959620456650965713",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/13604813.2011.568715",
+      "title": "Assemblage and critical urbanism",
+      "authors": "C McFarlane",
+      "year": "2011",
+      "cited_by": 586,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9959620456650965713&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Learning the city: knowledge and translocal assemblage",
+      "id": "1164320569137154808",
+      "url": "https://books.google.com/books?hl=en&lr=&id=0E2DJWlRKCUC&oi=fnd&pg=PT10&ots=35cpBogHpK&sig=wXubPQ_hiad80LbiHof1CExn8yI",
+      "title": "Learning the city: knowledge and translocal assemblage",
+      "authors": "C McFarlane",
+      "year": "2011",
+      "cited_by": 523,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1164320569137154808&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The city as assemblage: dwelling and urban space",
+      "id": "3695280036055625213",
+      "url": "https://journals.sagepub.com/doi/abs/10.1068/d4710",
+      "title": "The city as assemblage: dwelling and urban space",
+      "authors": "C McFarlane",
+      "year": "2011",
+      "cited_by": 481,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3695280036055625213&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Understanding cultural geography: places and traces",
+      "id": "1749504508564395839",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2013-0-21357-6&isbn=9781317821397&format=googlePreviewPdf",
+      "title": "Understanding cultural geography: places and traces",
+      "authors": "J Anderson",
+      "year": "2015",
+      "cited_by": 327,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1749504508564395839&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Staging mobilities",
+      "id": "6034538433197244828",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2011-0-08152-X&isbn=9781135089764&format=googlePreviewPdf",
+      "title": "Staging mobilities",
+      "authors": "OB Jensen",
+      "year": "2013",
+      "cited_by": 194,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6034538433197244828&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Street art, public city: Law, crime and the urban imagination",
+      "id": "10680485220079545563",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2011-0-17991-4&isbn=9781135143510&format=googlePreviewPdf",
+      "title": "Street art, public city: Law, crime and the urban imagination",
+      "authors": "A Young",
+      "year": "2013",
+      "cited_by": 183,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10680485220079545563&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Informal urbanism and complex adaptive assemblage",
+      "id": "17195843823492810497",
+      "url": "https://online.liverpooluniversitypress.co.uk/doi/abs/10.3828/idpr.2012.23",
+      "title": "Informal urbanism and complex adaptive assemblage",
+      "authors": "K Dovey",
+      "year": "2012",
+      "cited_by": 157,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17195843823492810497&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "City rules: How regulations affect urban form",
+      "id": "18437113867316911927",
+      "url": "https://books.google.com/books?hl=en&lr=&id=SNjrx3Y69H4C&oi=fnd&pg=PR9&ots=aVUfuhWpeg&sig=CPaQe4W7ujHlYtzOKBCcLlMsxmg",
+      "title": "City rules: How regulations affect urban form",
+      "authors": "E Talen",
+      "year": "2012",
+      "cited_by": 140,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=18437113867316911927&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Mapping controversies in architecture",
+      "id": "11244293858113798874",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2015-0-80784-2&isbn=9781317100935&format=googlePreviewPdf",
+      "title": "Mapping controversies in architecture",
+      "authors": "A Yaneva",
+      "year": "2016",
+      "cited_by": 215,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11244293858113798874&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Waiting for Gaia: Composing the common world through arts and politics",
+      "id": "7734411929509306183",
+      "url": "https://www.taylorfrancis.com/books/e/9781315545721/chapters/10.4324/9781315545721-9",
+      "title": "Waiting for Gaia: Composing the common world through arts and politics",
+      "authors": "B Latour",
+      "year": "2017",
+      "cited_by": 155,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7734411929509306183&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Mundane governance: Ontology and accountability",
+      "id": "3538236727389985683",
+      "url": "https://books.google.com/books?hl=en&lr=&id=5sF7AgAAQBAJ&oi=fnd&pg=PP1&ots=hPDOL0VdRo&sig=hgoIFPvLJQlN7HfH0ehsWy08CWY",
+      "title": "Mundane governance: Ontology and accountability",
+      "authors": "S Woolgar, D Neyland",
+      "year": "2013",
+      "cited_by": 150,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3538236727389985683&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "An anthropology of architecture",
+      "id": "3831639673457127331",
+      "url": "https://books.google.com/books?hl=en&lr=&id=XRzwAAAAQBAJ&oi=fnd&pg=PR7&ots=pHAZFWT_Hc&sig=nDKkYoXAy2K9RQLFCHrbS_SXS_Q",
+      "title": "An anthropology of architecture",
+      "authors": "V Buchli",
+      "year": "2013",
+      "cited_by": 146,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3831639673457127331&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Why map issues? On controversy analysis as a digital method",
+      "id": "2981428655877438499",
+      "url": "https://journals.sagepub.com/doi/abs/10.1177/0162243915574602",
+      "title": "Why map issues? On controversy analysis as a digital method",
+      "authors": "N Marres",
+      "year": "2015",
+      "cited_by": 131,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2981428655877438499&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Low-budget Berlin: Towards an understanding of low-budget urbanity as assemblage",
+      "id": "2933923163944750679",
+      "url": "https://academic.oup.com/cjres/article-abstract/7/1/119/365007",
+      "title": "Low-budget Berlin: Towards an understanding of low-budget urbanity as assemblage",
+      "authors": "A F\u00e4rber",
+      "year": "2014",
+      "cited_by": 45,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2933923163944750679&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Object-oriented publics",
+      "id": "18406641731304936948",
+      "url": "https://dl.acm.org/citation.cfm?id=2858565",
+      "title": "Object-oriented publics",
+      "authors": "T Jenkins, CA Le Dantec, C Disalvo, T Lodato\u2026",
+      "year": "2016",
+      "cited_by": 37,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=18406641731304936948&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Experiments in participation",
+      "id": "11593615735529873550",
+      "url": "https://books.google.com/books?hl=en&lr=&id=4GTUDQAAQBAJ&oi=fnd&pg=PA195&ots=l-d-S3DRzO&sig=2DnLEzsemQHyOYLrDvgpNCDk2QI",
+      "title": "Experiments in participation",
+      "authors": "J Lezaun, N Marres, M Tironi",
+      "year": "2016",
+      "cited_by": 30,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11593615735529873550&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Questioning architectural judgment: the problem of codes in the United States",
+      "id": "938285620772532416",
+      "url": "https://www.taylorfrancis.com/books/9780203796658",
+      "title": "Questioning architectural judgment: the problem of codes in the United States",
+      "authors": "SA Moore, BB Wilson",
+      "year": "2013",
+      "cited_by": 24,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=938285620772532416&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Web-visions as controversy-lenses",
+      "id": "6625024565000359248",
+      "url": "https://www.tandfonline.com/doi/abs/10.1179/0308018812Z.0000000004",
+      "title": "Web-visions as controversy-lenses",
+      "authors": "A Koed Madsen",
+      "year": "2012",
+      "cited_by": 23,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6625024565000359248&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Atmospheres of indagation: disasters and the politics of excessiveness",
+      "id": "1985113819836296545",
+      "url": "https://onlinelibrary.wiley.com/doi/abs/10.1111/1467-954X.12126",
+      "title": "Atmospheres of indagation: disasters and the politics of excessiveness",
+      "authors": "M Tironi",
+      "year": "2014",
+      "cited_by": 21,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1985113819836296545&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Criticality and its discontents",
+      "id": "9923232251753932329",
+      "url": "https://www.academia.edu/download/61062724/Baird__Criticality_and_Its_Discontents__200420191029-14107-f89ovy.pdf",
+      "title": "Criticality and its discontents",
+      "authors": "G Baird",
+      "year": "2004",
+      "cited_by": 111,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9923232251753932329&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Architecture of modern China: a historical critique",
+      "id": "9751142921891906632",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2010-0-30225-5&isbn=9781315881348&format=googlePreviewPdf",
+      "title": "Architecture of modern China: a historical critique",
+      "authors": "J Zhu",
+      "year": "2013",
+      "cited_by": 88,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9751142921891906632&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Occupying Time: Design, time, and the form of interaction",
+      "id": "1918395206732060029",
+      "url": "http://www.diva-portal.org/smash/record.jsf?pid=diva2:836366",
+      "title": "Occupying Time: Design, time, and the form of interaction",
+      "authors": "R Maz\u00e9",
+      "year": "2007",
+      "cited_by": 69,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1918395206732060029&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The architecture of neoliberalism: How contemporary architecture became an instrument of control and compliance",
+      "id": "10881085281107066117",
+      "url": "https://books.google.com/books?hl=en&lr=&id=jp3pDAAAQBAJ&oi=fnd&pg=PR3&ots=Jnuoyhtvfs&sig=aEDW14NhHPsCv-4PjdIU6DW6B3s",
+      "title": "The architecture of neoliberalism: How contemporary architecture became an instrument of control and compliance",
+      "authors": "D Spencer",
+      "year": "2016",
+      "cited_by": 72,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10881085281107066117&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The SAGE handbook of architectural theory",
+      "id": "12647959926434436133",
+      "url": "https://books.google.com/books?hl=en&lr=&id=n354cBry_6EC&oi=fnd&pg=PP1&ots=Pw62qTjBrW&sig=7odlPFNHYiO-Z5OBo2ANNRVeWU4",
+      "title": "The SAGE handbook of architectural theory",
+      "authors": "CG Crysler, S Cairns, H Heynen",
+      "year": "2012",
+      "cited_by": 52,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12647959926434436133&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The Icon Project: Architecture, cities, and capitalist globalization",
+      "id": "11317351899032488949",
+      "url": "https://books.google.com/books?hl=en&lr=&id=Gr_XDQAAQBAJ&oi=fnd&pg=PP1&ots=YRZR8s061D&sig=v9qlWjz7LI7MVF_dc5txxVq16ws",
+      "title": "The Icon Project: Architecture, cities, and capitalist globalization",
+      "authors": "L Sklair",
+      "year": "2017",
+      "cited_by": 65,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11317351899032488949&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Agency in architecture: Reframing criticality in theory and practice",
+      "id": "16308796484612585506",
+      "url": "https://journals.open.tudelft.nl/index.php/footprint/article/view/694",
+      "title": "Agency in architecture: Reframing criticality in theory and practice",
+      "authors": "I Doucet, K Cupers",
+      "year": "2009",
+      "cited_by": 40,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16308796484612585506&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "[CITATION][C]",
+      "id": "17308215253373357512",
+      "title": "[CITATION][C]",
+      "authors": "M Malpass",
+      "year": "2017",
+      "cited_by": 49,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17308215253373357512&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Architecture, crisis and resuscitation: the reproduction of post-Fordism in late-twentieth-centur...",
+      "id": "12271613048123106506",
+      "url": "https://www.taylorfrancis.com/books/9780203831847",
+      "title": "Architecture, crisis and resuscitation: the reproduction of post-Fordism in late-twentieth-centur...",
+      "authors": "T Kaminer",
+      "year": "2011",
+      "cited_by": 34,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12271613048123106506&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Criticality in between China and the West",
+      "id": "267408197746456268",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/13602360500460541",
+      "title": "Criticality in between China and the West",
+      "authors": "J Zhu",
+      "year": "2005",
+      "cited_by": 23,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=267408197746456268&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Building globalization: Transnational architecture production in urban China",
+      "id": "7866691505620219819",
+      "url": "https://books.google.com/books?hl=en&lr=&id=pOUcYH1EMXoC&oi=fnd&pg=PR7&ots=6Sk5BI4OXC&sig=aA5LW8b0meRQ0_otVuRK-n1TVHA",
+      "title": "Building globalization: Transnational architecture production in urban China",
+      "authors": "X Ren",
+      "year": "2011",
+      "cited_by": 130,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7866691505620219819&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The New Deal: a global history",
+      "id": "17975085377502034676",
+      "url": "https://books.google.com/books?hl=en&lr=&id=xXGYDwAAQBAJ&oi=fnd&pg=PP7&ots=JZ6tlgngf9&sig=SmnP__cl9YaKbfZZ7fiea6L1wtw",
+      "title": "The New Deal: a global history",
+      "authors": "KK Patel",
+      "year": "2017",
+      "cited_by": 68,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17975085377502034676&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "International heritage and historic building conservation: Saving the world's past",
+      "id": "10395793415996526806",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2010-0-36864-0&isbn=9781136185915&format=googlePreviewPdf",
+      "title": "International heritage and historic building conservation: Saving the world's past",
+      "authors": "Z Aygen",
+      "year": "2013",
+      "cited_by": 34,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10395793415996526806&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Shaping the city: studies in history, theory and urban design",
+      "id": "6731344658592700998",
+      "url": "https://www.taylorfrancis.com/books/9781315662152",
+      "title": "Shaping the city: studies in history, theory and urban design",
+      "authors": "R El-Khoury, E Robbins",
+      "year": "2015",
+      "cited_by": 27,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6731344658592700998&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Planning Beijing: socialist city, transitional city, and global city",
+      "id": "8132392314413587746",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/02723638.2015.1067409",
+      "title": "Planning Beijing: socialist city, transitional city, and global city",
+      "authors": "C Gu, YD Wei, IG Cook",
+      "year": "2015",
+      "cited_by": 24,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8132392314413587746&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Beyond postcolonialism: New directions for the history of nonwestern architecture",
+      "id": "8703669932622101755",
+      "url": "https://www.sciencedirect.com/science/article/pii/S2095263513000642",
+      "title": "Beyond postcolonialism: New directions for the history of nonwestern architecture",
+      "authors": "K James-Chakraborty",
+      "year": "2014",
+      "cited_by": 17,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8703669932622101755&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Shopping malls and public space in modern China",
+      "id": "16108622419172451832",
+      "url": "https://www.taylorfrancis.com/books/9781315609065",
+      "title": "Shopping malls and public space in modern China",
+      "authors": "N Jewell",
+      "year": "2016",
+      "cited_by": 17,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16108622419172451832&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Beijing: Socialist Chinese capital and new world city",
+      "id": "16185839974974861389",
+      "url": "https://www.taylorfrancis.com/books/e/9780203804247/chapters/10.4324/9780203804247-8",
+      "title": "Beijing: Socialist Chinese capital and new world city",
+      "authors": "G Chaolin, IG Cook",
+      "year": "2012",
+      "cited_by": 13,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16185839974974861389&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "A pragmatic approach to church construction in Northern China at the time of Christian inculturation: The handbook \u201cLe missionnaire constructeur\u201d, 1926",
+      "id": "15582931201237491137",
+      "url": "https://www.sciencedirect.com/science/article/pii/S209526351400017X",
+      "title": "A pragmatic approach to church construction in Northern China at the time of Christian inculturation: The handbook \u201cLe missionnaire constructeur\u201d, 1926",
+      "authors": "T Coomans",
+      "year": "2014",
+      "cited_by": 13,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15582931201237491137&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Form follows libido: Architecture and Richard Neutra in a psychoanalytic culture",
+      "id": "4284349209529361401",
+      "url": "https://books.google.com/books?hl=en&lr=&id=Jp0Qvoc0c64C&oi=fnd&pg=PR6&ots=srhaNja7Rf&sig=GLssUnQIooWuoL2TCMLdesnNA3Q",
+      "title": "Form follows libido: Architecture and Richard Neutra in a psychoanalytic culture",
+      "authors": "S Lavin",
+      "year": "2004",
+      "cited_by": 70,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4284349209529361401&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The emergence of the interior: architecture, modernity, domesticity",
+      "id": "18312357337065964848",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2005-0-03177-1&isbn=9781134174201&format=googlePreviewPdf",
+      "title": "The emergence of the interior: architecture, modernity, domesticity",
+      "authors": "C Rice",
+      "year": "2006",
+      "cited_by": 246,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=18312357337065964848&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Weimar on the Pacific: German exile culture in Los Angeles and the crisis of modernism",
+      "id": "7518356433890653504",
+      "url": "https://books.google.com/books?hl=en&lr=&id=LsxGVAg2SAUC&oi=fnd&pg=PR9&ots=-qjg3B7hjs&sig=rbQnKHti8MKR47IK2H0hbwzTC_w",
+      "title": "Weimar on the Pacific: German exile culture in Los Angeles and the crisis of modernism",
+      "authors": "E Bahr",
+      "year": "2007",
+      "cited_by": 93,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7518356433890653504&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The artist's mind: A psychoanalytic perspective on creativity, modern art and modern artists",
+      "id": "6772648655970256673",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2009-0-16626-1&isbn=9781136896538&format=googlePreviewPdf",
+      "title": "The artist's mind: A psychoanalytic perspective on creativity, modern art and modern artists",
+      "authors": "G Hagman",
+      "year": "2010",
+      "cited_by": 35,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6772648655970256673&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "David Lynch",
+      "id": "3882684797423933415",
+      "url": "https://books.google.com/books?hl=en&lr=&id=GdXeLQIhYJQC&oi=fnd&pg=PP1&ots=N5o88BqpY0&sig=ndTbWoTfYBrcuULQpwv3fSJIfZw",
+      "title": "David Lynch",
+      "authors": "J Nieland",
+      "year": "2012",
+      "cited_by": 24,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3882684797423933415&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Philosophy of architecture",
+      "id": "2392748618822997733",
+      "url": "https://stanford.library.sydney.edu.au/entries/architecture/",
+      "title": "Philosophy of architecture",
+      "authors": "S Fisher",
+      "year": "2015",
+      "cited_by": 22,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2392748618822997733&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "[CITATION][C]",
+      "id": "11632954121200658125",
+      "title": "[CITATION][C]",
+      "authors": "R Martin",
+      "year": "2014",
+      "cited_by": 15,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11632954121200658125&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Design as dream and self-representation: Philip Johnson and the Glass House of Atreus",
+      "id": "6163322841453078287",
+      "url": "https://journals.sagepub.com/doi/abs/10.1177/0003065111408725",
+      "title": "Design as dream and self-representation: Philip Johnson and the Glass House of Atreus",
+      "authors": "A Tutter",
+      "year": "2011",
+      "cited_by": 12,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6163322841453078287&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Sublimation: Building or dwelling? Loewald, Freud, and architecture.",
+      "id": "11326864120436706486",
+      "url": "https://psycnet.apa.org/record/2014-45768-006",
+      "title": "Sublimation: Building or dwelling? Loewald, Freud, and architecture.",
+      "authors": "E Sperber",
+      "year": "2014",
+      "cited_by": 11,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11326864120436706486&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Digital Poetics: An Open Theory of Design-research in Architecture",
+      "id": "3471022306575672977",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2016-0-34401-7&isbn=9781351944038&format=googlePreviewPdf",
+      "title": "Digital Poetics: An Open Theory of Design-research in Architecture",
+      "authors": "M Colletti",
+      "year": "2017",
+      "cited_by": 11,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3471022306575672977&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Graphic language: Herbert Bayer's environmental design",
+      "id": "10497588081476137078",
+      "url": "https://academic.oup.com/envhis/article-abstract/12/2/254/442229",
+      "title": "Graphic language: Herbert Bayer's environmental design",
+      "authors": "P Anker",
+      "year": "2007",
+      "cited_by": 10,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10497588081476137078&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Practising architectures",
+      "id": "8025612836597502362",
+      "url": "https://www.tandfonline.com/doi/full/10.1080/14649365.2011.565884",
+      "title": "Practising architectures",
+      "authors": "JM Jacobs, P Merriman",
+      "year": "2011",
+      "cited_by": 137,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8025612836597502362&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Transdisciplinarity, the hybridisation of knowledge production and space-related research",
+      "id": "2220091097441751838",
+      "url": "https://link.springer.com/chapter/10.1007/978-94-007-0104-5_1",
+      "title": "Transdisciplinarity, the hybridisation of knowledge production and space-related research",
+      "authors": "I Doucet, N Janssens",
+      "year": "2011",
+      "cited_by": 27,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2220091097441751838&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Mobilities Design: Urban designs for mobile situations",
+      "id": "11249529449813610441",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2014-0-31959-5&isbn=9781317526933&format=googlePreviewPdf",
+      "title": "Mobilities Design: Urban designs for mobile situations",
+      "authors": "OB Jensen, DB Lanng",
+      "year": "2016",
+      "cited_by": 24,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11249529449813610441&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Space as receptor, instrument or stage: Notes on the interaction between spatial and social constellations",
+      "id": "12958246400085443987",
+      "url": "https://rsa.tandfonline.com/doi/abs/10.1080/13563475.2013.833729",
+      "title": "Space as receptor, instrument or stage: Notes on the interaction between spatial and social constellations",
+      "authors": "H Heynen",
+      "year": "2013",
+      "cited_by": 17,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12958246400085443987&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Where is the social project?",
+      "id": "16323175914398198977",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/10464883.2014.864892",
+      "title": "Where is the social project?",
+      "authors": "K Cupers",
+      "year": "2014",
+      "cited_by": 15,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16323175914398198977&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Spatial agency and practising architecture beyond buildings",
+      "id": "16741015325200786121",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/14649365.2016.1174282",
+      "title": "Spatial agency and practising architecture beyond buildings",
+      "authors": "C Lorne",
+      "year": "2017",
+      "cited_by": 12,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16741015325200786121&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Making a city with words: Understanding Brussels through its urban heroes and villains",
+      "id": "399551333738991449",
+      "url": "https://www.sciencedirect.com/science/article/pii/S1877916611000750",
+      "title": "Making a city with words: Understanding Brussels through its urban heroes and villains",
+      "authors": "I Doucet",
+      "year": "2012",
+      "cited_by": 13,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=399551333738991449&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Towards a relational approach to design process",
+      "id": "11707563527947063123",
+      "url": "http://anzasca.net/wp-content/uploads/2013/03/01P47.pdf",
+      "title": "Towards a relational approach to design process",
+      "authors": "AB Kocaballi, P Gemeinboeck, R Saunders\u2026",
+      "year": "2011",
+      "cited_by": 8,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11707563527947063123&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Applying protest event analysis to architecture and design",
+      "id": "9448025673678489528",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/14742837.2013.823346",
+      "title": "Applying protest event analysis to architecture and design",
+      "authors": "A Thorpe",
+      "year": "2014",
+      "cited_by": 9,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9448025673678489528&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The right to the city: rethinking architecture's social significance",
+      "id": "12318557303694743473",
+      "url": "https://www.tandfonline.com/doi/full/10.1080/13264826.2011.628633",
+      "title": "The right to the city: rethinking architecture's social significance",
+      "authors": "L Stickells",
+      "year": "2011",
+      "cited_by": 39,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12318557303694743473&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The Efficacy of Architecture: Political Contestation and Agency",
+      "id": "4698685726669052051",
+      "url": "https://books.google.com/books?hl=en&lr=&id=3iQlDwAAQBAJ&oi=fnd&pg=PP1&ots=EHMcNb9ORJ&sig=d7KU2UpwE3CZp7DR7zCW3Ty_DhU",
+      "title": "The Efficacy of Architecture: Political Contestation and Agency",
+      "authors": "T Kaminer",
+      "year": "2016",
+      "cited_by": 10,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4698685726669052051&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Learning in the 'Real'World: encounters with radical architectures (1960s\u20131970s).",
+      "id": "14435331623206711560",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/00220620.2017.1252735",
+      "title": "Learning in the 'Real'World: encounters with radical architectures (1960s\u20131970s).",
+      "authors": "I Doucet",
+      "year": "2017",
+      "cited_by": 6,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14435331623206711560&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The figures of Charles Jencks,\u201csemiology and architecture\u201d",
+      "id": "10184339919845079984",
+      "url": "http://ecite.utas.edu.au/107359",
+      "title": "The figures of Charles Jencks,\u201csemiology and architecture\u201d",
+      "authors": "AP Steen",
+      "year": "2015",
+      "cited_by": 3,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10184339919845079984&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "El diagrama arquitect\u00f3nico despu\u00e9s de Deleuze: estudio de casos holandeses",
+      "id": "5882245120676918696",
+      "url": "https://upcommons.upc.edu/handle/2117/95607",
+      "title": "El diagrama arquitect\u00f3nico despu\u00e9s de Deleuze: estudio de casos holandeses",
+      "authors": "RB Duarte",
+      "year": "2015",
+      "cited_by": 4,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5882245120676918696&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "\u00c1lvaro Siza's Negotiated Code: Housing with Citizens' Participation in the Urban Renewal of The Hague in the 1980s",
+      "id": "8292591090009170609",
+      "url": "http://www.academia.edu/download/60932173/Housing_Builds_Cities_Urban_Planning_low20191017-111399-b560l5.pdf#page=181",
+      "title": "\u00c1lvaro Siza's Negotiated Code: Housing with Citizens' Participation in the Urban Renewal of The Hague in the 1980s",
+      "authors": "N Mota",
+      "year": "2019",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8292591090009170609&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Environmental discourse in turkish architecture",
+      "id": "2329898924579724634",
+      "url": "http://openaccess.iyte.edu.tr/handle/11147/4188",
+      "title": "Environmental discourse in turkish architecture",
+      "authors": "S Demirel \u00d6zer",
+      "year": "2014",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2329898924579724634&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Building Beauty: Kantian aesthetics in a time of dark ecology",
+      "id": "14157346008914598194",
+      "url": "https://philpapers.org/rec/AUGBBK",
+      "title": "Building Beauty: Kantian aesthetics in a time of dark ecology",
+      "authors": "K August",
+      "year": "2013",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14157346008914598194&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Architecture, Mentalities and Meaning",
+      "id": "2496986919756511764",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2016-0-05555-3&isbn=9781351675369&format=googlePreviewPdf",
+      "title": "Architecture, Mentalities and Meaning",
+      "authors": "P Malone",
+      "year": "2017",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2496986919756511764&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "A Case for the Sublime Uselessness of Graphic Design",
+      "id": "14502858073042127499",
+      "url": "https://caa.tandfonline.com/doi/abs/10.1080/17547075.2016.1142347",
+      "title": "A Case for the Sublime Uselessness of Graphic Design",
+      "authors": "D Cabianca",
+      "year": "2016",
+      "cited_by": 3,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14502858073042127499&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Transcultural Architecture: The Limits and Opportunities of Critical Regionalism",
+      "id": "17080519213344120407",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2015-0-83996-2&isbn=9781317007999&format=googlePreviewPdf",
+      "title": "Transcultural Architecture: The Limits and Opportunities of Critical Regionalism",
+      "authors": "T Botz-Bornstein",
+      "year": "2016",
+      "cited_by": 15,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17080519213344120407&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "\u8fd1\u671f\u897f\u65b9 \u201c\u6279\u8bc4\u201d \u4e4b\u4e89\u4e0e\u5f53\u4ee3\u4e2d\u56fd\u5efa\u7b51\u72b6\u51b5\u2014\u2014\u201c\u6279\u8bc4\u7684\u6f14\u5316\u2014\u2014\u4e2d\u56fd\u4e0e\u897f\u65b9\u7684\u4ea4\u6d41\u201d \u5f15\u53d1\u601d\u8003",
+      "id": "13498179693600569981",
+      "url": "http://www.cqvip.com/qk/91309x/200605/23716245.html",
+      "title": "\u8fd1\u671f\u897f\u65b9 \u201c\u6279\u8bc4\u201d \u4e4b\u4e89\u4e0e\u5f53\u4ee3\u4e2d\u56fd\u5efa\u7b51\u72b6\u51b5\u2014\u2014\u201c\u6279\u8bc4\u7684\u6f14\u5316\u2014\u2014\u4e2d\u56fd\u4e0e\u897f\u65b9\u7684\u4ea4\u6d41\u201d \u5f15\u53d1\u601d\u8003",
+      "authors": "\u6731\u6d9b",
+      "year": "2006",
+      "cited_by": 10,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13498179693600569981&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The real fake: Authenticity and the production of space",
+      "id": "6903691845772654490",
+      "url": "https://books.google.com/books?hl=en&lr=&id=MI2UDwAAQBAJ&oi=fnd&pg=PT8&ots=q4HZ1cQV94&sig=OP7wFr-3tYF1SNvX0sXSf8m79xo",
+      "title": "The real fake: Authenticity and the production of space",
+      "authors": "MF Piazzoni",
+      "year": "2018",
+      "cited_by": 4,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6903691845772654490&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Constructing a Place of Critical Architecture in China: Intermediate Criticality in the Journal Time+ Architecture",
+      "id": "15859347271399086241",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2015-0-84012-7&isbn=9781317161592&format=googlePreviewPdf",
+      "title": "Constructing a Place of Critical Architecture in China: Intermediate Criticality in the Journal Time+ Architecture",
+      "authors": "G Ding",
+      "year": "2016",
+      "cited_by": 4,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15859347271399086241&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Constructing a place of critical architecture in China: a case study of the journal'Time+ Architecture'",
+      "id": "5328239371128677339",
+      "url": "https://ethos.bl.uk/OrderDetails.do?uin=uk.bl.ethos.594625",
+      "title": "Constructing a place of critical architecture in China: a case study of the journal'Time+ Architecture'",
+      "authors": "G Ding",
+      "year": "2013",
+      "cited_by": 2,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5328239371128677339&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "WANG Shu and the Possibilities of Architectural regionalism in China",
+      "id": "1327726977466337934",
+      "url": "http://arkitekturforskning.net/na/article/view/76",
+      "title": "WANG Shu and the Possibilities of Architectural regionalism in China",
+      "authors": "T Botz-Bornstein",
+      "year": "2013",
+      "cited_by": 4,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1327726977466337934&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "'Make\u2010the\u2010Most\u2010of\u2010It'architecture: Young architects and Chinese tactics",
+      "id": "2710491047770291961",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/13604810802167010",
+      "title": "'Make\u2010the\u2010Most\u2010of\u2010It'architecture: Young architects and Chinese tactics",
+      "authors": "L Xiangning",
+      "year": "2008",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2710491047770291961&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "'Critical'practice in state-owned design institutes in post-Mao China (1976-2000s): a case study of CAG (China Architecture Design and Research Group)",
+      "id": "13529989820514833752",
+      "url": "https://minerva-access.unimelb.edu.au/handle/11343/35453",
+      "title": "'Critical'practice in state-owned design institutes in post-Mao China (1976-2000s): a case study of CAG (China Architecture Design and Research Group)",
+      "authors": "F Li",
+      "year": "2010",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13529989820514833752&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Atmospheres\u2013Architectural spaces between critical reading and immersive presence",
+      "id": "1006520316289189626",
+      "url": "http://www.field-journal.org/uploads/file/2007_Volume_1/o%20fischer.pdf",
+      "title": "Atmospheres\u2013Architectural spaces between critical reading and immersive presence",
+      "authors": "OW Fischer",
+      "year": "2007",
+      "cited_by": 22,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1006520316289189626&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Withdrawing from atmosphere: An ontology of air partitioning and affective engineering",
+      "id": "12932284439135795676",
+      "url": "https://journals.sagepub.com/doi/abs/10.1177/0263775815600443",
+      "title": "Withdrawing from atmosphere: An ontology of air partitioning and affective engineering",
+      "authors": "A Philippopoulos-Mihalopoulos",
+      "year": "2016",
+      "cited_by": 37,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12932284439135795676&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Utopian-driven projektive research exploring the field of Metaurbanism",
+      "id": "6660383954699495475",
+      "url": "http://publications.lib.chalmers.se/records/fulltext/157597.pdf",
+      "title": "Utopian-driven projektive research exploring the field of Metaurbanism",
+      "authors": "N Janssens",
+      "year": "2012",
+      "cited_by": 20,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6660383954699495475&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Into the fog of architecture",
+      "id": "1967883256113225764",
+      "url": "https://www.taylorfrancis.com/books/e/9781315641171/chapters/10.4324/9781315641171-7",
+      "title": "Into the fog of architecture",
+      "authors": "M Bille, TF S\u00f8rensen",
+      "year": "2016",
+      "cited_by": 15,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1967883256113225764&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "New Media Dramaturgy: Performance, Media and New-Materialism",
+      "id": "4881954761193086463",
+      "url": "https://books.google.com/books?hl=en&lr=&id=dbHDDgAAQBAJ&oi=fnd&pg=PR3&ots=HbC0ko0DmG&sig=YPqDcRae_y4I7aqPbGYLDzFSdHY",
+      "title": "New Media Dramaturgy: Performance, Media and New-Materialism",
+      "authors": "P Eckersall, H Grehan, E Scheer",
+      "year": "2017",
+      "cited_by": 14,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4881954761193086463&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Tuning the space: investigating the making of atmospheres through interior design practices",
+      "id": "6096471902497555158",
+      "url": "https://www.tandfonline.com/doi/abs/10.2752/204191114X14126916211184",
+      "title": "Tuning the space: investigating the making of atmospheres through interior design practices",
+      "authors": "M Sloane",
+      "year": "2014",
+      "cited_by": 7,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6096471902497555158&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Art and conversation: disturbation in public space",
+      "id": "15447126983383693923",
+      "url": "https://ora.ox.ac.uk/objects/uuid:7b5abb31-0fed-44fb-bcd1-91e1fa96bd58",
+      "title": "Art and conversation: disturbation in public space",
+      "authors": "FO Oketch",
+      "year": "2013"
+    },
+    {
+      "label": "[CITATION][C]",
+      "id": "xAxuSAKQLBoJ",
+      "title": "[CITATION][C]"
+    },
+    {
+      "label": "A sustainable home? Reconceptualizing home in a low-impact society",
+      "id": "10031494106121422582",
+      "url": "http://publications.lib.chalmers.se/records/fulltext/238843/238843.pdf",
+      "title": "A sustainable home? Reconceptualizing home in a low-impact society",
+      "authors": "P Hagbert",
+      "year": "2016",
+      "cited_by": 7,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10031494106121422582&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Organoleptic interfaces: Exploring embodied methods in foodscapes",
+      "id": "2249396154074586359",
+      "url": "http://publications.lib.chalmers.se/records/fulltext/236787/236787.pdf",
+      "title": "Organoleptic interfaces: Exploring embodied methods in foodscapes",
+      "authors": "AM Orru",
+      "year": "2016",
+      "cited_by": 3,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2249396154074586359&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Developing Making scholarship. From making disciplines to field-specific research in creative practices",
+      "id": "12384427327304315973",
+      "url": "http://publications.lib.chalmers.se/records/fulltext/180194/local_180194.pdf",
+      "title": "Developing Making scholarship. From making disciplines to field-specific research in creative practices",
+      "authors": "F Nilsson, H Dunin-Woyseth",
+      "year": "2013",
+      "cited_by": 2,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12384427327304315973&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The Future Commons 2070: The ethical problem of the territorialization of the North Sea",
+      "id": "11706641401432607823",
+      "url": "https://lirias.kuleuven.be/retrieve/352090",
+      "title": "The Future Commons 2070: The ethical problem of the territorialization of the North Sea",
+      "authors": "N Janssens, C Geldof",
+      "year": "2014",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11706641401432607823&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Wayfinding design as a tool for community empowerment and storytelling: a case study from central Appalachia",
+      "id": "16707402873843097009",
+      "url": "http://www.academia.edu/download/56344025/EDRA2015BestPaperWayfinding.pdf#page=45",
+      "title": "Wayfinding design as a tool for community empowerment and storytelling: a case study from central Appalachia",
+      "authors": "E Carlson, M Bose",
+      "year": "2015",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16707402873843097009&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Developing Making Scholarship",
+      "id": "9762553722845185189",
+      "url": "http://www.academia.edu/download/34521581/HDW-FN_Making-Scholarship_2013.pdf",
+      "title": "Developing Making Scholarship",
+      "authors": "H Dunin-Woyseth, F Nilsson",
+      "year": "2013",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9762553722845185189&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Some Futures for the Belgian Coast 2100, a Case Study of Research by Design on Regional Level",
+      "id": "5979732380449247916",
+      "url": "https://repository.corp.at/44/1/CORP2015_143.pdf",
+      "title": "Some Futures for the Belgian Coast 2100, a Case Study of Research by Design on Regional Level",
+      "authors": "C Geldof, J Zaman",
+      "year": "2015"
+    },
+    {
+      "label": "Rethinking Social Impact Assessment through Urban Design: Towards designerly evaluation with a socio-form approach",
+      "id": "16758383415192372703",
+      "url": "http://publications.lib.chalmers.se/records/fulltext/213230/213230.pdf",
+      "title": "Rethinking Social Impact Assessment through Urban Design: Towards designerly evaluation with a socio-form approach",
+      "authors": "J Gregorowicz-Kipszak",
+      "year": "2015",
+      "cited_by": 3,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16758383415192372703&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Environmental Design Research Association",
+      "id": "5049754150817329888",
+      "url": "https://www.researchgate.net/profile/J_Davis_Harte/publication/277423330_The_influence_of_Australian_hospital_birth_unit_design_on_women's_birth_supporters/links/556abb0c08aefcb861d5f6f7.pdf",
+      "title": "Environmental Design Research Association",
+      "authors": "J Bissell, J Eyres, GB Gulwadi, E Harper, N Kirk, S Lee\u2026",
+      "year": "2015"
+    },
+    {
+      "label": "[CITATION][C]",
+      "id": "0mrWOo3WXhsJ",
+      "title": "[CITATION][C]",
+      "authors": "J Vanhille",
+      "year": "2014"
+    }
+  ],
+  "links": [
+    {
+      "source": "15587233053702399582",
+      "target": "12941369689650326452"
+    },
+    {
+      "source": "15587233053702399582",
+      "target": "9923232251753932329"
+    },
+    {
+      "source": "16781108293812742613",
+      "target": "15587233053702399582"
+    },
+    {
+      "source": "5143919825678837114",
+      "target": "15587233053702399582"
+    },
+    {
+      "source": "9959620456650965713",
+      "target": "15587233053702399582"
+    },
+    {
+      "source": "1164320569137154808",
+      "target": "15587233053702399582"
+    },
+    {
+      "source": "3695280036055625213",
+      "target": "15587233053702399582"
+    },
+    {
+      "source": "1749504508564395839",
+      "target": "15587233053702399582"
+    },
+    {
+      "source": "6034538433197244828",
+      "target": "15587233053702399582"
+    },
+    {
+      "source": "10680485220079545563",
+      "target": "15587233053702399582"
+    },
+    {
+      "source": "17195843823492810497",
+      "target": "15587233053702399582"
+    },
+    {
+      "source": "18437113867316911927",
+      "target": "15587233053702399582"
+    },
+    {
+      "source": "11244293858113798874",
+      "target": "12941369689650326452"
+    },
+    {
+      "source": "7734411929509306183",
+      "target": "11244293858113798874"
+    },
+    {
+      "source": "3538236727389985683",
+      "target": "11244293858113798874"
+    },
+    {
+      "source": "3831639673457127331",
+      "target": "11244293858113798874"
+    },
+    {
+      "source": "2981428655877438499",
+      "target": "11244293858113798874"
+    },
+    {
+      "source": "2933923163944750679",
+      "target": "11244293858113798874"
+    },
+    {
+      "source": "18406641731304936948",
+      "target": "11244293858113798874"
+    },
+    {
+      "source": "11593615735529873550",
+      "target": "11244293858113798874"
+    },
+    {
+      "source": "938285620772532416",
+      "target": "11244293858113798874"
+    },
+    {
+      "source": "938285620772532416",
+      "target": "16308796484612585506"
+    },
+    {
+      "source": "6625024565000359248",
+      "target": "11244293858113798874"
+    },
+    {
+      "source": "1985113819836296545",
+      "target": "11244293858113798874"
+    },
+    {
+      "source": "9923232251753932329",
+      "target": "12941369689650326452"
+    },
+    {
+      "source": "9751142921891906632",
+      "target": "9923232251753932329"
+    },
+    {
+      "source": "9751142921891906632",
+      "target": "12941369689650326452"
+    },
+    {
+      "source": "9751142921891906632",
+      "target": "267408197746456268"
+    },
+    {
+      "source": "1918395206732060029",
+      "target": "9923232251753932329"
+    },
+    {
+      "source": "10881085281107066117",
+      "target": "9923232251753932329"
+    },
+    {
+      "source": "12647959926434436133",
+      "target": "9923232251753932329"
+    },
+    {
+      "source": "11317351899032488949",
+      "target": "9923232251753932329"
+    },
+    {
+      "source": "11317351899032488949",
+      "target": "9751142921891906632"
+    },
+    {
+      "source": "16308796484612585506",
+      "target": "9923232251753932329"
+    },
+    {
+      "source": "16308796484612585506",
+      "target": "12941369689650326452"
+    },
+    {
+      "source": "17308215253373357512",
+      "target": "9923232251753932329"
+    },
+    {
+      "source": "12271613048123106506",
+      "target": "9923232251753932329"
+    },
+    {
+      "source": "12271613048123106506",
+      "target": "12941369689650326452"
+    },
+    {
+      "source": "267408197746456268",
+      "target": "9923232251753932329"
+    },
+    {
+      "source": "267408197746456268",
+      "target": "12941369689650326452"
+    },
+    {
+      "source": "7866691505620219819",
+      "target": "9751142921891906632"
+    },
+    {
+      "source": "17975085377502034676",
+      "target": "9751142921891906632"
+    },
+    {
+      "source": "10395793415996526806",
+      "target": "9751142921891906632"
+    },
+    {
+      "source": "6731344658592700998",
+      "target": "9751142921891906632"
+    },
+    {
+      "source": "8132392314413587746",
+      "target": "9751142921891906632"
+    },
+    {
+      "source": "8703669932622101755",
+      "target": "9751142921891906632"
+    },
+    {
+      "source": "16108622419172451832",
+      "target": "9751142921891906632"
+    },
+    {
+      "source": "16108622419172451832",
+      "target": "267408197746456268"
+    },
+    {
+      "source": "16185839974974861389",
+      "target": "9751142921891906632"
+    },
+    {
+      "source": "15582931201237491137",
+      "target": "9751142921891906632"
+    },
+    {
+      "source": "4284349209529361401",
+      "target": "12941369689650326452"
+    },
+    {
+      "source": "18312357337065964848",
+      "target": "4284349209529361401"
+    },
+    {
+      "source": "7518356433890653504",
+      "target": "4284349209529361401"
+    },
+    {
+      "source": "6772648655970256673",
+      "target": "4284349209529361401"
+    },
+    {
+      "source": "3882684797423933415",
+      "target": "4284349209529361401"
+    },
+    {
+      "source": "2392748618822997733",
+      "target": "4284349209529361401"
+    },
+    {
+      "source": "11632954121200658125",
+      "target": "4284349209529361401"
+    },
+    {
+      "source": "6163322841453078287",
+      "target": "4284349209529361401"
+    },
+    {
+      "source": "11326864120436706486",
+      "target": "4284349209529361401"
+    },
+    {
+      "source": "3471022306575672977",
+      "target": "4284349209529361401"
+    },
+    {
+      "source": "10497588081476137078",
+      "target": "4284349209529361401"
+    },
+    {
+      "source": "8025612836597502362",
+      "target": "16308796484612585506"
+    },
+    {
+      "source": "2220091097441751838",
+      "target": "16308796484612585506"
+    },
+    {
+      "source": "2220091097441751838",
+      "target": "1006520316289189626"
+    },
+    {
+      "source": "11249529449813610441",
+      "target": "16308796484612585506"
+    },
+    {
+      "source": "12958246400085443987",
+      "target": "16308796484612585506"
+    },
+    {
+      "source": "16323175914398198977",
+      "target": "16308796484612585506"
+    },
+    {
+      "source": "16741015325200786121",
+      "target": "16308796484612585506"
+    },
+    {
+      "source": "399551333738991449",
+      "target": "16308796484612585506"
+    },
+    {
+      "source": "11707563527947063123",
+      "target": "16308796484612585506"
+    },
+    {
+      "source": "9448025673678489528",
+      "target": "16308796484612585506"
+    },
+    {
+      "source": "12318557303694743473",
+      "target": "12271613048123106506"
+    },
+    {
+      "source": "4698685726669052051",
+      "target": "12271613048123106506"
+    },
+    {
+      "source": "14435331623206711560",
+      "target": "12271613048123106506"
+    },
+    {
+      "source": "10184339919845079984",
+      "target": "12271613048123106506"
+    },
+    {
+      "source": "5882245120676918696",
+      "target": "12271613048123106506"
+    },
+    {
+      "source": "8292591090009170609",
+      "target": "12271613048123106506"
+    },
+    {
+      "source": "2329898924579724634",
+      "target": "12271613048123106506"
+    },
+    {
+      "source": "14157346008914598194",
+      "target": "12271613048123106506"
+    },
+    {
+      "source": "2496986919756511764",
+      "target": "12271613048123106506"
+    },
+    {
+      "source": "14502858073042127499",
+      "target": "12271613048123106506"
+    },
+    {
+      "source": "17080519213344120407",
+      "target": "267408197746456268"
+    },
+    {
+      "source": "13498179693600569981",
+      "target": "267408197746456268"
+    },
+    {
+      "source": "6903691845772654490",
+      "target": "267408197746456268"
+    },
+    {
+      "source": "15859347271399086241",
+      "target": "267408197746456268"
+    },
+    {
+      "source": "15859347271399086241",
+      "target": "1006520316289189626"
+    },
+    {
+      "source": "5328239371128677339",
+      "target": "267408197746456268"
+    },
+    {
+      "source": "5328239371128677339",
+      "target": "1006520316289189626"
+    },
+    {
+      "source": "1327726977466337934",
+      "target": "267408197746456268"
+    },
+    {
+      "source": "2710491047770291961",
+      "target": "267408197746456268"
+    },
+    {
+      "source": "13529989820514833752",
+      "target": "267408197746456268"
+    },
+    {
+      "source": "1006520316289189626",
+      "target": "12941369689650326452"
+    },
+    {
+      "source": "12932284439135795676",
+      "target": "1006520316289189626"
+    },
+    {
+      "source": "6660383954699495475",
+      "target": "1006520316289189626"
+    },
+    {
+      "source": "6660383954699495475",
+      "target": "12941369689650326452"
+    },
+    {
+      "source": "1967883256113225764",
+      "target": "1006520316289189626"
+    },
+    {
+      "source": "4881954761193086463",
+      "target": "1006520316289189626"
+    },
+    {
+      "source": "6096471902497555158",
+      "target": "1006520316289189626"
+    },
+    {
+      "source": "15447126983383693923",
+      "target": "1006520316289189626"
+    },
+    {
+      "source": "xAxuSAKQLBoJ",
+      "target": "1006520316289189626"
+    },
+    {
+      "source": "10031494106121422582",
+      "target": "6660383954699495475"
+    },
+    {
+      "source": "2249396154074586359",
+      "target": "6660383954699495475"
+    },
+    {
+      "source": "12384427327304315973",
+      "target": "6660383954699495475"
+    },
+    {
+      "source": "11706641401432607823",
+      "target": "6660383954699495475"
+    },
+    {
+      "source": "16707402873843097009",
+      "target": "6660383954699495475"
+    },
+    {
+      "source": "9762553722845185189",
+      "target": "6660383954699495475"
+    },
+    {
+      "source": "5979732380449247916",
+      "target": "6660383954699495475"
+    },
+    {
+      "source": "16758383415192372703",
+      "target": "6660383954699495475"
+    },
+    {
+      "source": "5049754150817329888",
+      "target": "6660383954699495475"
+    },
+    {
+      "source": "0mrWOo3WXhsJ",
+      "target": "6660383954699495475"
+    }
+  ]
+};
+
+var link = svg.append("g")
+    .attr("class", "links")
+  .selectAll("line")
+  .data(graph.links)
+  .enter().append("line");
+
+var node = svg.append("g")
+    .attr("class", "nodes")
+  .selectAll("circle")
+  .data(graph.nodes)
+  .enter().append("circle")
+    .attr("r", 5)
+    .call(d3.drag()
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended));
+
+node.append("title")
+    .text(function(d) {
+        return d.authors ? d.title + ' - ' + d.authors : d.title
+    });
+
+node.on("click", function(d) {
+  window.open(d.url, '_blank');
+  d3.event.stopPropagation();
+});
+
+simulation
+    .nodes(graph.nodes)
+    .on("tick", ticked);
+
+simulation.force("link")
+    .links(graph.links);
+
+function ticked() {
+  link
+      .attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
+
+  node
+      .attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; });
+}
+
+function dragstarted(d) {
+  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+  d.fx = d.x;
+  d.fy = d.y;
+}
+
+function dragged(d) {
+  d.fx = d3.event.x;
+  d.fy = d3.event.y;
+}
+
+function dragended(d) {
+  if (!d3.event.active) simulation.alphaTarget(0);
+  d.fx = null;
+  d.fy = null;
+}
+
+</script>
