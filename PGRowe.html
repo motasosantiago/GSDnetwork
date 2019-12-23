@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<style>
+
+.links line {
+  stroke: #999;
+  stroke-opacity: 0.8;
+  stroke-width: 2px;
+}
+
+.nodes circle {
+  stroke: black;
+  fill: white;
+  stroke-width: 1.5px;
+}
+
+#graph {
+  width: 99vw;
+  height: 99vh;
+}
+
+</style>
+<svg id="graph"></svg>
+<script>
+
+var width = $(window).width();
+var height = $(window).height();
+
+var svg = d3.select("svg")
+    .attr("height", height)
+    .attr("width", width);
+
+var color = d3.scaleOrdinal(d3.schemeCategory20c);
+
+var simulation = d3.forceSimulation()
+    .velocityDecay(0.6)
+    .force("link", d3.forceLink().id(function(d) { return d.id; }))
+    .force("charge", d3.forceManyBody())
+    .force("center", d3.forceCenter(width / 2, height / 2));
+
+var graph = {
+  "nodes": [
+    {
+      "label": "Designerly ways of knowing: Design discipline versus design science",
+      "id": "16821992797506766329",
+      "url": "https://www.mitpressjournals.org/doi/pdf/10.1162/074793601750357196",
+      "title": "Designerly ways of knowing: Design discipline versus design science",
+      "authors": "N Cross",
+      "year": "2001",
+      "cited_by": 4129,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16821992797506766329&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Design thinking",
+      "id": "3431493009517767209",
+      "title": "Design thinking"
+    },
+    {
+      "label": "Systems thinking: Managing chaos and complexity: A platform for designing business architecture",
+      "id": "1815839450354238582",
+      "url": "https://books.google.com/books?hl=en&lr=&id=b0g9AUVo2uUC&oi=fnd&pg=PP1&ots=CDXhXucEdu&sig=_sYNV2wP2nUEc978lPN7r-V-i7U",
+      "title": "Systems thinking: Managing chaos and complexity: A platform for designing business architecture",
+      "authors": "J Gharajedaghi",
+      "year": "2011",
+      "cited_by": 1739,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1815839450354238582&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Research through design as a method for interaction design research in HCI",
+      "id": "14728727331132137888",
+      "url": "https://dl.acm.org/citation.cfm?id=1240704",
+      "title": "Research through design as a method for interaction design research in HCI",
+      "authors": "J Zimmerman, J Forlizzi, S Evenson",
+      "year": "2007",
+      "cited_by": 1360,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14728727331132137888&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Teaching as a design science: Building pedagogical patterns for learning and technology",
+      "id": "12837637295573204254",
+      "url": "https://www.taylorfrancis.com/books/9780203125083",
+      "title": "Teaching as a design science: Building pedagogical patterns for learning and technology",
+      "authors": "D Laurillard",
+      "year": "2013",
+      "cited_by": 1175,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12837637295573204254&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "The culture of design",
+      "id": "13742271598181907082",
+      "url": "https://books.google.com/books?hl=en&lr=&id=_QdPAgAAQBAJ&oi=fnd&pg=PP1&ots=Or609mD7jO&sig=mHALmQCwIIi798Z-Fso9-v-f8Fg",
+      "title": "The culture of design",
+      "authors": "G Julier",
+      "year": "2013",
+      "cited_by": 714,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13742271598181907082&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Sustainable interaction design: invention & disposal, renewal & reuse",
+      "id": "16854422332716145011",
+      "url": "https://dl.acm.org/citation.cfm?id=1240705",
+      "title": "Sustainable interaction design: invention & disposal, renewal & reuse",
+      "authors": "E Blevis",
+      "year": "2007",
+      "cited_by": 604,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16854422332716145011&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Investigating design: A review of forty years of design research",
+      "id": "3192848657962168917",
+      "url": "https://www.mitpressjournals.org/doi/pdf/10.1162/074793604772933739",
+      "title": "Investigating design: A review of forty years of design research",
+      "authors": "N Bayazit",
+      "year": "2004",
+      "cited_by": 609,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3192848657962168917&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Rethinking design thinking: Part I",
+      "id": "10400745104787950932",
+      "url": "https://caa.tandfonline.com/doi/abs/10.2752/175470811X13071166525216",
+      "title": "Rethinking design thinking: Part I",
+      "authors": "L Kimbell",
+      "year": "2011",
+      "cited_by": 647,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10400745104787950932&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Engineering design processes: A comparison of students and expert practitioners",
+      "id": "4376101026158153890",
+      "url": "https://onlinelibrary.wiley.com/doi/abs/10.1002/j.2168-9830.2007.tb00945.x",
+      "title": "Engineering design processes: A comparison of students and expert practitioners",
+      "authors": "CJ Atman, RS Adams, ME Cardella\u2026",
+      "year": "2007",
+      "cited_by": 589,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4376101026158153890&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Design thinking: past, present and possible futures",
+      "id": "11537471864076379219",
+      "url": "https://onlinelibrary.wiley.com/doi/abs/10.1111/caim.12023",
+      "title": "Design thinking: past, present and possible futures",
+      "authors": "U Johansson\u2010Sk\u00f6ldberg, J Woodilla\u2026",
+      "year": "2013",
+      "cited_by": 637,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11537471864076379219&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "The nature of design practice and implications for interaction design research",
+      "id": "1910282563503695371",
+      "url": "http://ijdesign.org/index.php/IJDesign/article/view/240",
+      "title": "The nature of design practice and implications for interaction design research",
+      "authors": "E Stolterman",
+      "year": "2008",
+      "cited_by": 523,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1910282563503695371&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Engineering design thinking, teaching, and learning",
+      "id": "17716524980260594986",
+      "url": "https://onlinelibrary.wiley.com/doi/abs/10.1002/j.2168-9830.2005.tb00832.x",
+      "title": "Engineering design thinking, teaching, and learning",
+      "authors": "CL Dym, AM Agogino, O Eris, DD Frey\u2026",
+      "year": "2005",
+      "cited_by": 2546,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17716524980260594986&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Pedagogies of engagement: Classroom\u2010based practices",
+      "id": "7502878587993559398",
+      "url": "https://onlinelibrary.wiley.com/doi/abs/10.1002/j.2168-9830.2005.tb00831.x",
+      "title": "Pedagogies of engagement: Classroom\u2010based practices",
+      "authors": "KA Smith, SD Sheppard, DW Johnson\u2026",
+      "year": "2005",
+      "cited_by": 1499,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7502878587993559398&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Advancing engineering education in P\u201012 classrooms",
+      "id": "6918459715192790870",
+      "url": "https://onlinelibrary.wiley.com/doi/abs/10.1002/j.2168-9830.2008.tb00985.x",
+      "title": "Advancing engineering education in P\u201012 classrooms",
+      "authors": "S Brophy, S Klein, M Portsmore\u2026",
+      "year": "2008",
+      "cited_by": 724,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6918459715192790870&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Discipline-based education research: Understanding and improving learning in undergraduate science and engineering",
+      "id": "9124716159119528890",
+      "url": "https://books.google.com/books?hl=en&lr=&id=JMqnAwAAQBAJ&oi=fnd&pg=PR1&ots=MYurNZ4pRw&sig=CSzU7z0sPaMT2BZj1Tze-x03W-0",
+      "title": "Discipline-based education research: Understanding and improving learning in undergraduate science and engineering",
+      "authors": "National Research Council",
+      "year": "2012",
+      "cited_by": 585,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9124716159119528890&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Discipline\u2010based education research: Understanding and improving learning in undergraduate science and engineering",
+      "id": "3393881613200370321",
+      "url": "https://onlinelibrary.wiley.com/doi/abs/10.1002/jee.20030",
+      "title": "Discipline\u2010based education research: Understanding and improving learning in undergraduate science and engineering",
+      "authors": "S Singer, KA Smith",
+      "year": "2013",
+      "cited_by": 512,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3393881613200370321&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Mobile service innovation and business models",
+      "id": "13224585772494284601",
+      "url": "https://books.google.com/books?hl=en&lr=&id=zVAQzH3M7u8C&oi=fnd&pg=PR9&ots=sHZYPzgrJU&sig=nkLJcjfTsr0ZnKa4fwOi72J_1aA",
+      "title": "Mobile service innovation and business models",
+      "authors": "H Bouwman, H de Vos, T Haaker",
+      "year": "2008",
+      "cited_by": 442,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13224585772494284601&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Engineering education and the development of expertise",
+      "id": "10475529673979778260",
+      "url": "https://onlinelibrary.wiley.com/doi/abs/10.1002/j.2168-9830.2011.tb00006.x",
+      "title": "Engineering education and the development of expertise",
+      "authors": "T Litzinger, LR Lattuca, R Hadgraft\u2026",
+      "year": "2011",
+      "cited_by": 465,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10475529673979778260&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "What is design thinking and why is it important?",
+      "id": "8167891428259645811",
+      "url": "https://journals.sagepub.com/doi/abs/10.3102/0034654312457429",
+      "title": "What is design thinking and why is it important?",
+      "authors": "R Razzouk, V Shute",
+      "year": "2012",
+      "cited_by": 478,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8167891428259645811&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "The promise of the maker movement for education",
+      "id": "10976926944254470509",
+      "url": "https://docs.lib.purdue.edu/jpeer/vol5/iss1/4/",
+      "title": "The promise of the maker movement for education",
+      "authors": "L Martin",
+      "year": "2015",
+      "cited_by": 374,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10976926944254470509&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Situated engineering learning: Bridging engineering education research and the learning sciences",
+      "id": "8642222583827656298",
+      "url": "https://onlinelibrary.wiley.com/doi/abs/10.1002/j.2168-9830.2011.tb00007.x",
+      "title": "Situated engineering learning: Bridging engineering education research and the learning sciences",
+      "authors": "A Johri, BM Olds",
+      "year": "2011",
+      "cited_by": 306,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8642222583827656298&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Design thinking: Understanding how designers think and work",
+      "id": "1126031978416611822",
+      "url": "https://books.google.com/books?hl=en&lr=&id=F4SUVT1XCCwC&oi=fnd&pg=PT5&ots=7PYABRRu2k&sig=5g8Aihc8RMctglm8IccIEF7mrEU",
+      "title": "Design thinking: Understanding how designers think and work",
+      "authors": "N Cross",
+      "year": "2011",
+      "cited_by": 1258,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1126031978416611822&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Conducting educational design research",
+      "id": "13791300279590302480",
+      "url": "https://www.taylorfrancis.com/books/9781315105642",
+      "title": "Conducting educational design research",
+      "authors": "S McKenney, TC Reeves",
+      "year": "2018",
+      "cited_by": 1009,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13791300279590302480&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Learning in the making: A comparative case study of three makerspaces",
+      "id": "5337772644127834573",
+      "url": "http://www.hepgjournals.org/doi/abs/10.17763/haer.84.4.brr34733723j648u",
+      "title": "Learning in the making: A comparative case study of three makerspaces",
+      "authors": "K Sheridan, ER Halverson, B Litts\u2026",
+      "year": "2014",
+      "cited_by": 434,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5337772644127834573&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Designing public participation processes",
+      "id": "15636636604043621903",
+      "url": "https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1540-6210.2012.02678.x",
+      "title": "Designing public participation processes",
+      "authors": "JM Bryson, KS Quick, CS Slotterback\u2026",
+      "year": "2013",
+      "cited_by": 397,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15636636604043621903&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Design Thinking as an effective Toolkit for Innovation",
+      "id": "12005550466292504237",
+      "url": "http://www.academia.edu/download/27180660/Ispim2012FinalVersion.low.pdf",
+      "title": "Design Thinking as an effective Toolkit for Innovation",
+      "authors": "K Tschimmel",
+      "year": "2012",
+      "cited_by": 205,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12005550466292504237&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "The need for design thinking in business schools",
+      "id": "15071916487803734471",
+      "url": "https://journals.aom.org/doi/abs/10.5465/amle.2012.0308",
+      "title": "The need for design thinking in business schools",
+      "authors": "R Glen, C Suciu, C Baughn",
+      "year": "2014",
+      "cited_by": 157,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15071916487803734471&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "A taste for practices: Unrepressing style in design thinking",
+      "id": "16802291670965168163",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0142694X1100055X",
+      "title": "A taste for practices: Unrepressing style in design thinking",
+      "authors": "C Tonkinwise",
+      "year": "2011",
+      "cited_by": 125,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16802291670965168163&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Framing design thinking: The concept in idea and enactment",
+      "id": "2452302737400230681",
+      "url": "https://onlinelibrary.wiley.com/doi/abs/10.1111/caim.12153",
+      "title": "Framing design thinking: The concept in idea and enactment",
+      "authors": "L Carlgren, I Rauth, M Elmquist",
+      "year": "2016",
+      "cited_by": 151,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2452302737400230681&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Design capital and design moves: The logic of digital business strategy",
+      "id": "7259089252909004243",
+      "url": "https://www.jstor.org/stable/43825922",
+      "title": "Design capital and design moves: The logic of digital business strategy",
+      "authors": "CJ Woodard, N Ramasubbu, FT Tschang\u2026",
+      "year": "2013",
+      "cited_by": 128,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7259089252909004243&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Fixation and creativity in concept development: The attitudes and practices of expert designers",
+      "id": "4672539436523907761",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0142694X15000137",
+      "title": "Fixation and creativity in concept development: The attitudes and practices of expert designers",
+      "authors": "N Crilly",
+      "year": "2015",
+      "cited_by": 131,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4672539436523907761&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Expertise in design: an overview",
+      "id": "13818928775247576022",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0142694X04000316",
+      "title": "Expertise in design: an overview",
+      "authors": "N Cross",
+      "year": "2004",
+      "cited_by": 979,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13818928775247576022&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "The evolution, challenges, and future of knowledge representation in product design systems",
+      "id": "12990113186551687719",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0010448512001741",
+      "title": "The evolution, challenges, and future of knowledge representation in product design systems",
+      "authors": "SK Chandrasegaran, K Ramani, RD Sriram\u2026",
+      "year": "2013",
+      "cited_by": 535,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12990113186551687719&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "The cognitive artifacts of designing",
+      "id": "8044338510785976237",
+      "url": "https://www.taylorfrancis.com/books/9780429179693",
+      "title": "The cognitive artifacts of designing",
+      "authors": "W Visser",
+      "year": "2006",
+      "cited_by": 359,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8044338510785976237&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Solution driven versus problem driven design: strategies and outcomes",
+      "id": "16606493944006027167",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0142694X06000160",
+      "title": "Solution driven versus problem driven design: strategies and outcomes",
+      "authors": "C Kruger, N Cross",
+      "year": "2006",
+      "cited_by": 326,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16606493944006027167&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Frame innovation: Create new thinking by design",
+      "id": "13855024623824895355",
+      "url": "https://books.google.com/books?hl=en&lr=&id=E6R7BwAAQBAJ&oi=fnd&pg=PR5&ots=n4NGtQnSw0&sig=0FoIDPGUfa2geZfA_YREiT_hGcE",
+      "title": "Frame innovation: Create new thinking by design",
+      "authors": "K Dorst",
+      "year": "2015",
+      "cited_by": 347,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13855024623824895355&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Parallel prototyping leads to better design results, more divergence, and increased self-efficacy",
+      "id": "5934372380977171032",
+      "url": "https://dl.acm.org/citation.cfm?id=1879836",
+      "title": "Parallel prototyping leads to better design results, more divergence, and increased self-efficacy",
+      "authors": "SP Dow, A Glassco, J Kass, M Schwarz\u2026",
+      "year": "2010",
+      "cited_by": 269,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5934372380977171032&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Research methods for human-computer interaction.",
+      "id": "3871294418225897946",
+      "url": "https://psycnet.apa.org/record/2008-14833-000",
+      "title": "Research methods for human-computer interaction.",
+      "authors": "PE Cairns, AL Cox",
+      "year": "2008",
+      "cited_by": 235,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3871294418225897946&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Integrating computational thinking with K-12 science education using agent-based computation: A theoretical framework",
+      "id": "4526006695577842069",
+      "url": "https://link.springer.com/article/10.1007/s10639-012-9240-x",
+      "title": "Integrating computational thinking with K-12 science education using agent-based computation: A theoretical framework",
+      "authors": "P Sengupta, JS Kinnebrew, S Basu, G Biswas\u2026",
+      "year": "2013",
+      "cited_by": 266,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4526006695577842069&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Rethinking design thinking: Part II",
+      "id": "1125182463850719698",
+      "url": "https://www.tandfonline.com/doi/abs/10.2752/175470812X13281948975413",
+      "title": "Rethinking design thinking: Part II",
+      "authors": "L Kimbell",
+      "year": "2012",
+      "cited_by": 236,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1125182463850719698&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "The core of \u2018design thinking\u2019and its application",
+      "id": "11409866206610579756",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0142694X11000603",
+      "title": "The core of \u2018design thinking\u2019and its application",
+      "authors": "K Dorst",
+      "year": "2011",
+      "cited_by": 1077,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11409866206610579756&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Patching vs packaging in policy formulation: Assessing policy portfolio design",
+      "id": "14594609420344046989",
+      "url": "https://www.cogitatiopress.com/politicsandgovernance/article/view/95",
+      "title": "Patching vs packaging in policy formulation: Assessing policy portfolio design",
+      "authors": "M Howlett, J Rayner",
+      "year": "2013",
+      "cited_by": 161,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14594609420344046989&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "The problem with plan-do-study-act cycles",
+      "id": "3445648893362623939",
+      "url": "https://qualitysafety.bmj.com/content/25/3/147.short",
+      "title": "The problem with plan-do-study-act cycles",
+      "authors": "JE Reed, AJ Card",
+      "year": "2016",
+      "cited_by": 131,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3445648893362623939&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Design for value co-creation: Exploring synergies between design for service and service logic",
+      "id": "16376604477796956051",
+      "url": "https://pubsonline.informs.org/doi/abs/10.1287/serv.2014.0068",
+      "title": "Design for value co-creation: Exploring synergies between design for service and service logic",
+      "authors": "K Wetter-Edman, D Sangiorgi, B Edvardsson\u2026",
+      "year": "2014",
+      "cited_by": 103,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16376604477796956051&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Co-design as a process of joint inquiry and imagination",
+      "id": "2595880828052289492",
+      "url": "https://www.mitpressjournals.org/doi/abs/10.1162/DESI_a_00207",
+      "title": "Co-design as a process of joint inquiry and imagination",
+      "authors": "M Steen",
+      "year": "2013",
+      "cited_by": 115,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2595880828052289492&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Initial mental representations of design problems: Differences between experts and novices",
+      "id": "5131168980015356807",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0142694X12000609",
+      "title": "Initial mental representations of design problems: Differences between experts and novices",
+      "authors": "TA Bj\u00f6rklund",
+      "year": "2013",
+      "cited_by": 109,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5131168980015356807&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "The agility construct on project management theory",
+      "id": "3915765658746908302",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0263786316000089",
+      "title": "The agility construct on project management theory",
+      "authors": "EC Conforto, DC Amaral, SL da Silva\u2026",
+      "year": "2016",
+      "cited_by": 93,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3915765658746908302&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Technological Pedagogical Content Knowledge (TPACK) and design thinking: A framework to support ICT lesson design for 21st century learning",
+      "id": "5880775043453123398",
+      "url": "https://link.springer.com/article/10.1007/s40299-015-0237-2",
+      "title": "Technological Pedagogical Content Knowledge (TPACK) and design thinking: A framework to support ICT lesson design for 21st century learning",
+      "authors": "JHL Koh, CS Chai, W Benjamin, HY Hong",
+      "year": "2015",
+      "cited_by": 89,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5880775043453123398&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Reconciling the tension between consistency and relevance: design thinking as a mechanism for brand ambidexterity",
+      "id": "8728897859421198303",
+      "url": "https://link.springer.com/article/10.1007/s11747-015-0443-8",
+      "title": "Reconciling the tension between consistency and relevance: design thinking as a mechanism for brand ambidexterity",
+      "authors": "MB Beverland, SJS Wilner, P Micheli",
+      "year": "2015",
+      "cited_by": 82,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8728897859421198303&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Bridging sustainable business model innovation and user-driven innovation: A process for sustainable value proposition design",
+      "id": "4587195829077387124",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0959652617300951",
+      "title": "Bridging sustainable business model innovation and user-driven innovation: A process for sustainable value proposition design",
+      "authors": "B Baldassarre, G Calabretta, NMP Bocken\u2026",
+      "year": "2017",
+      "cited_by": 99,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4587195829077387124&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Stakeholder Engagement for Service Design: How service designers identify and communicate insights",
+      "id": "10694204142829465444",
+      "url": "http://www.diva-portal.org/smash/record.jsf?pid=diva2:647878",
+      "title": "Stakeholder Engagement for Service Design: How service designers identify and communicate insights",
+      "authors": "F Segelstr\u00f6m",
+      "year": "2013",
+      "cited_by": 62,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10694204142829465444&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Building product models: computer environments, supporting design and construction",
+      "id": "7770756822763039711",
+      "url": "https://www.taylorfrancis.com/books/9781315138671",
+      "title": "Building product models: computer environments, supporting design and construction",
+      "authors": "CM Eastman",
+      "year": "2018",
+      "cited_by": 838,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7770756822763039711&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "BIM handbook: A guide to building information modeling for owners, managers, designers, engineers and contractors",
+      "id": "18128830008383586156",
+      "url": "https://books.google.com/books?hl=en&lr=&id=aCi7Ozwkoj0C&oi=fnd&pg=PP7&ots=ZbFcJRA4Kn&sig=lhqIrqsyXnpt8y3IafwY0cdsMSk",
+      "title": "BIM handbook: A guide to building information modeling for owners, managers, designers, engineers and contractors",
+      "authors": "C Eastman, P Teicholz, R Sacks, K Liston",
+      "year": "2011",
+      "cited_by": 5470,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=18128830008383586156&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Building information modelling framework: A research and delivery foundation for industry stakeholders",
+      "id": "14428939224440894080",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0926580508001568",
+      "title": "Building information modelling framework: A research and delivery foundation for industry stakeholders",
+      "authors": "B Succar",
+      "year": "2009",
+      "cited_by": 1293,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14428939224440894080&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Building information model based energy/exergy performance assessment in early design stages",
+      "id": "16181998455588264536",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0926580508001064",
+      "title": "Building information model based energy/exergy performance assessment in early design stages",
+      "authors": "A Schlueter, F Thesseling",
+      "year": "2009",
+      "cited_by": 597,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16181998455588264536&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "CityGML: Interoperable access to 3D city models",
+      "id": "11369500060406259031",
+      "url": "https://link.springer.com/chapter/10.1007/3-540-27468-5_63",
+      "title": "CityGML: Interoperable access to 3D city models",
+      "authors": "TH Kolbe, G Gr\u00f6ger, L Pl\u00fcmer",
+      "year": "2005",
+      "cited_by": 540,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11369500060406259031&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Theory and design in the first digital age",
+      "id": "812873750079943452",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0142694X05000840",
+      "title": "Theory and design in the first digital age",
+      "authors": "R Oxman",
+      "year": "2006",
+      "cited_by": 442,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=812873750079943452&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Building information modelling\u2013Experts' views on standardisation and industry deployment",
+      "id": "3958763714482915976",
+      "url": "https://www.sciencedirect.com/science/article/pii/S1474034607000201",
+      "title": "Building information modelling\u2013Experts' views on standardisation and industry deployment",
+      "authors": "R Howard, BC Bj\u00f6rk",
+      "year": "2008",
+      "cited_by": 389,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3958763714482915976&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "CityGML\u2013Interoperable semantic 3D city models",
+      "id": "6445805190940808538",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0924271612000779",
+      "title": "CityGML\u2013Interoperable semantic 3D city models",
+      "authors": "G Gr\u00f6ger, L Pl\u00fcmer",
+      "year": "2012",
+      "cited_by": 345,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6445805190940808538&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "A review and outlook for a 'Building Information Model'(BIM): A multi-standpoint framework for technological development",
+      "id": "12634868672461074046",
+      "url": "https://www.sciencedirect.com/science/article/pii/S1474034610000479",
+      "title": "A review and outlook for a 'Building Information Model'(BIM): A multi-standpoint framework for technological development",
+      "authors": "T Cerovsek",
+      "year": "2011",
+      "cited_by": 336,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12634868672461074046&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "IFC and building lifecycle management",
+      "id": "8513399513119976960",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0926580508000800",
+      "title": "IFC and building lifecycle management",
+      "authors": "R Vanlande, C Nicolle, C Cruz",
+      "year": "2008",
+      "cited_by": 333,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8513399513119976960&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Parametric 3D modeling in building construction with examples from precast concrete",
+      "id": "2795564873085241724",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0926580503000438",
+      "title": "Parametric 3D modeling in building construction with examples from precast concrete",
+      "authors": "R Sacks, CM Eastman, G Lee",
+      "year": "2004",
+      "cited_by": 282,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2795564873085241724&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Minds in play: Computer game design as a context for children's learning",
+      "id": "15248934600387896125",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2007-0-05342-1&isbn=9781136482397&format=googlePreviewPdf",
+      "title": "Minds in play: Computer game design as a context for children's learning",
+      "authors": "YB Kafai",
+      "year": "2012",
+      "cited_by": 835,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15248934600387896125&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Seriously considering play: Designing interactive learning environments based on the blending of microworlds, simulations, and games",
+      "id": "17508720492455819666",
+      "url": "https://link.springer.com/article/10.1007/BF02300540",
+      "title": "Seriously considering play: Designing interactive learning environments based on the blending of microworlds, simulations, and games",
+      "authors": "LP Rieber",
+      "year": "1996",
+      "cited_by": 1486,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17508720492455819666&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Tracing the development of teacher knowledge in a design seminar: Integrating content, pedagogy and technology",
+      "id": "2477581131923466047",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0360131505001752",
+      "title": "Tracing the development of teacher knowledge in a design seminar: Integrating content, pedagogy and technology",
+      "authors": "MJ Koehler, P Mishra, K Yahya",
+      "year": "2007",
+      "cited_by": 1039,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2477581131923466047&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Current status, opportunities and challenges of augmented reality in education",
+      "id": "17174474470028932855",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0360131512002527",
+      "title": "Current status, opportunities and challenges of augmented reality in education",
+      "authors": "HK Wu, SWY Lee, HY Chang, JC Liang",
+      "year": "2013",
+      "cited_by": 1137,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17174474470028932855&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Beyond Nintendo: design and assessment of educational video games for first and second grade students",
+      "id": "109444600541633511",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0360131502000994",
+      "title": "Beyond Nintendo: design and assessment of educational video games for first and second grade students",
+      "authors": "R Rosas, M Nussbaum, P Cumsille, V Marianov\u2026",
+      "year": "2003",
+      "cited_by": 925,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=109444600541633511&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Understanding video games: The essential introduction",
+      "id": "4802736820496450590",
+      "url": "https://www.taylorfrancis.com/books/9780429431791",
+      "title": "Understanding video games: The essential introduction",
+      "authors": "S Egenfeldt-Nielsen, JH Smith, SP Tosca",
+      "year": "2019",
+      "cited_by": 842,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4802736820496450590&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Computers, teachers, peers: Science learning partners",
+      "id": "1644875983136551276",
+      "url": "https://books.google.com/books?hl=en&lr=&id=PhuQAgAAQBAJ&oi=fnd&pg=PP1&ots=K04AJJsHTz&sig=xpQp0HIYjXvk2v4XxXAesinhJxM",
+      "title": "Computers, teachers, peers: Science learning partners",
+      "authors": "MC Linn, S Hsi",
+      "year": "2000",
+      "cited_by": 809,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1644875983136551276&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Tools for scaffolding students in a complex learning environment: What have we gained and what have we missed?",
+      "id": "1151194254612780929",
+      "url": "https://www.tandfonline.com/doi/abs/10.1207/s15326985ep4001_1",
+      "title": "Tools for scaffolding students in a complex learning environment: What have we gained and what have we missed?",
+      "authors": "S Puntambekar, R Hubscher",
+      "year": "2005",
+      "cited_by": 828,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1151194254612780929&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Playing and making games for learning: Instructionist and constructionist perspectives for game studies",
+      "id": "4317461347886401561",
+      "url": "https://journals.sagepub.com/doi/abs/10.1177/1555412005281767",
+      "title": "Playing and making games for learning: Instructionist and constructionist perspectives for game studies",
+      "authors": "YB Kafai",
+      "year": "2006",
+      "cited_by": 679,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4317461347886401561&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Digital fabrication and 'making'in education: The democratization of invention",
+      "id": "6785009529976274452",
+      "url": "http://www.academia.edu/download/30555959/Blikstein-2013-Making_The_Democratization_of_Invention.pdf",
+      "title": "Digital fabrication and 'making'in education: The democratization of invention",
+      "authors": "P Blikstein",
+      "year": "2013",
+      "cited_by": 704,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6785009529976274452&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Beyond edutainment: Exploring the educational potential of computer games",
+      "id": "14859170656030948382",
+      "url": "https://books.google.com/books?hl=en&lr=&id=snupBAAAQBAJ&oi=fnd&pg=PA9&ots=0rUBRF63tx&sig=SEBiLXIIri7z7dmc9XyOYIB0vcs",
+      "title": "Beyond edutainment: Exploring the educational potential of computer games",
+      "authors": "S Egenfeldt-Nielsen",
+      "year": "2011",
+      "cited_by": 559,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14859170656030948382&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Abstracting craft: The practiced digital hand",
+      "id": "15681236846792845718",
+      "url": "https://books.google.com/books?hl=en&lr=&id=PcwH1WricJEC&oi=fnd&pg=PR9&ots=jRuJaSqqpQ&sig=mMExkN8BEyDQR3ZJs_hmd8PJJVk",
+      "title": "Abstracting craft: The practiced digital hand",
+      "authors": "M McCullough",
+      "year": "1998",
+      "cited_by": 762,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15681236846792845718&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "[CITATION][C]",
+      "id": "14819181174947171817",
+      "title": "[CITATION][C]",
+      "authors": "N Thrift, A Amin",
+      "year": "2002",
+      "cited_by": 3479,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14819181174947171817&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Thoughtful interaction design: A design perspective on information technology",
+      "id": "243396760690920253",
+      "url": "https://books.google.com/books?hl=en&lr=&id=g573kw36QMUC&oi=fnd&pg=PR7&ots=kkAyEhYAbc&sig=x9Vpt7vbXljOjyrbgjPaie_C5A8",
+      "title": "Thoughtful interaction design: A design perspective on information technology",
+      "authors": "J L\u00f6wgren, E Stolterman",
+      "year": "2004",
+      "cited_by": 873,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=243396760690920253&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "The senses of touch: Haptics, affects and technologies",
+      "id": "5171528311667568477",
+      "url": "https://books.google.com/books?hl=en&lr=&id=PtKvAwAAQBAJ&oi=fnd&pg=PP5&ots=xRHi1qLimL&sig=rkrz58GpPbCurEViF0BxFbchpyk",
+      "title": "The senses of touch: Haptics, affects and technologies",
+      "authors": "M Paterson",
+      "year": "2007",
+      "cited_by": 632,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5171528311667568477&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Gesturecraft: The manu-facture of meaning",
+      "id": "17633304659243386083",
+      "url": "https://books.google.com/books?hl=en&lr=&id=lUI5mZRie6gC&oi=fnd&pg=PR1&ots=bRp9n8zFmI&sig=usrH5sElArnHOa8wZHjwG9zW2pI",
+      "title": "Gesturecraft: The manu-facture of meaning",
+      "authors": "J Streeck",
+      "year": "2009",
+      "cited_by": 553,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17633304659243386083&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Virtual migration: The programming of globalization",
+      "id": "1312069416873096725",
+      "url": "https://books.google.com/books?hl=en&lr=&id=aGoqsWfCXO8C&oi=fnd&pg=PA1&ots=59GmVjLPnx&sig=0I3FZ1w9UOnEaKLLY2Sp5JC0ZFg",
+      "title": "Virtual migration: The programming of globalization",
+      "authors": "A Aneesh",
+      "year": "2006",
+      "cited_by": 394,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1312069416873096725&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "A theory of craft: function and aesthetic expression",
+      "id": "3577974365890644489",
+      "url": "https://books.google.com/books?hl=en&lr=&id=pPuY_aWE4oYC&oi=fnd&pg=PR7&ots=mOucoZ-qi5&sig=XMfRP-hrXgEztMWYz8_6ll4Ij-0",
+      "title": "A theory of craft: function and aesthetic expression",
+      "authors": "H Risatti",
+      "year": "2009",
+      "cited_by": 375,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3577974365890644489&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Think, play, do: Technology, innovation, and organization",
+      "id": "607832293532380093",
+      "url": "https://books.google.com/books?hl=en&lr=&id=P10TDAAAQBAJ&oi=fnd&pg=PR15&ots=1oxwOQDDtb&sig=iT_WWh73WCJoMswZrVYZpyUoeks",
+      "title": "Think, play, do: Technology, innovation, and organization",
+      "authors": "M Dodgson, D Gann, AJ Salter",
+      "year": "2005",
+      "cited_by": 327,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=607832293532380093&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Behind the blip: Essays on the culture of software",
+      "id": "10081416230382911358",
+      "url": "http://research.gold.ac.uk/id/eprint/970",
+      "title": "Behind the blip: Essays on the culture of software",
+      "authors": "M Fuller",
+      "year": "2003",
+      "cited_by": 313,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10081416230382911358&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Virtual reality and the built environment",
+      "id": "11265468246803013685",
+      "url": "https://www.taylorfrancis.com/books/9780080520667",
+      "title": "Virtual reality and the built environment",
+      "authors": "J Whyte",
+      "year": "2007",
+      "cited_by": 268,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11265468246803013685&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Aesthetics and experience-centered design",
+      "id": "4648901125319654513",
+      "url": "https://dl.acm.org/citation.cfm?id=1460360",
+      "title": "Aesthetics and experience-centered design",
+      "authors": "P Wright, J Wallace, J McCarthy",
+      "year": "2008",
+      "cited_by": 259,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4648901125319654513&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Service innovation in the digital age: key contributions and future directions",
+      "id": "3183556494472853402",
+      "url": "https://www.misq.org/misq/downloads/download/editorial/616/",
+      "title": "Service innovation in the digital age: key contributions and future directions",
+      "authors": "M Barrett, E Davidson, J Prabhu, SL Vargo",
+      "year": "2015",
+      "cited_by": 555,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3183556494472853402&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Service-dominant logic 2025",
+      "id": "9964012927857006977",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0167811615302007",
+      "title": "Service-dominant logic 2025",
+      "authors": "SL Vargo, RF Lusch",
+      "year": "2017",
+      "cited_by": 384,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9964012927857006977&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Pragmatism and Design Thinking.",
+      "id": "1630436138846617202",
+      "url": "https://www.researchgate.net/profile/Peter_Dalsgaard/publication/288295454_Pragmatism_and_Design_Thinking/links/58aaac9692851cf0e3c6cb2c/Pragmatism-and-Design-Thinking.pdf",
+      "title": "Pragmatism and Design Thinking.",
+      "authors": "P Dalsgaard",
+      "year": "2014",
+      "cited_by": 104,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1630436138846617202&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Design thinking and organizational culture: A review and framework for future research",
+      "id": "4092859112367577648",
+      "url": "https://journals.sagepub.com/doi/abs/10.1177/0149206317744252",
+      "title": "Design thinking and organizational culture: A review and framework for future research",
+      "authors": "KD Elsbach, I Stigliani",
+      "year": "2018",
+      "cited_by": 70,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4092859112367577648&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Urban design: the American experience",
+      "id": "2589671767135530850",
+      "url": "https://books.google.com/books?hl=en&lr=&id=Rp8ISlY4DBsC&oi=fnd&pg=PR9&ots=156skqkcAm&sig=jLCWGnmdj0mhUf34JLz-KsBLVVs",
+      "title": "Urban design: the American experience",
+      "authors": "J Lang",
+      "year": "1994",
+      "cited_by": 583,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2589671767135530850&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Public places-Urban spaces",
+      "id": "5143919825678837114",
+      "url": "https://www.taylorfrancis.com/books/9780080515427",
+      "title": "Public places-Urban spaces",
+      "authors": "M Carmona, T Heath, T Oc, S Tiesdell",
+      "year": "2012",
+      "cited_by": 2456,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5143919825678837114&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Root shock: How tearing up city neighborhoods hurts America, and what we can do about it",
+      "id": "4272083139734317419",
+      "url": "https://books.google.com/books?hl=en&lr=&id=EJZRDwAAQBAJ&oi=fnd&pg=PR15&ots=t1FNL1t3md&sig=1Pc_tf1rEfMrwBheCfBlaJ8EFZE",
+      "title": "Root shock: How tearing up city neighborhoods hurts America, and what we can do about it",
+      "authors": "MT Fullilove",
+      "year": "2016",
+      "cited_by": 849,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4272083139734317419&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Sense of community and neighbourhood form: An assessment of the social doctrine of new urbanism",
+      "id": "16415979999896811120",
+      "url": "https://journals.sagepub.com/doi/abs/10.1080/0042098993033",
+      "title": "Sense of community and neighbourhood form: An assessment of the social doctrine of new urbanism",
+      "authors": "E Talen",
+      "year": "1999",
+      "cited_by": 742,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16415979999896811120&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Urban design: A typology of procedures and products",
+      "id": "8638977321751208813",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2016-0-41580-3&isbn=9781136350696&format=googlePreviewPdf",
+      "title": "Urban design: A typology of procedures and products",
+      "authors": "J Lang",
+      "year": "2006",
+      "cited_by": 421,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8638977321751208813&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "The new urbanism: Critiques and rebuttals",
+      "id": "10036608556622044107",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/1357480022000039330",
+      "title": "The new urbanism: Critiques and rebuttals",
+      "authors": "C Ellis",
+      "year": "2002",
+      "cited_by": 351,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10036608556622044107&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "The form of cities: Political economy and urban design",
+      "id": "9142344137212258532",
+      "url": "https://books.google.com/books?hl=en&lr=&id=86tPZuYmnIgC&oi=fnd&pg=PR5&ots=M7Hsh4nlfB&sig=KVgHlJDQJGlCUv7wSdbSK2THG44",
+      "title": "The form of cities: Political economy and urban design",
+      "authors": "AR Cuthbert",
+      "year": "2008",
+      "cited_by": 332,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9142344137212258532&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Public space: the management dimension",
+      "id": "11236802549598472272",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2009-0-07328-9&isbn=9781134166640&format=googlePreviewPdf",
+      "title": "Public space: the management dimension",
+      "authors": "M Carmona, C De Magalhaes, L Hammond",
+      "year": "2008",
+      "cited_by": 317,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11236802549598472272&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Urban design reader",
+      "id": "536710736611349284",
+      "url": "https://books.google.com/books?hl=en&lr=&id=20Yzz44hAi8C&oi=fnd&pg=PR1&ots=JDo1zSVKHX&sig=PpY66uvK2-_c3J7iXFlcBrzsrdI",
+      "title": "Urban design reader",
+      "authors": "M Carmona, S Tiesdell",
+      "year": "2007",
+      "cited_by": 295,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=536710736611349284&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "New urbanism and the city: Potential applications and implications for distressed inner\u2010city neighborhoods",
+      "id": "3908874801560341589",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/10511482.2000.9521387",
+      "title": "New urbanism and the city: Potential applications and implications for distressed inner\u2010city neighborhoods",
+      "authors": "CC Bohl",
+      "year": "2000",
+      "cited_by": 269,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3908874801560341589&as_sdt=40000005&sciodt=1,22&hl=en"
+    },
+    {
+      "label": "Public/private development: Lessons from history, research, and practice",
+      "id": "15667373855762094331",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/01944360708976133",
+      "title": "Public/private development: Lessons from history, research, and practice",
+      "authors": "LB Sagalyn",
+      "year": "2007",
+      "cited_by": 215,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15667373855762094331&as_sdt=40000005&sciodt=1,22&hl=en"
+    }
+  ],
+  "links": [
+    {
+      "source": "16821992797506766329",
+      "target": "3431493009517767209"
+    },
+    {
+      "source": "1815839450354238582",
+      "target": "16821992797506766329"
+    },
+    {
+      "source": "14728727331132137888",
+      "target": "16821992797506766329"
+    },
+    {
+      "source": "12837637295573204254",
+      "target": "16821992797506766329"
+    },
+    {
+      "source": "13742271598181907082",
+      "target": "16821992797506766329"
+    },
+    {
+      "source": "13742271598181907082",
+      "target": "10400745104787950932"
+    },
+    {
+      "source": "16854422332716145011",
+      "target": "16821992797506766329"
+    },
+    {
+      "source": "3192848657962168917",
+      "target": "16821992797506766329"
+    },
+    {
+      "source": "10400745104787950932",
+      "target": "16821992797506766329"
+    },
+    {
+      "source": "10400745104787950932",
+      "target": "3431493009517767209"
+    },
+    {
+      "source": "4376101026158153890",
+      "target": "16821992797506766329"
+    },
+    {
+      "source": "4376101026158153890",
+      "target": "13818928775247576022"
+    },
+    {
+      "source": "11537471864076379219",
+      "target": "16821992797506766329"
+    },
+    {
+      "source": "11537471864076379219",
+      "target": "17716524980260594986"
+    },
+    {
+      "source": "11537471864076379219",
+      "target": "1126031978416611822"
+    },
+    {
+      "source": "11537471864076379219",
+      "target": "10400745104787950932"
+    },
+    {
+      "source": "1910282563503695371",
+      "target": "16821992797506766329"
+    },
+    {
+      "source": "17716524980260594986",
+      "target": "3431493009517767209"
+    },
+    {
+      "source": "7502878587993559398",
+      "target": "17716524980260594986"
+    },
+    {
+      "source": "6918459715192790870",
+      "target": "17716524980260594986"
+    },
+    {
+      "source": "9124716159119528890",
+      "target": "17716524980260594986"
+    },
+    {
+      "source": "3393881613200370321",
+      "target": "17716524980260594986"
+    },
+    {
+      "source": "13224585772494284601",
+      "target": "17716524980260594986"
+    },
+    {
+      "source": "10475529673979778260",
+      "target": "17716524980260594986"
+    },
+    {
+      "source": "8167891428259645811",
+      "target": "17716524980260594986"
+    },
+    {
+      "source": "8167891428259645811",
+      "target": "13818928775247576022"
+    },
+    {
+      "source": "10976926944254470509",
+      "target": "17716524980260594986"
+    },
+    {
+      "source": "8642222583827656298",
+      "target": "17716524980260594986"
+    },
+    {
+      "source": "1126031978416611822",
+      "target": "3431493009517767209"
+    },
+    {
+      "source": "13791300279590302480",
+      "target": "1126031978416611822"
+    },
+    {
+      "source": "5337772644127834573",
+      "target": "1126031978416611822"
+    },
+    {
+      "source": "15636636604043621903",
+      "target": "1126031978416611822"
+    },
+    {
+      "source": "12005550466292504237",
+      "target": "1126031978416611822"
+    },
+    {
+      "source": "15071916487803734471",
+      "target": "1126031978416611822"
+    },
+    {
+      "source": "15071916487803734471",
+      "target": "10400745104787950932"
+    },
+    {
+      "source": "16802291670965168163",
+      "target": "1126031978416611822"
+    },
+    {
+      "source": "2452302737400230681",
+      "target": "1126031978416611822"
+    },
+    {
+      "source": "2452302737400230681",
+      "target": "10400745104787950932"
+    },
+    {
+      "source": "7259089252909004243",
+      "target": "1126031978416611822"
+    },
+    {
+      "source": "4672539436523907761",
+      "target": "1126031978416611822"
+    },
+    {
+      "source": "13818928775247576022",
+      "target": "3431493009517767209"
+    },
+    {
+      "source": "12990113186551687719",
+      "target": "13818928775247576022"
+    },
+    {
+      "source": "8044338510785976237",
+      "target": "13818928775247576022"
+    },
+    {
+      "source": "16606493944006027167",
+      "target": "13818928775247576022"
+    },
+    {
+      "source": "13855024623824895355",
+      "target": "13818928775247576022"
+    },
+    {
+      "source": "5934372380977171032",
+      "target": "13818928775247576022"
+    },
+    {
+      "source": "3871294418225897946",
+      "target": "13818928775247576022"
+    },
+    {
+      "source": "4526006695577842069",
+      "target": "13818928775247576022"
+    },
+    {
+      "source": "1125182463850719698",
+      "target": "13818928775247576022"
+    },
+    {
+      "source": "1125182463850719698",
+      "target": "10400745104787950932"
+    },
+    {
+      "source": "11409866206610579756",
+      "target": "3431493009517767209"
+    },
+    {
+      "source": "14594609420344046989",
+      "target": "11409866206610579756"
+    },
+    {
+      "source": "3445648893362623939",
+      "target": "11409866206610579756"
+    },
+    {
+      "source": "16376604477796956051",
+      "target": "11409866206610579756"
+    },
+    {
+      "source": "2595880828052289492",
+      "target": "11409866206610579756"
+    },
+    {
+      "source": "5131168980015356807",
+      "target": "11409866206610579756"
+    },
+    {
+      "source": "3915765658746908302",
+      "target": "11409866206610579756"
+    },
+    {
+      "source": "5880775043453123398",
+      "target": "11409866206610579756"
+    },
+    {
+      "source": "8728897859421198303",
+      "target": "11409866206610579756"
+    },
+    {
+      "source": "8728897859421198303",
+      "target": "10400745104787950932"
+    },
+    {
+      "source": "4587195829077387124",
+      "target": "11409866206610579756"
+    },
+    {
+      "source": "10694204142829465444",
+      "target": "11409866206610579756"
+    },
+    {
+      "source": "7770756822763039711",
+      "target": "3431493009517767209"
+    },
+    {
+      "source": "18128830008383586156",
+      "target": "7770756822763039711"
+    },
+    {
+      "source": "14428939224440894080",
+      "target": "7770756822763039711"
+    },
+    {
+      "source": "16181998455588264536",
+      "target": "7770756822763039711"
+    },
+    {
+      "source": "11369500060406259031",
+      "target": "7770756822763039711"
+    },
+    {
+      "source": "812873750079943452",
+      "target": "7770756822763039711"
+    },
+    {
+      "source": "3958763714482915976",
+      "target": "7770756822763039711"
+    },
+    {
+      "source": "6445805190940808538",
+      "target": "7770756822763039711"
+    },
+    {
+      "source": "12634868672461074046",
+      "target": "7770756822763039711"
+    },
+    {
+      "source": "8513399513119976960",
+      "target": "7770756822763039711"
+    },
+    {
+      "source": "2795564873085241724",
+      "target": "7770756822763039711"
+    },
+    {
+      "source": "15248934600387896125",
+      "target": "3431493009517767209"
+    },
+    {
+      "source": "17508720492455819666",
+      "target": "15248934600387896125"
+    },
+    {
+      "source": "2477581131923466047",
+      "target": "15248934600387896125"
+    },
+    {
+      "source": "17174474470028932855",
+      "target": "15248934600387896125"
+    },
+    {
+      "source": "109444600541633511",
+      "target": "15248934600387896125"
+    },
+    {
+      "source": "4802736820496450590",
+      "target": "15248934600387896125"
+    },
+    {
+      "source": "1644875983136551276",
+      "target": "15248934600387896125"
+    },
+    {
+      "source": "1151194254612780929",
+      "target": "15248934600387896125"
+    },
+    {
+      "source": "4317461347886401561",
+      "target": "15248934600387896125"
+    },
+    {
+      "source": "6785009529976274452",
+      "target": "15248934600387896125"
+    },
+    {
+      "source": "14859170656030948382",
+      "target": "15248934600387896125"
+    },
+    {
+      "source": "15681236846792845718",
+      "target": "3431493009517767209"
+    },
+    {
+      "source": "14819181174947171817",
+      "target": "15681236846792845718"
+    },
+    {
+      "source": "243396760690920253",
+      "target": "15681236846792845718"
+    },
+    {
+      "source": "5171528311667568477",
+      "target": "15681236846792845718"
+    },
+    {
+      "source": "17633304659243386083",
+      "target": "15681236846792845718"
+    },
+    {
+      "source": "1312069416873096725",
+      "target": "15681236846792845718"
+    },
+    {
+      "source": "3577974365890644489",
+      "target": "15681236846792845718"
+    },
+    {
+      "source": "607832293532380093",
+      "target": "15681236846792845718"
+    },
+    {
+      "source": "10081416230382911358",
+      "target": "15681236846792845718"
+    },
+    {
+      "source": "11265468246803013685",
+      "target": "15681236846792845718"
+    },
+    {
+      "source": "4648901125319654513",
+      "target": "15681236846792845718"
+    },
+    {
+      "source": "3183556494472853402",
+      "target": "10400745104787950932"
+    },
+    {
+      "source": "9964012927857006977",
+      "target": "10400745104787950932"
+    },
+    {
+      "source": "1630436138846617202",
+      "target": "10400745104787950932"
+    },
+    {
+      "source": "4092859112367577648",
+      "target": "10400745104787950932"
+    },
+    {
+      "source": "2589671767135530850",
+      "target": "3431493009517767209"
+    },
+    {
+      "source": "5143919825678837114",
+      "target": "2589671767135530850"
+    },
+    {
+      "source": "4272083139734317419",
+      "target": "2589671767135530850"
+    },
+    {
+      "source": "16415979999896811120",
+      "target": "2589671767135530850"
+    },
+    {
+      "source": "8638977321751208813",
+      "target": "2589671767135530850"
+    },
+    {
+      "source": "10036608556622044107",
+      "target": "2589671767135530850"
+    },
+    {
+      "source": "9142344137212258532",
+      "target": "2589671767135530850"
+    },
+    {
+      "source": "11236802549598472272",
+      "target": "2589671767135530850"
+    },
+    {
+      "source": "536710736611349284",
+      "target": "2589671767135530850"
+    },
+    {
+      "source": "3908874801560341589",
+      "target": "2589671767135530850"
+    },
+    {
+      "source": "15667373855762094331",
+      "target": "2589671767135530850"
+    }
+  ]
+};
+
+var link = svg.append("g")
+    .attr("class", "links")
+  .selectAll("line")
+  .data(graph.links)
+  .enter().append("line");
+
+var node = svg.append("g")
+    .attr("class", "nodes")
+  .selectAll("circle")
+  .data(graph.nodes)
+  .enter().append("circle")
+    .attr("r", 5)
+    .call(d3.drag()
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended));
+
+node.append("title")
+    .text(function(d) {
+        return d.authors ? d.title + ' - ' + d.authors : d.title
+    });
+
+node.on("click", function(d) {
+  window.open(d.url, '_blank');
+  d3.event.stopPropagation();
+});
+
+simulation
+    .nodes(graph.nodes)
+    .on("tick", ticked);
+
+simulation.force("link")
+    .links(graph.links);
+
+function ticked() {
+  link
+      .attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
+
+  node
+      .attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; });
+}
+
+function dragstarted(d) {
+  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+  d.fx = d.x;
+  d.fy = d.y;
+}
+
+function dragged(d) {
+  d.fx = d3.event.x;
+  d.fy = d3.event.y;
+}
+
+function dragended(d) {
+  if (!d3.event.active) simulation.alphaTarget(0);
+  d.fx = null;
+  d.fy = null;
+}
+
+</script>
