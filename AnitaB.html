@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<style>
+
+.links line {
+  stroke: #999;
+  stroke-opacity: 0.8;
+  stroke-width: 2px;
+}
+
+.nodes circle {
+  stroke: black;
+  fill: white;
+  stroke-width: 1.5px;
+}
+
+#graph {
+  width: 99vw;
+  height: 99vh;
+}
+
+</style>
+<svg id="graph"></svg>
+<script>
+
+var width = $(window).width();
+var height = $(window).height();
+
+var svg = d3.select("svg")
+    .attr("height", height)
+    .attr("width", width);
+
+var color = d3.scaleOrdinal(d3.schemeCategory20c);
+
+var simulation = d3.forceSimulation()
+    .velocityDecay(0.6)
+    .force("link", d3.forceLink().id(function(d) { return d.id; }))
+    .force("charge", d3.forceManyBody())
+    .force("center", d3.forceCenter(width / 2, height / 2));
+
+var graph = {
+  "nodes": [
+    {
+      "label": "Art and architecture: a place between",
+      "id": "8155017193395339313",
+      "url": "http://www.janerendell.co.uk/wp-content/uploads/2009/03/Art-and-Architecture-prepublication.pdf",
+      "title": "Art and architecture: a place between",
+      "authors": "J Rendell",
+      "year": "2006",
+      "cited_by": 392,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8155017193395339313&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Inside outside: between architecture and landscape",
+      "id": "4203597988604919511",
+      "title": "Inside outside: between architecture and landscape"
+    },
+    {
+      "label": "Learning the city: knowledge and translocal assemblage",
+      "id": "1164320569137154808",
+      "url": "https://books.google.com/books?hl=en&lr=&id=0E2DJWlRKCUC&oi=fnd&pg=PT10&ots=35cpBpcOqS&sig=ONXxRIMMnZx3GT17v9dFhdNcLc8",
+      "title": "Learning the city: knowledge and translocal assemblage",
+      "authors": "C McFarlane",
+      "year": "2011",
+      "cited_by": 523,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1164320569137154808&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The life of lines",
+      "id": "633284274262450580",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2009-0-08182-5&isbn=9781317539346&format=googlePreviewPdf",
+      "title": "The life of lines",
+      "authors": "T Ingold",
+      "year": "2015",
+      "cited_by": 462,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=633284274262450580&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Footprints through the weather\u2010world: walking, breathing, knowing",
+      "id": "5696720647386845580",
+      "url": "https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1467-9655.2010.01613.x",
+      "title": "Footprints through the weather\u2010world: walking, breathing, knowing",
+      "authors": "T Ingold",
+      "year": "2010",
+      "cited_by": 370,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5696720647386845580&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Gender space architecture: an interdisciplinary introduction",
+      "id": "12723876765474216462",
+      "url": "https://books.google.com/books?hl=en&lr=&id=3CyEAgAAQBAJ&oi=fnd&pg=PP1&ots=HBByLstq1d&sig=-cyOAV2Ln6gVo8RYmE_QiDlmHzI",
+      "title": "Gender space architecture: an interdisciplinary introduction",
+      "authors": "I Borden, B Penner, J Rendell",
+      "year": "2002",
+      "cited_by": 258,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12723876765474216462&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Walking and rhythmicity: Sensing urban space",
+      "id": "656248784403469096",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/13574800701803472",
+      "title": "Walking and rhythmicity: Sensing urban space",
+      "authors": "F Matos Wunderlich",
+      "year": "2008",
+      "cited_by": 260,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=656248784403469096&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Sense and the city: exploring the embodied geographies of urban walking",
+      "id": "11434565106305800124",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/14649365.2010.497913",
+      "title": "Sense and the city: exploring the embodied geographies of urban walking",
+      "authors": "J Middleton",
+      "year": "2010",
+      "cited_by": 248,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11434565106305800124&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Geography and art. An expanding field: Site, the body and practice",
+      "id": "754711151693873108",
+      "url": "https://journals.sagepub.com/doi/abs/10.1177/0309132512442865",
+      "title": "Geography and art. An expanding field: Site, the body and practice",
+      "authors": "H Hawkins",
+      "year": "2013",
+      "cited_by": 185,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=754711151693873108&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Site-writing: the architecture of art criticism",
+      "id": "3026663753895044021",
+      "url": "https://discovery.ucl.ac.uk/id/eprint/1310286/",
+      "title": "Site-writing: the architecture of art criticism",
+      "authors": "J Rendell",
+      "year": "2011",
+      "cited_by": 139,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3026663753895044021&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "For creative geographies: Geography, visual arts and the making of worlds",
+      "id": "6467597721525788",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2011-0-19050-7&isbn=9781135139674&format=googlePreviewPdf",
+      "title": "For creative geographies: Geography, visual arts and the making of worlds",
+      "authors": "H Hawkins",
+      "year": "2013",
+      "cited_by": 156,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6467597721525788&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Dialogues and doings: sketching the relationships between geography and art",
+      "id": "15988282940401290124",
+      "url": "https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1749-8198.2011.00429.x",
+      "title": "Dialogues and doings: sketching the relationships between geography and art",
+      "authors": "H Hawkins",
+      "year": "2011",
+      "cited_by": 113,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15988282940401290124&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Integral urbanism",
+      "id": "5401847472758703950",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2006-0-00394-2&isbn=9781135436643&format=googlePreviewPdf",
+      "title": "Integral urbanism",
+      "authors": "N Ellin",
+      "year": "2013",
+      "cited_by": 262,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5401847472758703950&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Public places-Urban spaces",
+      "id": "5143919825678837114",
+      "url": "https://www.taylorfrancis.com/books/9780080515427",
+      "title": "Public places-Urban spaces",
+      "authors": "M Carmona, T Heath, T Oc, S Tiesdell",
+      "year": "2012",
+      "cited_by": 2456,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5143919825678837114&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Collateral knowledge: Legal reasoning in the global financial markets",
+      "id": "9680058275094285624",
+      "url": "https://books.google.com/books?hl=en&lr=&id=4ek6zWSyknMC&oi=fnd&pg=PR7&ots=9SERFRDors&sig=YpmCkYNnHrC28fCOnhqtvKYmnaE",
+      "title": "Collateral knowledge: Legal reasoning in the global financial markets",
+      "authors": "A Riles",
+      "year": "2011",
+      "cited_by": 491,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9680058275094285624&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Design for diversity",
+      "id": "12967517714981181494",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2011-0-09504-9&isbn=9781136411458&format=googlePreviewPdf",
+      "title": "Design for diversity",
+      "authors": "E Talen",
+      "year": "2012",
+      "cited_by": 203,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12967517714981181494&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Hot, congested, crowded and diverse: Emerging research agendas in planning",
+      "id": "545371780766505193",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0305900609000233",
+      "title": "Hot, congested, crowded and diverse: Emerging research agendas in planning",
+      "authors": "H Blanco, M Alberti, A Forsyth, KJ Krizek\u2026",
+      "year": "2009",
+      "cited_by": 177,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=545371780766505193&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Cities and design",
+      "id": "5780136874196148319",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2009-0-10163-6&isbn=9781136949173&format=googlePreviewPdf",
+      "title": "Cities and design",
+      "authors": "PL Knox",
+      "year": "2010",
+      "cited_by": 148,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5780136874196148319&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The privatization of public space: modeling and measuring publicness",
+      "id": "16900738893292517213",
+      "url": "https://journals.sagepub.com/doi/abs/10.1068/b36057",
+      "title": "The privatization of public space: modeling and measuring publicness",
+      "authors": "J N\u00e9meth, S Schmidt",
+      "year": "2011",
+      "cited_by": 148,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16900738893292517213&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Cities and gender",
+      "id": "8395694000390345430",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2009-0-09907-3&isbn=9781134119257&format=googlePreviewPdf",
+      "title": "Cities and gender",
+      "authors": "H Jarvis, J Cloke, P Kantor",
+      "year": "2009",
+      "cited_by": 147,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8395694000390345430&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "City and soul in divided societies",
+      "id": "2706998558130433532",
+      "url": "https://www.taylorfrancis.com/books/9780203156209",
+      "title": "City and soul in divided societies",
+      "authors": "SA Bollens",
+      "year": "2012",
+      "cited_by": 125,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2706998558130433532&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Zoned in the USA: The origins and implications of American land-use regulation",
+      "id": "11505382563387202984",
+      "url": "https://books.google.com/books?hl=en&lr=&id=xfNqBgAAQBAJ&oi=fnd&pg=PR7&ots=v_VWBQhQDq&sig=VhmgSKPnS0PWr9IOI0uEqQUGwjg",
+      "title": "Zoned in the USA: The origins and implications of American land-use regulation",
+      "authors": "SA Hirt",
+      "year": "2015",
+      "cited_by": 93,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11505382563387202984&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Sprawl retrofit: sustainable urban form in unsustainable places",
+      "id": "16161179243783093",
+      "url": "https://journals.sagepub.com/doi/abs/10.1068/b37048",
+      "title": "Sprawl retrofit: sustainable urban form in unsustainable places",
+      "authors": "E Talen",
+      "year": "2011",
+      "cited_by": 81,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16161179243783093&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Multimodality in the built environment: Spatial discourse analysis",
+      "id": "3840582515616716051",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2013-0-18306-2&isbn=9781134747900&format=googlePreviewPdf",
+      "title": "Multimodality in the built environment: Spatial discourse analysis",
+      "authors": "LJ Ravelli, RJ McMurtrie",
+      "year": "2015",
+      "cited_by": 41,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3840582515616716051&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Towards an articulation of the material and visual turn in organization studies",
+      "id": "13328571242034769788",
+      "url": "https://journals.sagepub.com/doi/abs/10.1177/0170840618772611",
+      "title": "Towards an articulation of the material and visual turn in organization studies",
+      "authors": "E Boxenbaum, C Jones, RE Meyer, S Svejenova",
+      "year": "2018",
+      "cited_by": 33,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13328571242034769788&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The architecture of city identities: A multimodal study of Barcelona and Boston",
+      "id": "18329745922857632949",
+      "url": "https://www.emeraldinsight.com/doi/abs/10.1108/S0733-558X2017000054B007",
+      "title": "The architecture of city identities: A multimodal study of Barcelona and Boston",
+      "authors": "C Jones, S Svejenova",
+      "year": "2017",
+      "cited_by": 22,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=18329745922857632949&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The semiotics of movement in space",
+      "id": "2180301313816533659",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2015-0-66349-X&isbn=9781317276524&format=googlePreviewPdf",
+      "title": "The semiotics of movement in space",
+      "authors": "RJ McMurtrie",
+      "year": "2016",
+      "cited_by": 16,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2180301313816533659&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Place, space, and networked learning",
+      "id": "8259835520623093858",
+      "url": "https://www.taylorfrancis.com/books/e/9781315724485/chapters/10.4324/9781315724485-1",
+      "title": "Place, space, and networked learning",
+      "authors": "L Carvalho, P Goodyear, M de Laat",
+      "year": "2016",
+      "cited_by": 11,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8259835520623093858&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The material and visual turn in organization theory: Objectifying and (re) acting to novel ideas",
+      "id": "12219436841366827939",
+      "url": "https://www.researchgate.net/profile/Candace_Jones2/publication/325030481_Towards_an_Articulation_of_the_Material_and_Visual_Turn_in_Organization_Studies/links/5c5e9197299bf1d14cb67f7c/Towards-an-Articulation-of-the-Material-and-Visual-Turn-in-Organization-Studies.pdf",
+      "title": "The material and visual turn in organization theory: Objectifying and (re) acting to novel ideas",
+      "authors": "E Boxenbaum, C Jones, RE Meyer, S Svejenova",
+      "year": "2018",
+      "cited_by": 11,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12219436841366827939&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Visual and multimodal research in organization and management studies",
+      "id": "10415216152744556390",
+      "url": "https://www.taylorfrancis.com/books/9781315455013",
+      "title": "Visual and multimodal research in organization and management studies",
+      "authors": "MA H\u00f6llerer, T van Leeuwen, D Jancsary, RE Meyer\u2026",
+      "year": "2019",
+      "cited_by": 12,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10415216152744556390&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Networked places as communicative resources: a social-semiotic analysis of a redesigned university library",
+      "id": "10593718468502084845",
+      "url": "https://www.taylorfrancis.com/books/e/9781315724485/chapters/10.4324/9781315724485-9",
+      "title": "Networked places as communicative resources: a social-semiotic analysis of a redesigned university library",
+      "authors": "LJ Ravelli, RJ McMurtrie",
+      "year": "2016",
+      "cited_by": 5,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10593718468502084845&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Penetrating spaces: a social semiotic, multimodal analysis of performance as rape prevention",
+      "id": "14942608296181936452",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/10350330.2016.1189728",
+      "title": "Penetrating spaces: a social semiotic, multimodal analysis of performance as rape prevention",
+      "authors": "RJ McMurtrie, A Murphy",
+      "year": "2016",
+      "cited_by": 4,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14942608296181936452&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Semiotics and design: Towards an aesthetics of the artificial",
+      "id": "15089965629686222748",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/14606925.2017.1352860",
+      "title": "Semiotics and design: Towards an aesthetics of the artificial",
+      "authors": "M Holt",
+      "year": "2017",
+      "cited_by": 3,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15089965629686222748&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Museums and creative industries: The contribution of Translation Studies",
+      "id": "3318002739540840810",
+      "url": "https://researchportal.hw.ac.uk/files/16069895/29_Liao_Formatted.pdf",
+      "title": "Museums and creative industries: The contribution of Translation Studies",
+      "authors": "MH Liao",
+      "year": "2018",
+      "cited_by": 5,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3318002739540840810&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Designing wilderness as a phenomenological landscape: design-directed research within the...",
+      "id": "13794093725927000978",
+      "url": "http://researcharchive.lincoln.ac.nz/handle/10182/1026",
+      "title": "Designing wilderness as a phenomenological landscape: design-directed research within the...",
+      "authors": "MR Abbott",
+      "year": "2008",
+      "cited_by": 19,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13794093725927000978&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Research strategies in landscape architecture: mapping the terrain",
+      "id": "4384244320637127719",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/18626033.2011.9723445",
+      "title": "Research strategies in landscape architecture: mapping the terrain",
+      "authors": "S Swaffield, ME Deming",
+      "year": "2011",
+      "cited_by": 39,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4384244320637127719&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Globalisation, contest and paradox in a continuing cultural landscape: Land reform in the New Zealand High Country",
+      "id": "4486261781243588226",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/00167223.2009.10649605",
+      "title": "Globalisation, contest and paradox in a continuing cultural landscape: Land reform in the New Zealand High Country",
+      "authors": "S Swaffield, A Brower",
+      "year": "2009",
+      "cited_by": 8,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4486261781243588226&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Landscaping Boulder Bay, Canterbury, New Zealand: the emergent and contested classification of authentic heritage baches and an endangered species of penguin",
+      "id": "9219803052754450147",
+      "url": "http://researcharchive.lincoln.ac.nz/handle/10182/5885",
+      "title": "Landscaping Boulder Bay, Canterbury, New Zealand: the emergent and contested classification of authentic heritage baches and an endangered species of penguin",
+      "authors": "RJS Foster",
+      "year": "2012",
+      "cited_by": 2,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9219803052754450147&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "'Visions of wildness': the place of (re) wilding in Scotland's uplands",
+      "id": "3161473385057697446",
+      "url": "https://research-repository.st-andrews.ac.uk/handle/10023/11903",
+      "title": "'Visions of wildness': the place of (re) wilding in Scotland's uplands",
+      "authors": "HA Deary",
+      "year": "2014",
+      "cited_by": 2,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3161473385057697446&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "A landscape of paths: seeing, being, moving, making",
+      "id": "6915809749170320536",
+      "url": "http://researcharchive.lincoln.ac.nz/handle/10182/6821",
+      "title": "A landscape of paths: seeing, being, moving, making",
+      "authors": "J Rae",
+      "year": "2015",
+      "cited_by": 2,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6915809749170320536&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "[CITATION][C]",
+      "id": "15094943886647989623",
+      "title": "[CITATION][C]",
+      "authors": "JR Maxted",
+      "year": "2011",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15094943886647989623&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The role of landscape architecture in designing for urban transformations and adaption after disaster: a design-directed inquiry within the context of post-earthquake\u00a0\u2026",
+      "id": "9434716265144007454",
+      "url": "http://researcharchive.lincoln.ac.nz/handle/10182/6416",
+      "title": "The role of landscape architecture in designing for urban transformations and adaption after disaster: a design-directed inquiry within the context of post-earthquake\u00a0\u2026",
+      "authors": "N Copley",
+      "year": "2014",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9434716265144007454&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "A new wild: Reimagining the potential of indigenous biodiversity in Aotearoa, New Zealand",
+      "id": "15016336621667383860",
+      "url": "https://www.ingentaconnect.com/content/intellect/des/2018/00000007/00000001/art00005",
+      "title": "A new wild: Reimagining the potential of indigenous biodiversity in Aotearoa, New Zealand",
+      "authors": "M Abbott, K Blackburne, C Boyle, W Lee\u2026",
+      "year": "2018",
+      "cited_by": 2,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15016336621667383860&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "[CITATION][C]",
+      "id": "752937230762088333",
+      "title": "[CITATION][C]",
+      "authors": "BA Payne",
+      "year": "2017"
+    },
+    {
+      "label": "The Caterpillar Dreaming Trail",
+      "id": "1719836361862813278",
+      "url": "https://research-repository.uwa.edu.au/files/26945694/THESIS_DOCTOR_OF_PHILOSOPHY_BLACKWOOD_Ailsa_Louise_2018.pdf",
+      "title": "The Caterpillar Dreaming Trail",
+      "authors": "A Blackwood, N Nannup",
+      "year": "research-repository.uwa.edu.au"
+    },
+    {
+      "label": "From emergence to divergence: modes of landscape urbanism",
+      "id": "1778390450827336932",
+      "url": "http://www.academia.edu/download/31022350/master-of-architecture-cgray-web.pdf",
+      "title": "From emergence to divergence: modes of landscape urbanism",
+      "authors": "CD Gray, F Reader, M Jones",
+      "year": "2006",
+      "cited_by": 16,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1778390450827336932&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Utopian-driven projektive research exploring the field of Metaurbanism",
+      "id": "6660383954699495475",
+      "url": "http://publications.lib.chalmers.se/records/fulltext/157597.pdf",
+      "title": "Utopian-driven projektive research exploring the field of Metaurbanism",
+      "authors": "N Janssens",
+      "year": "2012",
+      "cited_by": 20,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6660383954699495475&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Taking the High Line: elevated parks, transforming neighbourhoods, and the ever-changing relationship between the urban and nature",
+      "id": "4611788052041291959",
+      "url": "https://rsa.tandfonline.com/doi/abs/10.1080/17549175.2015.1063532",
+      "title": "Taking the High Line: elevated parks, transforming neighbourhoods, and the ever-changing relationship between the urban and nature",
+      "authors": "H Littke, R Locke, T Haas",
+      "year": "2016",
+      "cited_by": 15,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4611788052041291959&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "A comparative framework for assessing sustainability initiatives at the regional scale",
+      "id": "15893734889899636370",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0305750X16300833",
+      "title": "A comparative framework for assessing sustainability initiatives at the regional scale",
+      "authors": "DE Orenstein, D Shach-Pinsley",
+      "year": "2017",
+      "cited_by": 20,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15893734889899636370&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Landscape based urbanism enriched with geospatial understanding against landscape urbanism: Regeneration project proposal for Antakya City",
+      "id": "12035507385115333289",
+      "url": "http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.1002.1271&rep=rep1&type=pdf",
+      "title": "Landscape based urbanism enriched with geospatial understanding against landscape urbanism: Regeneration project proposal for Antakya City",
+      "authors": "SN Cabuk, A Cabuk, R Bakis",
+      "year": "2013",
+      "cited_by": 5,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12035507385115333289&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Deltaic urbanism for living with flooding in Southern Vietnam",
+      "id": "10494584796518015887",
+      "url": "http://eprints.qut.edu.au/86785",
+      "title": "Deltaic urbanism for living with flooding in Southern Vietnam",
+      "authors": "PN Nguyen",
+      "year": "2015",
+      "cited_by": 3,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10494584796518015887&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Unfamiliar terrain: From the paradox of intervention to paradoxical intervention",
+      "id": "7418003986569818053",
+      "url": "https://www.survey.unitec.ac.nz/handle/10652/1848",
+      "title": "Unfamiliar terrain: From the paradox of intervention to paradoxical intervention",
+      "authors": "DR Coombes",
+      "year": "2011",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7418003986569818053&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Estrategias y movimientos internacionales para la planificaci\u00f3n de ciudades biof\u00edlicas",
+      "id": "4604117139740792912",
+      "url": "https://www.researchgate.net/profile/Pedro_Calaza/publication/313895035_ESTRATEGIAS_Y_MOVIMIENTOS_INTERNACIONALES_PARA_LA_PLANIFICACION_DE_CIUDADES_BIOFILICAS/links/58ae9804a6fdcc6f03f01faa/ESTRATEGIAS-Y-MOVIMIENTOS-INTERNACIONALES-PARA-LA-PLANIFICACION-DE-CIUDADES-BIOFILICAS.pdf",
+      "title": "Estrategias y movimientos internacionales para la planificaci\u00f3n de ciudades biof\u00edlicas",
+      "authors": "P Calaza",
+      "year": "2016",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4604117139740792912&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "\u041b\u0430\u043d\u0434\u0448\u0430\u0444\u0442\u043d\u044b\u0439 \u0443\u0440\u0431\u0430\u043d\u0438\u0437\u043c",
+      "id": "8998040448766919808",
+      "url": "http://elib.sfu-kras.ru/bitstream/handle/2311/59831/%20%20%20%20%20%20%20%20%20%20%20%20?sequence=1#page=265",
+      "title": "\u041b\u0430\u043d\u0434\u0448\u0430\u0444\u0442\u043d\u044b\u0439 \u0443\u0440\u0431\u0430\u043d\u0438\u0437\u043c",
+      "authors": "\u041d\u0410 \u0423\u043d\u0430\u0433\u0430\u0435\u0432\u0430",
+      "year": "2015",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8998040448766919808&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "8 A typology of urban analysis models",
+      "id": "1582294987361682598",
+      "url": "https://books.google.com/books?hl=en&lr=&id=dj63DwAAQBAJ&oi=fnd&pg=PT159&ots=b27gsx479c&sig=y_NnK8x9FDSpwlxhhxzydmdc0KQ",
+      "title": "8 A typology of urban analysis models",
+      "authors": "C Antoniou, D Shach-Pinsly, F Sprumont\u2026",
+      "year": "2019"
+    },
+    {
+      "label": "A Landscape of Possibilities: On Landscape Urbanism in Danish (Sub) Urban Development Projects: Methods, Implementation, and Practicability",
+      "id": "17237927329814352849",
+      "url": "https://adk.elsevierpure.com/ws/files/61242720/Roden_2017.pdf",
+      "title": "A Landscape of Possibilities: On Landscape Urbanism in Danish (Sub) Urban Development Projects: Methods, Implementation, and Practicability",
+      "authors": "TM Roden",
+      "year": "2017"
+    },
+    {
+      "label": "Integral urbanism: A context for urban design",
+      "id": "8330371140866919335",
+      "url": "https://link.springer.com/chapter/10.1007/978-94-007-5341-9_4",
+      "title": "Integral urbanism: A context for urban design",
+      "authors": "N Ellin",
+      "year": "2013",
+      "cited_by": 15,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8330371140866919335&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "An ecology for cities: A transformational nexus of design and ecology to advance climate change resilience and urban sustainability",
+      "id": "8316573036289645343",
+      "url": "https://www.mdpi.com/2071-1050/7/4/3774",
+      "title": "An ecology for cities: A transformational nexus of design and ecology to advance climate change resilience and urban sustainability",
+      "authors": "D Childers, M Cadenasso, J Grove, V Marshall\u2026",
+      "year": "2015",
+      "cited_by": 129,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8316573036289645343&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Ecological science and transformation to the sustainable city",
+      "id": "7085102137780773724",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0264275113000267",
+      "title": "Ecological science and transformation to the sustainable city",
+      "authors": "STA Pickett, CG Boone, BP McGrath, ML Cadenasso\u2026",
+      "year": "2013",
+      "cited_by": 99,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7085102137780773724&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Changing ecosystem service values following technological change",
+      "id": "7933906503750592913",
+      "url": "https://link.springer.com/article/10.1007/s00267-014-0270-6",
+      "title": "Changing ecosystem service values following technological change",
+      "authors": "J Honey-Ros\u00e9s, DW Schneider, N Brozovi\u0107",
+      "year": "2014",
+      "cited_by": 15,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7933906503750592913&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Do sustainability measures constrain urban design creativity?",
+      "id": "15581787810554644569",
+      "url": "https://www.icevirtuallibrary.com/doi/abs/10.1680/udap.13.00034",
+      "title": "Do sustainability measures constrain urban design creativity?",
+      "authors": "JM Leach, CT Boyko, R Cooper\u2026",
+      "year": "2014",
+      "cited_by": 11,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15581787810554644569&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Community-based adaptation through ecological design: lessons from Negril, Jamaica",
+      "id": "15816857886565307252",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/13574809.2015.1133224",
+      "title": "Community-based adaptation through ecological design: lessons from Negril, Jamaica",
+      "authors": "TK Dhar, L Khirfan",
+      "year": "2016",
+      "cited_by": 11,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15816857886565307252&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Urban design and planning in adapting to climate change: Advances, applications, and challenges",
+      "id": "14575391643213741842",
+      "url": "https://uwspace.uwaterloo.ca/handle/10012/10563",
+      "title": "Urban design and planning in adapting to climate change: Advances, applications, and challenges",
+      "authors": "TK Dhar",
+      "year": "2016",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14575391643213741842&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Towards a water sensitive city. The case of Johannesburg",
+      "id": "NcyFAGOzLEIJ",
+      "url": "http://wiredspace.wits.ac.za/handle/10539/24646",
+      "title": "Towards a water sensitive city. The case of Johannesburg",
+      "authors": "H Molvi",
+      "year": "wiredspace.wits.ac.za"
+    },
+    {
+      "label": "Cooling of a South-Facing Wall Using a Double-Skin Green Fa\u00e7ade in a Temperate Climate\u00a9",
+      "id": "3378578479893778718",
+      "url": "https://www.actahort.org/books/1085/1085_30.htm",
+      "title": "Cooling of a South-Facing Wall Using a Double-Skin Green Fa\u00e7ade in a Temperate Climate\u00a9",
+      "authors": "JS MacIvor, L Margolis",
+      "year": "2014"
+    },
+    {
+      "label": "CONSIDERING THE OLD CONTEXTURE REGENERATION USING AN APPROACH ON IMPROVING THE ENVIRONMENT QUALITY IN THE TEXTURE",
+      "id": "6YctIDjYsoMJ",
+      "url": "https://pdfs.semanticscholar.org/dc9d/bc1360548cc4f8802da8ad04ac1e2d75fc9d.pdf",
+      "title": "CONSIDERING THE OLD CONTEXTURE REGENERATION USING AN APPROACH ON IMPROVING THE ENVIRONMENT QUALITY IN THE TEXTURE",
+      "authors": "M Ramezankhorasani, A Rezayekanifard",
+      "year": "2014"
+    },
+    {
+      "label": "Cities of the Future: Introducing Cultural Dimensions to Urban Sustainability Research",
+      "id": "vvesgy_9dLcJ",
+      "url": "https://openaccess.leidenuniv.nl/handle/1887/73886",
+      "title": "Cities of the Future: Introducing Cultural Dimensions to Urban Sustainability Research",
+      "authors": "L Verheijen",
+      "year": "2019"
+    },
+    {
+      "label": "Taking Place: Landscape in the Architecture of Louis Kahn",
+      "id": "9591198935236887832",
+      "url": "https://www.tandfonline.com/doi/abs/10.1111/j.1531-314X.2007.00149.x",
+      "title": "Taking Place: Landscape in the Architecture of Louis Kahn",
+      "authors": "KK Ashraf",
+      "year": "2007",
+      "cited_by": 14,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9591198935236887832&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Toward a productive and creative curriculum in architecture",
+      "id": "83572547649618903",
+      "url": "https://journals.sagepub.com/doi/abs/10.1177/1474022209339961",
+      "title": "Toward a productive and creative curriculum in architecture",
+      "authors": "T Wang",
+      "year": "2009",
+      "cited_by": 3,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=83572547649618903&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Encountering materials in architectural production: the case of Kahn and brick at IIM.",
+      "id": "1841190663276934231",
+      "url": "https://digital.library.adelaide.edu.au/dspace/handle/2440/63373",
+      "title": "Encountering materials in architectural production: the case of Kahn and brick at IIM.",
+      "authors": "A Srivastava",
+      "year": "2009",
+      "cited_by": 3,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1841190663276934231&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Demonstration of energy detector performance and spectrum sensing in Cognitive Radio using AWGN, Rayleigh and Nakagami channels",
+      "id": "15535863228976776820",
+      "url": "https://ieeexplore.ieee.org/abstract/document/7916538/",
+      "title": "Demonstration of energy detector performance and spectrum sensing in Cognitive Radio using AWGN, Rayleigh and Nakagami channels",
+      "authors": "M Ashraf, J Khan, H Rasheed, F Ashraf\u2026",
+      "year": "2017",
+      "cited_by": 2,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15535863228976776820&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The genesis of Jatio Sangsad Bhaban at Sher-e-Bangla Nagar, Dhaka",
+      "id": "14204984248963364199",
+      "url": "http://ses.library.usyd.edu.au/handle/2123/13370",
+      "title": "The genesis of Jatio Sangsad Bhaban at Sher-e-Bangla Nagar, Dhaka",
+      "authors": "BI Choudhury",
+      "year": "2014",
+      "cited_by": 2,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14204984248963364199&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Architecture in ruins: Palladio, Piranesi and Kahn",
+      "id": "14400216032125590553",
+      "url": "https://www.taylorfrancis.com/books/e/9781315641171/chapters/10.4324/9781315641171-13",
+      "title": "Architecture in ruins: Palladio, Piranesi and Kahn",
+      "authors": "J Hill",
+      "year": "2016",
+      "cited_by": 2,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14400216032125590553&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The Architecture of Ruins: Designs on the Past, Present and Future",
+      "id": "10751138680675837210",
+      "url": "https://www.taylorfrancis.com/books/9780429429644",
+      "title": "The Architecture of Ruins: Designs on the Past, Present and Future",
+      "authors": "J Hill",
+      "year": "2019"
+    },
+    {
+      "label": "[CITATION][C]",
+      "id": "15071119455161101250",
+      "title": "[CITATION][C]",
+      "authors": "T Kang",
+      "year": "2018"
+    },
+    {
+      "label": "An Intersection",
+      "id": "2088779255545064364",
+      "url": "https://www.arcc-repository.org/index.php/repository/article/view/606",
+      "title": "An Intersection",
+      "authors": "N Samayeen",
+      "year": "2019"
+    },
+    {
+      "label": "Topographical Inquiry",
+      "id": "YR01zm8DFTwJ",
+      "url": "https://scholarspace.manoa.hawaii.edu/handle/10125/45716",
+      "title": "Topographical Inquiry",
+      "authors": "JC Kuo",
+      "year": "2011"
+    },
+    {
+      "label": "LOUIS I. KAHN, EL PAISAJE TEL\u00daRICO Y LAS MAQUETAS DE ARCILLA/Louis I. Kahn, the telluric landscape and clay models",
+      "id": "3402865747300311670",
+      "url": "https://revistascientificas.us.es/index.php/ppa/article/view/2497",
+      "title": "LOUIS I. KAHN, EL PAISAJE TEL\u00daRICO Y LAS MAQUETAS DE ARCILLA/Louis I. Kahn, the telluric landscape and clay models",
+      "authors": "JMJ Sandoval",
+      "year": "2016"
+    },
+    {
+      "label": "Feeling space dynamically: Variable interpersonal meanings in high-rise apartment complexes",
+      "id": "6542208225442345423",
+      "url": "https://journals.sagepub.com/doi/abs/10.1177/1470357212454099",
+      "title": "Feeling space dynamically: Variable interpersonal meanings in high-rise apartment complexes",
+      "authors": "RJ Mcmurtrie",
+      "year": "2012",
+      "cited_by": 9,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6542208225442345423&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The West Wing and House of Cards: A comparison of narrative strategies of two politically-themed dramas",
+      "id": "10057818085180765589",
+      "url": "http://www.calstatela.edu/sites/default/files/users/u2276/colloquy_2015_fritz2.pdf",
+      "title": "The West Wing and House of Cards: A comparison of narrative strategies of two politically-themed dramas",
+      "authors": "AJM Fritz",
+      "year": "2015",
+      "cited_by": 5,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10057818085180765589&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "News, Neoliberalism, and Miami's Fragmented Urban Space",
+      "id": "46101218052017766",
+      "url": "https://books.google.com/books?hl=en&lr=&id=7gxnDQAAQBAJ&oi=fnd&pg=PR10&ots=VlD09y4q0B&sig=JDAob2ndDThpVyPdWKO855S_zJU",
+      "title": "News, Neoliberalism, and Miami's Fragmented Urban Space",
+      "authors": "M Shumow, RE Gutsche Jr",
+      "year": "2016",
+      "cited_by": 6,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=46101218052017766&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "'NO OUTLET': a critical visual analysis of neoliberal narratives in mediated geographies",
+      "id": "8176287381487917013",
+      "url": "https://journals.sagepub.com/doi/abs/10.1177/1470357216668692",
+      "title": "'NO OUTLET': a critical visual analysis of neoliberal narratives in mediated geographies",
+      "authors": "RE Gutsche Jr, M Shumow",
+      "year": "2017",
+      "cited_by": 3,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8176287381487917013&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Bringing a museum of language to life: the use of multimodal resources for interactional engagement in the Museu da L\u00edngua Portuguesa, Brazil",
+      "id": "5018499055913061560",
+      "url": "http://www.scielo.br/scielo.php?pid=S1984-63982016000400521&script=sci_abstract&tlng=pt",
+      "title": "Bringing a museum of language to life: the use of multimodal resources for interactional engagement in the Museu da L\u00edngua Portuguesa, Brazil",
+      "authors": "L Ravelli, VM Heberle",
+      "year": "2016",
+      "cited_by": 2,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5018499055913061560&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Narrating and explaining urban stories through inherited visual urban vocabulary",
+      "id": "Z_FVQaKR-a4J",
+      "url": "https://journals.sagepub.com/doi/abs/10.1177/1470357217727676",
+      "title": "Narrating and explaining urban stories through inherited visual urban vocabulary",
+      "authors": "M Juvancic, S Verovsek",
+      "year": "2018"
+    },
+    {
+      "label": "An Analysis of the Differential Meanings Embedded in Two Main Areas of Los Angeles Union Station",
+      "id": "16988563126129632372",
+      "url": "http://www.calstatela.edu/sites/default/files/groups/Colloquy/colloquy_2015_final.pdf#page=47",
+      "title": "An Analysis of the Differential Meanings Embedded in Two Main Areas of Los Angeles Union Station",
+      "authors": "AJM Fritz",
+      "year": "2015"
+    },
+    {
+      "label": "The deep grain of the inquiry: landscape and identity in Icelandic art",
+      "id": "15720368589043690943",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/18626033.2010.9723429",
+      "title": "The deep grain of the inquiry: landscape and identity in Icelandic art",
+      "authors": "RJ Thoren",
+      "year": "2010",
+      "cited_by": 7,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15720368589043690943&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Landscape identity as a human right",
+      "id": "0VbMCh_IyVMJ",
+      "url": "https://books.google.com/books?hl=en&lr=&id=fwxpDwAAQBAJ&oi=fnd&pg=PT440&ots=tZdovUFCyU&sig=xFoWLao7aQaLWaEwXBlMdanav50",
+      "title": "Landscape identity as a human right",
+      "authors": "S Egoz",
+      "year": "2018"
+    },
+    {
+      "label": "Tangled Up in Blue: Narratives of Glacier Change in Southeast Iceland",
+      "id": "cJPeCtngRM0J",
+      "url": "http://search.proquest.com/openview/0af4660cab52031babe5d3543f331eaa/1?pq-origsite=gscholar&cbl=18750&diss=y",
+      "title": "Tangled Up in Blue: Narratives of Glacier Change in Southeast Iceland",
+      "authors": "JE Jackson",
+      "year": "2017"
+    },
+    {
+      "label": "Representing Glaciers in Icelandic Art: A Spatial Shift",
+      "id": "15478852029517989665",
+      "url": "https://www.jstor.org/stable/10.5749/envispacplac.7.2.0065",
+      "title": "Representing Glaciers in Icelandic Art: A Spatial Shift",
+      "authors": "M Jackson",
+      "year": "2015",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15478852029517989665&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "A Rural Society: J\u00f8a",
+      "id": "bqkkSFeC5QwJ",
+      "url": "https://ntnuopen.ntnu.no/ntnu-xmlui/bitstream/handle/11250/2404669/Sk%C3%A5lnes.pdf?sequence=1",
+      "title": "A Rural Society: J\u00f8a",
+      "authors": "I Sk\u00e5lnes",
+      "year": "2016"
+    },
+    {
+      "label": "The landscape of things",
+      "id": "nHQ_WRLWb1cJ",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/18626033.2018.1476033",
+      "title": "The landscape of things",
+      "authors": "K Kullmann",
+      "year": "2018"
+    },
+    {
+      "label": "Beauty and Threat",
+      "id": "Izxt1UPwJBoJ",
+      "url": "https://journals.macewan.ca/studentresearch/article/view/1698",
+      "title": "Beauty and Threat",
+      "authors": "T Smith",
+      "year": "2018"
+    },
+    {
+      "label": "Kajian Lanskap Permukiman Tradisional Masyarakat Lampung Saibatin Di Pekon Kenali, Lampung Barat",
+      "id": "9945246170118205804",
+      "url": "http://jurnalpermukiman.pu.go.id/index.php/JP/article/view/86",
+      "title": "Kajian Lanskap Permukiman Tradisional Masyarakat Lampung Saibatin Di Pekon Kenali, Lampung Barat",
+      "authors": "YY Putri, A Gunawan, NHS Arifin",
+      "year": "2013",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9945246170118205804&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "\u2018Do we need a canopy for rain?\u2019: interior-exterior relationships in the Kunsthal",
+      "id": "11809740053050295635",
+      "url": "https://www.cambridge.org/core/journals/arq-architectural-research-quarterly/article/do-we-need-a-canopy-for-rain-interiorexterior-relationships-in-the-kunsthal/93A4E482249E4E2B66135427925B8D6E",
+      "title": "\u2018Do we need a canopy for rain?\u2019: interior-exterior relationships in the Kunsthal",
+      "authors": "M Moussette",
+      "year": "2003",
+      "cited_by": 5,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11809740053050295635&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Trajectories of Interstitial Landscapeness: A Conceptual Framework for Territorial Imagination and Action 1",
+      "id": "17516443397847399217",
+      "url": "https://www.taylorfrancis.com/books/e/9781315548807/chapters/10.4324/9781315548807-2",
+      "title": "Trajectories of Interstitial Landscapeness: A Conceptual Framework for Territorial Imagination and Action 1",
+      "authors": "L L\u00e9vesque",
+      "year": "2016",
+      "cited_by": 7,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17516443397847399217&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "TRANSITIONAL SPACE IN ARCHITECTURE",
+      "id": "15228217270225628830",
+      "url": "http://www.christosbolos.com/resources/bolos_thesis.pdf",
+      "title": "TRANSITIONAL SPACE IN ARCHITECTURE",
+      "authors": "CC Bolos",
+      "year": "2009",
+      "cited_by": 4,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15228217270225628830&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "\u041b\u043e\u0431\u043e\u0442\u043e\u043c\u0438\u044f \u0438 \u0441\u0438\u043c\u0431\u0438\u043e\u0437. \u0414\u0438\u0430\u043b\u0435\u043a\u0442\u0438\u043a\u0430 \u0432\u043d\u0435\u0448\u043d\u0435\u0433\u043e \u0438 \u0432\u043d\u0443\u0442\u0440\u0435\u043d\u043d\u0435\u0433\u043e \u0432 \u0430\u0440\u0445\u0438\u0442\u0435\u043a\u0442\u0443\u0440\u043d\u043e\u0439 \u0442\u0435\u043e\u0440\u0438\u0438 1960\u20131990-\u0445 \u0433\u043e\u0434\u043e\u0432",
+      "id": "912201279041852480",
+      "url": "http://sias.ru/upload/isk_2016_1-2_526-553_Elkina.pdf",
+      "title": "\u041b\u043e\u0431\u043e\u0442\u043e\u043c\u0438\u044f \u0438 \u0441\u0438\u043c\u0431\u0438\u043e\u0437. \u0414\u0438\u0430\u043b\u0435\u043a\u0442\u0438\u043a\u0430 \u0432\u043d\u0435\u0448\u043d\u0435\u0433\u043e \u0438 \u0432\u043d\u0443\u0442\u0440\u0435\u043d\u043d\u0435\u0433\u043e \u0432 \u0430\u0440\u0445\u0438\u0442\u0435\u043a\u0442\u0443\u0440\u043d\u043e\u0439 \u0442\u0435\u043e\u0440\u0438\u0438 1960\u20131990-\u0445 \u0433\u043e\u0434\u043e\u0432",
+      "authors": "\u041c \u042d\u043b\u044c\u043a\u0438\u043d\u0430",
+      "year": "\u0418\u0441\u043a\u0443\u0441\u0441\u0442\u0432\u043e\u0437\u043d\u0430\u043d\u0438\u0435",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=912201279041852480&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Automobile Interstices: Driving and the In-Between Spaces of the City",
+      "id": "13053310881761850063",
+      "url": "https://www.taylorfrancis.com/books/e/9781315548807/chapters/10.4324/9781315548807-6",
+      "title": "Automobile Interstices: Driving and the In-Between Spaces of the City",
+      "authors": "I Borden",
+      "year": "2016"
+    },
+    {
+      "label": "ON URBAN ARCHITECTURE: URBAN ARCHITECTURAL STRATEGIES IN THREE EXAMPLARY CASES",
+      "id": "11776337334373167215",
+      "url": "http://etd.lib.metu.edu.tr/upload/12610765/index.pdf",
+      "title": "ON URBAN ARCHITECTURE: URBAN ARCHITECTURAL STRATEGIES IN THREE EXAMPLARY CASES",
+      "authors": "E K\u00d6MEZ",
+      "year": "2009"
+    }
+  ],
+  "links": [
+    {
+      "source": "8155017193395339313",
+      "target": "4203597988604919511"
+    },
+    {
+      "source": "1164320569137154808",
+      "target": "8155017193395339313"
+    },
+    {
+      "source": "633284274262450580",
+      "target": "8155017193395339313"
+    },
+    {
+      "source": "5696720647386845580",
+      "target": "8155017193395339313"
+    },
+    {
+      "source": "12723876765474216462",
+      "target": "8155017193395339313"
+    },
+    {
+      "source": "656248784403469096",
+      "target": "8155017193395339313"
+    },
+    {
+      "source": "11434565106305800124",
+      "target": "8155017193395339313"
+    },
+    {
+      "source": "754711151693873108",
+      "target": "8155017193395339313"
+    },
+    {
+      "source": "3026663753895044021",
+      "target": "8155017193395339313"
+    },
+    {
+      "source": "6467597721525788",
+      "target": "8155017193395339313"
+    },
+    {
+      "source": "15988282940401290124",
+      "target": "8155017193395339313"
+    },
+    {
+      "source": "5401847472758703950",
+      "target": "4203597988604919511"
+    },
+    {
+      "source": "5143919825678837114",
+      "target": "5401847472758703950"
+    },
+    {
+      "source": "9680058275094285624",
+      "target": "5401847472758703950"
+    },
+    {
+      "source": "12967517714981181494",
+      "target": "5401847472758703950"
+    },
+    {
+      "source": "545371780766505193",
+      "target": "5401847472758703950"
+    },
+    {
+      "source": "5780136874196148319",
+      "target": "5401847472758703950"
+    },
+    {
+      "source": "16900738893292517213",
+      "target": "5401847472758703950"
+    },
+    {
+      "source": "8395694000390345430",
+      "target": "5401847472758703950"
+    },
+    {
+      "source": "2706998558130433532",
+      "target": "5401847472758703950"
+    },
+    {
+      "source": "11505382563387202984",
+      "target": "5401847472758703950"
+    },
+    {
+      "source": "16161179243783093",
+      "target": "5401847472758703950"
+    },
+    {
+      "source": "3840582515616716051",
+      "target": "4203597988604919511"
+    },
+    {
+      "source": "3840582515616716051",
+      "target": "6542208225442345423"
+    },
+    {
+      "source": "13328571242034769788",
+      "target": "3840582515616716051"
+    },
+    {
+      "source": "18329745922857632949",
+      "target": "3840582515616716051"
+    },
+    {
+      "source": "2180301313816533659",
+      "target": "3840582515616716051"
+    },
+    {
+      "source": "2180301313816533659",
+      "target": "6542208225442345423"
+    },
+    {
+      "source": "8259835520623093858",
+      "target": "3840582515616716051"
+    },
+    {
+      "source": "12219436841366827939",
+      "target": "3840582515616716051"
+    },
+    {
+      "source": "10415216152744556390",
+      "target": "3840582515616716051"
+    },
+    {
+      "source": "10593718468502084845",
+      "target": "3840582515616716051"
+    },
+    {
+      "source": "14942608296181936452",
+      "target": "3840582515616716051"
+    },
+    {
+      "source": "14942608296181936452",
+      "target": "6542208225442345423"
+    },
+    {
+      "source": "15089965629686222748",
+      "target": "3840582515616716051"
+    },
+    {
+      "source": "3318002739540840810",
+      "target": "3840582515616716051"
+    },
+    {
+      "source": "13794093725927000978",
+      "target": "4203597988604919511"
+    },
+    {
+      "source": "4384244320637127719",
+      "target": "13794093725927000978"
+    },
+    {
+      "source": "4486261781243588226",
+      "target": "13794093725927000978"
+    },
+    {
+      "source": "9219803052754450147",
+      "target": "13794093725927000978"
+    },
+    {
+      "source": "3161473385057697446",
+      "target": "13794093725927000978"
+    },
+    {
+      "source": "6915809749170320536",
+      "target": "13794093725927000978"
+    },
+    {
+      "source": "15094943886647989623",
+      "target": "13794093725927000978"
+    },
+    {
+      "source": "9434716265144007454",
+      "target": "13794093725927000978"
+    },
+    {
+      "source": "15016336621667383860",
+      "target": "13794093725927000978"
+    },
+    {
+      "source": "752937230762088333",
+      "target": "13794093725927000978"
+    },
+    {
+      "source": "1719836361862813278",
+      "target": "13794093725927000978"
+    },
+    {
+      "source": "1778390450827336932",
+      "target": "4203597988604919511"
+    },
+    {
+      "source": "6660383954699495475",
+      "target": "1778390450827336932"
+    },
+    {
+      "source": "4611788052041291959",
+      "target": "1778390450827336932"
+    },
+    {
+      "source": "15893734889899636370",
+      "target": "1778390450827336932"
+    },
+    {
+      "source": "12035507385115333289",
+      "target": "1778390450827336932"
+    },
+    {
+      "source": "10494584796518015887",
+      "target": "1778390450827336932"
+    },
+    {
+      "source": "7418003986569818053",
+      "target": "1778390450827336932"
+    },
+    {
+      "source": "4604117139740792912",
+      "target": "1778390450827336932"
+    },
+    {
+      "source": "8998040448766919808",
+      "target": "1778390450827336932"
+    },
+    {
+      "source": "1582294987361682598",
+      "target": "1778390450827336932"
+    },
+    {
+      "source": "17237927329814352849",
+      "target": "1778390450827336932"
+    },
+    {
+      "source": "8330371140866919335",
+      "target": "4203597988604919511"
+    },
+    {
+      "source": "8316573036289645343",
+      "target": "8330371140866919335"
+    },
+    {
+      "source": "7085102137780773724",
+      "target": "8330371140866919335"
+    },
+    {
+      "source": "7933906503750592913",
+      "target": "8330371140866919335"
+    },
+    {
+      "source": "15581787810554644569",
+      "target": "8330371140866919335"
+    },
+    {
+      "source": "15816857886565307252",
+      "target": "8330371140866919335"
+    },
+    {
+      "source": "14575391643213741842",
+      "target": "8330371140866919335"
+    },
+    {
+      "source": "NcyFAGOzLEIJ",
+      "target": "8330371140866919335"
+    },
+    {
+      "source": "3378578479893778718",
+      "target": "8330371140866919335"
+    },
+    {
+      "source": "6YctIDjYsoMJ",
+      "target": "8330371140866919335"
+    },
+    {
+      "source": "vvesgy_9dLcJ",
+      "target": "8330371140866919335"
+    },
+    {
+      "source": "9591198935236887832",
+      "target": "4203597988604919511"
+    },
+    {
+      "source": "83572547649618903",
+      "target": "9591198935236887832"
+    },
+    {
+      "source": "1841190663276934231",
+      "target": "9591198935236887832"
+    },
+    {
+      "source": "15535863228976776820",
+      "target": "9591198935236887832"
+    },
+    {
+      "source": "14204984248963364199",
+      "target": "9591198935236887832"
+    },
+    {
+      "source": "14400216032125590553",
+      "target": "9591198935236887832"
+    },
+    {
+      "source": "10751138680675837210",
+      "target": "9591198935236887832"
+    },
+    {
+      "source": "15071119455161101250",
+      "target": "9591198935236887832"
+    },
+    {
+      "source": "2088779255545064364",
+      "target": "9591198935236887832"
+    },
+    {
+      "source": "YR01zm8DFTwJ",
+      "target": "9591198935236887832"
+    },
+    {
+      "source": "3402865747300311670",
+      "target": "9591198935236887832"
+    },
+    {
+      "source": "6542208225442345423",
+      "target": "4203597988604919511"
+    },
+    {
+      "source": "10057818085180765589",
+      "target": "6542208225442345423"
+    },
+    {
+      "source": "46101218052017766",
+      "target": "6542208225442345423"
+    },
+    {
+      "source": "8176287381487917013",
+      "target": "6542208225442345423"
+    },
+    {
+      "source": "5018499055913061560",
+      "target": "6542208225442345423"
+    },
+    {
+      "source": "Z_FVQaKR-a4J",
+      "target": "6542208225442345423"
+    },
+    {
+      "source": "16988563126129632372",
+      "target": "6542208225442345423"
+    },
+    {
+      "source": "15720368589043690943",
+      "target": "4203597988604919511"
+    },
+    {
+      "source": "0VbMCh_IyVMJ",
+      "target": "15720368589043690943"
+    },
+    {
+      "source": "cJPeCtngRM0J",
+      "target": "15720368589043690943"
+    },
+    {
+      "source": "15478852029517989665",
+      "target": "15720368589043690943"
+    },
+    {
+      "source": "bqkkSFeC5QwJ",
+      "target": "15720368589043690943"
+    },
+    {
+      "source": "nHQ_WRLWb1cJ",
+      "target": "15720368589043690943"
+    },
+    {
+      "source": "Izxt1UPwJBoJ",
+      "target": "15720368589043690943"
+    },
+    {
+      "source": "9945246170118205804",
+      "target": "15720368589043690943"
+    },
+    {
+      "source": "11809740053050295635",
+      "target": "4203597988604919511"
+    },
+    {
+      "source": "17516443397847399217",
+      "target": "11809740053050295635"
+    },
+    {
+      "source": "15228217270225628830",
+      "target": "11809740053050295635"
+    },
+    {
+      "source": "912201279041852480",
+      "target": "11809740053050295635"
+    },
+    {
+      "source": "13053310881761850063",
+      "target": "11809740053050295635"
+    },
+    {
+      "source": "11776337334373167215",
+      "target": "11809740053050295635"
+    }
+  ]
+};
+
+var link = svg.append("g")
+    .attr("class", "links")
+  .selectAll("line")
+  .data(graph.links)
+  .enter().append("line");
+
+var node = svg.append("g")
+    .attr("class", "nodes")
+  .selectAll("circle")
+  .data(graph.nodes)
+  .enter().append("circle")
+    .attr("r", 5)
+    .call(d3.drag()
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended));
+
+node.append("title")
+    .text(function(d) {
+        return d.authors ? d.title + ' - ' + d.authors : d.title
+    });
+
+node.on("click", function(d) {
+  window.open(d.url, '_blank');
+  d3.event.stopPropagation();
+});
+
+simulation
+    .nodes(graph.nodes)
+    .on("tick", ticked);
+
+simulation.force("link")
+    .links(graph.links);
+
+function ticked() {
+  link
+      .attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
+
+  node
+      .attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; });
+}
+
+function dragstarted(d) {
+  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+  d.fx = d.x;
+  d.fy = d.y;
+}
+
+function dragged(d) {
+  d.fx = d3.event.x;
+  d.fy = d3.event.y;
+}
+
+function dragended(d) {
+  if (!d3.event.active) simulation.alphaTarget(0);
+  d.fx = null;
+  d.fy = null;
+}
+
+</script>
