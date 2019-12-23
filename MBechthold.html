@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<style>
+
+.links line {
+  stroke: #999;
+  stroke-opacity: 0.8;
+  stroke-width: 2px;
+}
+
+.nodes circle {
+  stroke: black;
+  fill: white;
+  stroke-width: 1.5px;
+}
+
+#graph {
+  width: 99vw;
+  height: 99vh;
+}
+
+</style>
+<svg id="graph"></svg>
+<script>
+
+var width = $(window).width();
+var height = $(window).height();
+
+var svg = d3.select("svg")
+    .attr("height", height)
+    .attr("width", width);
+
+var color = d3.scaleOrdinal(d3.schemeCategory20c);
+
+var simulation = d3.forceSimulation()
+    .velocityDecay(0.6)
+    .force("link", d3.forceLink().id(function(d) { return d.id; }))
+    .force("charge", d3.forceManyBody())
+    .force("center", d3.forceCenter(width / 2, height / 2));
+
+var graph = {
+  "nodes": [
+    {
+      "label": "Smart materials and technologies in architecture: for the architecture and design professions",
+      "id": "16951597402051293520",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2011-0-09066-0&isbn=9781136366093&format=googlePreviewPdf",
+      "title": "Smart materials and technologies in architecture: for the architecture and design professions",
+      "authors": "M Addington, D Schodek",
+      "year": "2012",
+      "cited_by": 490,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16951597402051293520&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Digital design and manufacturing: CAD/CAM applications in architecture and design",
+      "id": "7507732243562766228",
+      "url": "https://www.gsd.harvard.edu/person/martin-bechthold/",
+      "title": "Digital design and manufacturing: CAD/CAM applications in architecture and design"
+    },
+    {
+      "label": "Entangled: technology and the transformation of performance",
+      "id": "6027759471136766012",
+      "url": "https://books.google.com/books?hl=en&lr=&id=ZBJbIP0fMr0C&oi=fnd&pg=PR7&ots=GEzkIoMr2_&sig=gHpWQpCLv_jG_ol7of7MDwxVnUg",
+      "title": "Entangled: technology and the transformation of performance",
+      "authors": "C Salter",
+      "year": "2010",
+      "cited_by": 401,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6027759471136766012&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Smart things: ubiquitous computing user experience design",
+      "id": "11818067185487769956",
+      "url": "https://books.google.com/books?hl=en&lr=&id=-WLyUCBBUVAC&oi=fnd&pg=PP2&ots=HC50t3wqjv&sig=P-jtlxyQjAOd-Q9i_oN61owLHmw",
+      "title": "Smart things: ubiquitous computing user experience design",
+      "authors": "M Kuniavsky",
+      "year": "2010",
+      "cited_by": 360,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11818067185487769956&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Climate adaptive building shells: State-of-the-art and future challenges",
+      "id": "6429141039619985773",
+      "url": "https://www.sciencedirect.com/science/article/pii/S1364032113002670",
+      "title": "Climate adaptive building shells: State-of-the-art and future challenges",
+      "authors": "RCGM Loonen, M Tr\u010dka, D C\u00f3stola\u2026",
+      "year": "2013",
+      "cited_by": 308,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6429141039619985773&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Nanomaterials, nanotechnologies and design: an introduction for engineers and architects",
+      "id": "14974603183473907391",
+      "url": "https://books.google.com/books?hl=en&lr=&id=XyhTzB3PDaEC&oi=fnd&pg=PP1&ots=fgIRvTgl80&sig=J7eYDaDMVK1ZZjFRxHlnb5GZZik",
+      "title": "Nanomaterials, nanotechnologies and design: an introduction for engineers and architects",
+      "authors": "DL Schodek, P Ferreira, MF Ashby",
+      "year": "2009",
+      "cited_by": 302,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14974603183473907391&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Sustainable design: ecology, architecture, and planning",
+      "id": "3253879738962161004",
+      "url": "https://books.google.com/books?hl=en&lr=&id=1l3fO6Wqh_gC&oi=fnd&pg=PR9&ots=jH9iQD4I5S&sig=VL9lhp7eDnXwgMZeavz-3aXFcJg",
+      "title": "Sustainable design: ecology, architecture, and planning",
+      "authors": "DE Williams",
+      "year": "2007",
+      "cited_by": 225,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3253879738962161004&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "True visions: The emergence of ambient intelligence",
+      "id": "6946591980644169812",
+      "url": "https://books.google.com/books?hl=en&lr=&id=JfeAlyQX4gYC&oi=fnd&pg=PA1&ots=ShAwO6EotN&sig=7cKL79PRWSK-Eyb02vn9xAPElC8",
+      "title": "True visions: The emergence of ambient intelligence",
+      "authors": "EHL Aarts, JL Encarna\u00e7\u00e3o",
+      "year": "2006",
+      "cited_by": 210,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6946591980644169812&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The state of understanding of ionic polymer metal composite architecture: a review",
+      "id": "16842748068224545346",
+      "url": "https://iopscience.iop.org/article/10.1088/0964-1726/20/8/083001/meta",
+      "title": "The state of understanding of ionic polymer metal composite architecture: a review",
+      "authors": "R Tiwari, E Garcia",
+      "year": "2011",
+      "cited_by": 148,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16842748068224545346&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Designing kinetics for architectural facades: state change",
+      "id": "8880502774589459527",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2010-0-36146-8&isbn=9781136709043&format=googlePreviewPdf",
+      "title": "Designing kinetics for architectural facades: state change",
+      "authors": "J Moloney",
+      "year": "2011",
+      "cited_by": 123,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8880502774589459527&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Adaptive structures: engineering applications",
+      "id": "3879240372019421962",
+      "url": "https://books.google.com/books?hl=en&lr=&id=FC2Z6O1Y-asC&oi=fnd&pg=PR5&ots=Kbt0FCyLZi&sig=0yC3CYLwTAgVjnTnA8hvRCvrajQ",
+      "title": "Adaptive structures: engineering applications",
+      "authors": "D Wagg, I Bond, P Weaver, M Friswell",
+      "year": "2008",
+      "cited_by": 95,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3879240372019421962&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Surflex: a programmable surface for the design of tangible interfaces",
+      "id": "6304353652323528007",
+      "url": "https://dl.acm.org/citation.cfm?id=1358869",
+      "title": "Surflex: a programmable surface for the design of tangible interfaces",
+      "authors": "M Coelho, H Ishii, P Maes",
+      "year": "2008",
+      "cited_by": 90,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6304353652323528007&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Freeform construction: mega-scale rapid manufacturing for construction",
+      "id": "5507613466232573826",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0926580506000227",
+      "title": "Freeform construction: mega-scale rapid manufacturing for construction",
+      "authors": "RA Buswell, RC Soar, AGF Gibb, A Thorpe",
+      "year": "2007",
+      "cited_by": 320,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5507613466232573826&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "3D Printing and Additive Manufacturing: Principles and Applications (with Companion Media Pack) of Rapid Prototyping Fourth Edition",
+      "id": "14691283186921140293",
+      "url": "https://books.google.com/books?hl=en&lr=&id=Gy88DQAAQBAJ&oi=fnd&pg=PR7&ots=kh5CRkzTg1&sig=2vMc3TdDkZ9FW6H2nBd3MY8tpXk",
+      "title": "3D Printing and Additive Manufacturing: Principles and Applications (with Companion Media Pack) of Rapid Prototyping Fourth Edition",
+      "authors": "CK Chua, KF Leong",
+      "year": "2014",
+      "cited_by": 339,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14691283186921140293&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Mix design and fresh properties for high-performance printing concrete",
+      "id": "17390213974630746420",
+      "url": "https://link.springer.com/article/10.1617/s11527-012-9828-z",
+      "title": "Mix design and fresh properties for high-performance printing concrete",
+      "authors": "TT Le, SA Austin, S Lim, RA Buswell, AGF Gibb\u2026",
+      "year": "2012",
+      "cited_by": 303,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17390213974630746420&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Large-scale 3D printing of ultra-high performance concrete\u2013a new processing route for architects and builders",
+      "id": "12453149411017315858",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0264127516303811",
+      "title": "Large-scale 3D printing of ultra-high performance concrete\u2013a new processing route for architects and builders",
+      "authors": "C Gosselin, R Duballet, P Roux, N Gaudilli\u00e8re\u2026",
+      "year": "2016",
+      "cited_by": 285,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12453149411017315858&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Experimental investigation and empirical modelling of FDM process for compressive strength improvement",
+      "id": "6337370092403350792",
+      "url": "https://www.sciencedirect.com/science/article/pii/S209012321100066X",
+      "title": "Experimental investigation and empirical modelling of FDM process for compressive strength improvement",
+      "authors": "AK Sood, RK Ohdar, SS Mahapatra",
+      "year": "2012",
+      "cited_by": 259,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6337370092403350792&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "A critical review of the use of 3-D printing in the construction industry",
+      "id": "1500316283164279318",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0926580516300681",
+      "title": "A critical review of the use of 3-D printing in the construction industry",
+      "authors": "P Wu, J Wang, X Wang",
+      "year": "2016",
+      "cited_by": 205,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1500316283164279318&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Hardened properties of high-performance printing concrete",
+      "id": "2375998811979904696",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0008884611003255",
+      "title": "Hardened properties of high-performance printing concrete",
+      "authors": "TT Le, SA Austin, S Lim, RA Buswell, R Law\u2026",
+      "year": "2012",
+      "cited_by": 247,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2375998811979904696&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Structural built-up of cement-based materials used for 3D-printing extrusion techniques",
+      "id": "16319702180244029222",
+      "url": "https://link.springer.com/article/10.1617/S11527-015-0571-0",
+      "title": "Structural built-up of cement-based materials used for 3D-printing extrusion techniques",
+      "authors": "A Perrot, D Rangeard, A Pierre",
+      "year": "2016",
+      "cited_by": 234,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16319702180244029222&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Additive construction: State-of-the-art, challenges and opportunities",
+      "id": "17322954162985341017",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0926580516301790",
+      "title": "Additive construction: State-of-the-art, challenges and opportunities",
+      "authors": "N Labonnote, A R\u00f8nnquist, B Manum\u2026",
+      "year": "2016",
+      "cited_by": 121,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17322954162985341017&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Digital concrete: opportunities and challenges",
+      "id": "12028919501274601713",
+      "url": "http://letters.rilem.net/index.php/rilem/article/view/16",
+      "title": "Digital concrete: opportunities and challenges",
+      "authors": "T Wangler, E Lloret, L Reiter, N Hack\u2026",
+      "year": "2016",
+      "cited_by": 151,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12028919501274601713&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Mechanical properties of structures 3D printed with cementitious powders",
+      "id": "9205605433683998561",
+      "url": "https://www.sciencedirect.com/science/article/pii/S095006181500690X",
+      "title": "Mechanical properties of structures 3D printed with cementitious powders",
+      "authors": "P Feng, X Meng, JF Chen, L Ye",
+      "year": "2015",
+      "cited_by": 119,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9205605433683998561&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Prefab architecture: A guide to modular design and construction",
+      "id": "12568806091734565652",
+      "url": "https://books.google.com/books?hl=en&lr=&id=BuZCQpIHRbAC&oi=fnd&pg=PR7&ots=udiytfqgUU&sig=u2_TcTMejdpA0Zr5eUzZQeNOYB4",
+      "title": "Prefab architecture: A guide to modular design and construction",
+      "authors": "RE Smith",
+      "year": "2010",
+      "cited_by": 314,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12568806091734565652&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Life cycle performance of modular buildings: A critical review",
+      "id": "18295713473652531851",
+      "url": "https://www.sciencedirect.com/science/article/pii/S1364032116301411",
+      "title": "Life cycle performance of modular buildings: A critical review",
+      "authors": "M Kamali, K Hewage",
+      "year": "2016",
+      "cited_by": 115,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=18295713473652531851&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Construction matters: Comparing environmental impacts of building modular and conventional homes in the United States",
+      "id": "12327494388577812903",
+      "url": "https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1530-9290.2011.00424.x",
+      "title": "Construction matters: Comparing environmental impacts of building modular and conventional homes in the United States",
+      "authors": "J Quale, MJ Eckelman, KW Williams\u2026",
+      "year": "2012",
+      "cited_by": 79,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12327494388577812903&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Development of performance criteria for sustainability evaluation of modular versus conventional construction methods",
+      "id": "1336402511928085439",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0959652616317280",
+      "title": "Development of performance criteria for sustainability evaluation of modular versus conventional construction methods",
+      "authors": "M Kamali, K Hewage",
+      "year": "2017",
+      "cited_by": 64,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1336402511928085439&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Lean and integrated project delivery",
+      "id": "9433807380803525063",
+      "url": "https://researchportal.bath.ac.uk/en/publications/lean-and-integrated-project-delivery",
+      "title": "Lean and integrated project delivery",
+      "authors": "RE Smith, A Mossman, S Emmitt",
+      "year": "2011",
+      "cited_by": 49,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9433807380803525063&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Performance of modular prefabricated architecture: case study-based review and future pathways",
+      "id": "1519635371001736910",
+      "url": "https://www.mdpi.com/2071-1050/8/6/558",
+      "title": "Performance of modular prefabricated architecture: case study-based review and future pathways",
+      "authors": "FE Boafo, JH Kim, JT Kim",
+      "year": "2016",
+      "cited_by": 39,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1519635371001736910&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Trailer-mounted proppant delivery system",
+      "id": "1314946717802567675",
+      "url": "https://patents.google.com/patent/US10239436B2/en",
+      "title": "Trailer-mounted proppant delivery system",
+      "authors": "J Oren",
+      "year": "2019",
+      "cited_by": 36,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1314946717802567675&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Structural response of modular buildings\u2013an overview",
+      "id": "3179195717907317052",
+      "url": "https://www.sciencedirect.com/science/article/pii/S2352710217303650",
+      "title": "Structural response of modular buildings\u2013an overview",
+      "authors": "AW Lacey, W Chen, H Hao, K Bi",
+      "year": "2018",
+      "cited_by": 35,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3179195717907317052&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "An investigation of critical factors and constraints for selecting modular construction over conventional stick-built technique",
+      "id": "7627560937173052694",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/15578771.2012.723115",
+      "title": "An investigation of critical factors and constraints for selecting modular construction over conventional stick-built technique",
+      "authors": "S Azhar, MY Lukkad, I Ahmad",
+      "year": "2013",
+      "cited_by": 38,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7627560937173052694&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Product architecture model for multistory modular buildings",
+      "id": "7186078601941918540",
+      "url": "https://ascelibrary.org/doi/abs/10.1061/(ASCE)CO.1943-7862.0001159",
+      "title": "Product architecture model for multistory modular buildings",
+      "authors": "IJ Ramaji, AM Memari",
+      "year": "2016",
+      "cited_by": 29,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7186078601941918540&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "BIM-based 4D simulation to improve module manufacturing productivity for sustainable building projects",
+      "id": "9600638577219439421",
+      "url": "https://www.mdpi.com/2071-1050/9/3/426",
+      "title": "BIM-based 4D simulation to improve module manufacturing productivity for sustainable building projects",
+      "authors": "J Lee, J Kim",
+      "year": "2017",
+      "cited_by": 21,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9600638577219439421&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Digital architecture as a challenge for design pedagogy: theory, knowledge, models and medium",
+      "id": "2647543420661552434",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0142694X07001032",
+      "title": "Digital architecture as a challenge for design pedagogy: theory, knowledge, models and medium",
+      "authors": "R Oxman",
+      "year": "2008",
+      "cited_by": 249,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2647543420661552434&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The investigation on using Unity3D game engine in urban design study",
+      "id": "6581490292275618014",
+      "url": "http://journals.itb.ac.id/index.php/jictra/article/view/180",
+      "title": "The investigation on using Unity3D game engine in urban design study",
+      "authors": "A Indraprastha, M Shinozaki",
+      "year": "2009",
+      "cited_by": 97,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6581490292275618014&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Towards an integrated generative design framework",
+      "id": "3566263717681907235",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0142694X11000391",
+      "title": "Towards an integrated generative design framework",
+      "authors": "V Singh, N Gu",
+      "year": "2012",
+      "cited_by": 90,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3566263717681907235&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Seeing and discovering: how do student designers reinterpret sketches and digital marks during graphic design ideation?",
+      "id": "1503735692813391861",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0142694X10000438",
+      "title": "Seeing and discovering: how do student designers reinterpret sketches and digital marks during graphic design ideation?",
+      "authors": "C Stones, T Cassidy",
+      "year": "2010",
+      "cited_by": 69,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1503735692813391861&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Digital architectural design as exploration of computable functions",
+      "id": "14876156790814117635",
+      "url": "https://journals.sagepub.com/doi/abs/10.1260/1478-0771.8.1.1",
+      "title": "Digital architectural design as exploration of computable functions",
+      "authors": "T Kotnik",
+      "year": "2010",
+      "cited_by": 64,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14876156790814117635&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Learning creativity and design for innovation",
+      "id": "9371966356122775906",
+      "url": "https://link.springer.com/article/10.1007/s10798-010-9122-8",
+      "title": "Learning creativity and design for innovation",
+      "authors": "D Bruton",
+      "year": "2011",
+      "cited_by": 50,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9371966356122775906&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Performative design: a performance-based model of digital architectural design",
+      "id": "4069401559900267726",
+      "url": "https://journals.sagepub.com/doi/abs/10.1068/b34149",
+      "title": "Performative design: a performance-based model of digital architectural design",
+      "authors": "R Oxman",
+      "year": "2009",
+      "cited_by": 50,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4069401559900267726&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The impact of computer aided architectural design programs on conceptual design in an educational context",
+      "id": "5649431426659510991",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0142694X14000179",
+      "title": "The impact of computer aided architectural design programs on conceptual design in an educational context",
+      "authors": "HS Salman, R Laing, A Conniff",
+      "year": "2014",
+      "cited_by": 43,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5649431426659510991&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Landscape Architecture and Digital Technologies: Re-conceptualising design and making",
+      "id": "13133710427378733808",
+      "url": "https://www.taylorfrancis.com/books/9781315713526",
+      "title": "Landscape Architecture and Digital Technologies: Re-conceptualising design and making",
+      "authors": "J Walliss, H Rahmann",
+      "year": "2016",
+      "cited_by": 39,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13133710427378733808&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The text of free-form architecture: qualitative study of the discourse of four architects",
+      "id": "2214152389911898692",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0142694X09000945",
+      "title": "The text of free-form architecture: qualitative study of the discourse of four architects",
+      "authors": "JF Wong",
+      "year": "2010",
+      "cited_by": 33,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2214152389911898692&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Art and science in the design of physically large and complex systems",
+      "id": "9780737307324287657",
+      "url": "https://royalsocietypublishing.org/doi/abs/10.1098/rspa.2011.0590",
+      "title": "Art and science in the design of physically large and complex systems",
+      "authors": "DJ Andrews",
+      "year": "2011",
+      "cited_by": 28,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9780737307324287657&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The flight assembled architecture installation: Cooperative construction with flying machines",
+      "id": "10858630053257674584",
+      "url": "https://ieeexplore.ieee.org/abstract/document/6853477/",
+      "title": "The flight assembled architecture installation: Cooperative construction with flying machines",
+      "authors": "F Augugliaro, S Lupashin, M Hamer\u2026",
+      "year": "2014",
+      "cited_by": 188,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10858630053257674584&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Survey on unmanned aerial vehicle networks for civil applications: A communications viewpoint",
+      "id": "5634947064477561886",
+      "url": "https://ieeexplore.ieee.org/abstract/document/7463007/",
+      "title": "Survey on unmanned aerial vehicle networks for civil applications: A communications viewpoint",
+      "authors": "S Hayat, E Yanmaz, R Muzaffar",
+      "year": "2016",
+      "cited_by": 366,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5634947064477561886&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Fusing ultra-wideband range measurements with accelerometers and rate gyroscopes for quadrocopter state estimation",
+      "id": "7122333364042098113",
+      "url": "https://ieeexplore.ieee.org/abstract/document/7139421/",
+      "title": "Fusing ultra-wideband range measurements with accelerometers and rate gyroscopes for quadrocopter state estimation",
+      "authors": "MW Mueller, M Hamer\u2026",
+      "year": "2015",
+      "cited_by": 84,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7122333364042098113&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Toward site-specific and self-sufficient robotic fabrication on architectural scales",
+      "id": "2773357144154797671",
+      "url": "https://www.researchgate.net/profile/Steven_Keating/publication/316523158_Toward_site-specific_and_self-sufficient_robotic_fabrication_on_architectural_scales/links/5a204709a6fdcccd30e0086f/Toward-site-specific-and-self-sufficient-robotic-fabrication-on-architectural-scales.pdf",
+      "title": "Toward site-specific and self-sufficient robotic fabrication on architectural scales",
+      "authors": "SJ Keating, JC Leland, L Cai, N Oxman",
+      "year": "2017",
+      "cited_by": 71,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2773357144154797671&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Real-time trajectory generation for quadrocopters",
+      "id": "10600052167805431986",
+      "url": "https://ieeexplore.ieee.org/abstract/document/7128399/",
+      "title": "Real-time trajectory generation for quadrocopters",
+      "authors": "M Hehn, R D'Andrea",
+      "year": "2015",
+      "cited_by": 72,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10600052167805431986&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "6D physical interaction with a fully actuated aerial robot",
+      "id": "16947450745018740442",
+      "url": "https://ieeexplore.ieee.org/abstract/document/7989608/",
+      "title": "6D physical interaction with a fully actuated aerial robot",
+      "authors": "M Ryll, G Muscio, F Pierri, E Cataldi\u2026",
+      "year": "2017",
+      "cited_by": 66,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16947450745018740442&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Swarm robotics: A formal approach",
+      "id": "4229787426262920806",
+      "url": "https://link.springer.com/content/pdf/10.1007/978-3-319-74528-2.pdf",
+      "title": "Swarm robotics: A formal approach",
+      "authors": "H Hamann",
+      "year": "2018",
+      "cited_by": 66,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4229787426262920806&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Experimental soft-matter science",
+      "id": "15254985592649787693",
+      "url": "https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.89.025002",
+      "title": "Experimental soft-matter science",
+      "authors": "SR Nagel",
+      "year": "2017",
+      "cited_by": 43,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15254985592649787693&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Energetics in robotic flight at small scales",
+      "id": "11441038859071194357",
+      "url": "https://royalsocietypublishing.org/doi/abs/10.1098/rsfs.2016.0088",
+      "title": "Energetics in robotic flight at small scales",
+      "authors": "K Karydis, V Kumar",
+      "year": "2017",
+      "cited_by": 27,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11441038859071194357&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Collaborative transportation using mavs via passive force control",
+      "id": "7514757239807872883",
+      "url": "https://ieeexplore.ieee.org/abstract/document/7989678/",
+      "title": "Collaborative transportation using mavs via passive force control",
+      "authors": "A Tagliabue, M Kamel, S Verling\u2026",
+      "year": "2017",
+      "cited_by": 35,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7514757239807872883&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Lift of a cable-suspended load by a quadrotor: A hybrid system approach",
+      "id": "7706147602823414643",
+      "url": "https://ieeexplore.ieee.org/abstract/document/7171008/",
+      "title": "Lift of a cable-suspended load by a quadrotor: A hybrid system approach",
+      "authors": "PJ Cruz, M Oishi, R Fierro",
+      "year": "2015",
+      "cited_by": 31,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7706147602823414643&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Aerial robotic construction towards a new field of architectural research",
+      "id": "6997834954385070560",
+      "url": "https://journals.sagepub.com/doi/abs/10.1260/1478-0771.10.3.439",
+      "title": "Aerial robotic construction towards a new field of architectural research",
+      "authors": "J Willmann, F Augugliaro, T Cadalbert\u2026",
+      "year": "2012",
+      "cited_by": 127,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6997834954385070560&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Designing collective behavior in a termite-inspired robot construction team",
+      "id": "7085689178980949825",
+      "url": "https://science.sciencemag.org/content/343/6172/754.short",
+      "title": "Designing collective behavior in a termite-inspired robot construction team",
+      "authors": "J Werfel, K Petersen, R Nagpal",
+      "year": "2014",
+      "cited_by": 341,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7085689178980949825&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Aerial manipulation using a quadrotor with a two dof robotic arm",
+      "id": "4126310708464191267",
+      "url": "https://ieeexplore.ieee.org/abstract/document/6697077/",
+      "title": "Aerial manipulation using a quadrotor with a two dof robotic arm",
+      "authors": "S Kim, S Choi, HJ Kim",
+      "year": "2013",
+      "cited_by": 235,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4126310708464191267&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Building tensile structures with flying machines",
+      "id": "10677953081721742392",
+      "url": "https://ieeexplore.ieee.org/abstract/document/6696853/",
+      "title": "Building tensile structures with flying machines",
+      "authors": "F Augugliaro, A Mirjan, F Gramazio\u2026",
+      "year": "2013",
+      "cited_by": 69,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10677953081721742392&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Vision-guided aerial manipulation using a multirotor with a robotic arm",
+      "id": "4245283153722800504",
+      "url": "https://ieeexplore.ieee.org/abstract/document/7395364/",
+      "title": "Vision-guided aerial manipulation using a multirotor with a robotic arm",
+      "authors": "S Kim, H Seo, S Choi, HJ Kim",
+      "year": "2016",
+      "cited_by": 56,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4245283153722800504&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Admittance control for physical human-quadrocopter interaction",
+      "id": "237415814032959764",
+      "url": "https://ieeexplore.ieee.org/abstract/document/6669643/",
+      "title": "Admittance control for physical human-quadrocopter interaction",
+      "authors": "F Augugliaro, R D'Andrea",
+      "year": "2013",
+      "cited_by": 49,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=237415814032959764&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "3D printing with flying robots",
+      "id": "14422916020991097263",
+      "url": "https://ieeexplore.ieee.org/abstract/document/6907515/",
+      "title": "3D printing with flying robots",
+      "authors": "G Hunt, F Mitzalis, T Alhinai\u2026",
+      "year": "2014",
+      "cited_by": 46,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14422916020991097263&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Software engineering for mobility: reflecting on the past, peering into the future",
+      "id": "458656311515127278",
+      "url": "https://dl.acm.org/citation.cfm?id=2593884",
+      "title": "Software engineering for mobility: reflecting on the past, peering into the future",
+      "authors": "GP Picco, C Julien, AL Murphy, M Musolesi\u2026",
+      "year": "2014",
+      "cited_by": 34,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=458656311515127278&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Innovative surface structures: technology and applications",
+      "id": "18237528329207790655",
+      "title": "Innovative surface structures: technology and applications",
+      "authors": "M Bechthold",
+      "year": "2008",
+      "cited_by": 118,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=18237528329207790655&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The structural basis of architecture",
+      "id": "9183372898277849237",
+      "url": "https://www.taylorfrancis.com/books/9781315624501",
+      "title": "The structural basis of architecture",
+      "authors": "BN Sandaker, AP Eggen, MR Cruvellier",
+      "year": "2019",
+      "cited_by": 56,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9183372898277849237&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Deployable structures classification: A review",
+      "id": "3701195584106502113",
+      "url": "https://journals.sagepub.com/doi/abs/10.1177/0266351117711290",
+      "title": "Deployable structures classification: A review",
+      "authors": "GE Fenci, NGR Currie",
+      "year": "2017",
+      "cited_by": 19,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3701195584106502113&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Architectural prototypes II: Reformations, speculations and strategies in the digital design field",
+      "id": "535260248268964061",
+      "url": "http://www.diva-portal.org/smash/record.jsf?pid=diva2:526960",
+      "title": "Architectural prototypes II: Reformations, speculations and strategies in the digital design field",
+      "authors": "J Runberger",
+      "year": "2012",
+      "cited_by": 13,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=535260248268964061&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Geometry and performance of timber gridshells",
+      "id": "13445328929951789420",
+      "url": "http://www.academia.edu/download/33554456/D._Naicu_-_MPhil_-_Geometry_and_Performance_of_Timber_Gridshells_-_2012.pdf",
+      "title": "Geometry and performance of timber gridshells",
+      "authors": "DI Naicu, C Williams, R Harris",
+      "year": "2012",
+      "cited_by": 8,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13445328929951789420&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Timber Folded Plate Structures\u2013Topological and Structural Considerations",
+      "id": "4298577258187961690",
+      "url": "https://journals.sagepub.com/doi/abs/10.1260/0266-3511.30.2.169",
+      "title": "Timber Folded Plate Structures\u2013Topological and Structural Considerations",
+      "authors": "A Stitic, Y Weinand",
+      "year": "2015",
+      "cited_by": 8,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4298577258187961690&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Staging places as performances: creative strategies for architecture",
+      "id": "4537973310009143853",
+      "url": "https://osf.io/preprints/socarxiv/9evkj/",
+      "title": "Staging places as performances: creative strategies for architecture",
+      "authors": "S Roudavski",
+      "year": "2016",
+      "cited_by": 6,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4537973310009143853&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "New stone shells: design and robotic fabrication",
+      "id": "16417738583927970182",
+      "url": "https://riunet.upv.es/handle/10251/6814",
+      "title": "New stone shells: design and robotic fabrication",
+      "authors": "M BECHTHOLD",
+      "year": "2009",
+      "cited_by": 6,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16417738583927970182&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Flowing matter: Robotic fabrication of complex ceramic systems",
+      "id": "120881312924298869",
+      "url": "https://www.researchgate.net/profile/Martin_Bechthold/publication/320389930_Flowing_Matter_Robotic_Fabrication_of_Complex_Ceramic_Systems/links/5a3179ec0f7e9b2a285b6352/Flowing-Matter-Robotic-Fabrication-of-Complex-Ceramic-Systems.pdf",
+      "title": "Flowing matter: Robotic fabrication of complex ceramic systems",
+      "authors": "S Andreani, JLG del Castillo, A Jyoti\u2026",
+      "year": "2012",
+      "cited_by": 8,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=120881312924298869&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "An overview of historical and contemporary concrete shells, their construction and factors in their general disappearance",
+      "id": "7456683457565303752",
+      "url": "https://journals.sagepub.com/doi/abs/10.1260/0266-3511.30.1.1",
+      "title": "An overview of historical and contemporary concrete shells, their construction and factors in their general disappearance",
+      "authors": "G Tang",
+      "year": "2015",
+      "cited_by": 8,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7456683457565303752&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Untersuchungen zur Homogenisierung von Spannungsfeldern bei adaptiven Schalentragwerken mittels Auflagerverschiebung",
+      "id": "16322759061972132616",
+      "url": "http://elib.uni-stuttgart.de/handle/11682/541",
+      "title": "Untersuchungen zur Homogenisierung von Spannungsfeldern bei adaptiven Schalentragwerken mittels Auflagerverschiebung",
+      "authors": "S Neuh\u00e4user",
+      "year": "2014",
+      "cited_by": 13,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16322759061972132616&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Synthesis of design production with integrated digital fabrication",
+      "id": "13160054099149903321",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0926580506000410",
+      "title": "Synthesis of design production with integrated digital fabrication",
+      "authors": "L Sass",
+      "year": "2007",
+      "cited_by": 84,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13160054099149903321&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Building envelope shape design in early stages of the design process: Integrating architectural design systems and energy simulation",
+      "id": "5415893329570103031",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0926580512002415",
+      "title": "Building envelope shape design in early stages of the design process: Integrating architectural design systems and energy simulation",
+      "authors": "V Granadeiro, JP Duarte, JR Correia\u2026",
+      "year": "2013",
+      "cited_by": 108,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5415893329570103031&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Getting real about BIM: Critical realist descriptions as an alternative to the na\u00efve framing and multiple fallacies of hype",
+      "id": "16430557706585690958",
+      "url": "https://www.emeraldinsight.com/doi/abs/10.1108/IJMPB-12-2013-0073",
+      "title": "Getting real about BIM: Critical realist descriptions as an alternative to the na\u00efve framing and multiple fallacies of hype",
+      "authors": "S Fox",
+      "year": "2014",
+      "cited_by": 37,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16430557706585690958&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Design and digital fabrication of folded sandwich structures",
+      "id": "9737923306565418907",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0926580515002423",
+      "title": "Design and digital fabrication of folded sandwich structures",
+      "authors": "JM Gattas, Z You",
+      "year": "2016",
+      "cited_by": 25,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9737923306565418907&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Automated design and delivery of relief housing: the case of post-earthquake Haiti",
+      "id": "8064737239916868182",
+      "url": "http://home.fa.utl.pt/~miarq4p5/2011-12/Course_Programs/0_Projecto%20-%20Arch%20Design%20IV/1_Turma%20A/Shape_Grammars/3_Transformations%20in%20grammars/SG%20W_Lecture%203_Text%203_Automated%20design%20and%20delivery%20of%20relief%20housing_CF_2011.pdf",
+      "title": "Automated design and delivery of relief housing: the case of post-earthquake Haiti",
+      "authors": "D Benr\u00f3s, V Granadero, JP Duarte, T Knight",
+      "year": "2011",
+      "cited_by": 17,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8064737239916868182&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Potential of virtual-social-physical convergence for project manufacturing",
+      "id": "8604525249447263232",
+      "url": "https://www.emeraldinsight.com/doi/abs/10.1108/JMTM-01-2013-0008",
+      "title": "Potential of virtual-social-physical convergence for project manufacturing",
+      "authors": "S Fox",
+      "year": "2014",
+      "cited_by": 17,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8604525249447263232&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Shape grammars",
+      "id": "6258082173857036390",
+      "url": "https://dl.acm.org/citation.cfm?id=1667261",
+      "title": "Shape grammars",
+      "authors": "M \u00d6zkar, G Stiny",
+      "year": "2009",
+      "cited_by": 13,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6258082173857036390&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Domesticating artificial intelligence: Expanding human self-expression through applications of artificial intelligence in prosumption",
+      "id": "7144290256536757450",
+      "url": "https://journals.sagepub.com/doi/abs/10.1177/1469540516659126",
+      "title": "Domesticating artificial intelligence: Expanding human self-expression through applications of artificial intelligence in prosumption",
+      "authors": "S Fox",
+      "year": "2018",
+      "cited_by": 15,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7144290256536757450&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "From concept to reality: digital systems in architectural design and fabrication",
+      "id": "17039255646191035638",
+      "url": "https://journals.sagepub.com/doi/abs/10.1260/147807708787523312",
+      "title": "From concept to reality: digital systems in architectural design and fabrication",
+      "authors": "KE Larsen, C Schindler",
+      "year": "2008",
+      "cited_by": 10,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17039255646191035638&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Robotic prefabrication of timber structures: towards automated large-scale spatial assembly",
+      "id": "8237537486349101370",
+      "url": "https://link.springer.com/article/10.1007/s41693-017-0006-2",
+      "title": "Robotic prefabrication of timber structures: towards automated large-scale spatial assembly",
+      "authors": "P Eversmann, F Gramazio, M Kohler",
+      "year": "2017",
+      "cited_by": 11,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8237537486349101370&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Procedural modeling in architecture based on statistical and fuzzy inference",
+      "id": "17350377797429064080",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0926580513000824",
+      "title": "Procedural modeling in architecture based on statistical and fuzzy inference",
+      "authors": "B Tepav\u010devi\u0107, V Stojakovi\u0107",
+      "year": "2013",
+      "cited_by": 9,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17350377797429064080&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Design, data and process issues for mega-scale rapid manufacturing machines used for construction",
+      "id": "2826799291066339858",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0926580508000460",
+      "title": "Design, data and process issues for mega-scale rapid manufacturing machines used for construction",
+      "authors": "RA Buswell, A Thorpe, RC Soar, AGF Gibb",
+      "year": "2008",
+      "cited_by": 81,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2826799291066339858&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Development of a BIM-based automated construction system",
+      "id": "11456636301538354558",
+      "url": "https://www.sciencedirect.com/science/article/pii/S187770581401902X",
+      "title": "Development of a BIM-based automated construction system",
+      "authors": "L Ding, R Wei, H Che",
+      "year": "2014",
+      "cited_by": 86,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11456636301538354558&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Fabricating construction components using layered manufacturing technology",
+      "id": "17512184750089490113",
+      "url": "https://www.irbnet.de/daten/iconda/CIB15629.pdf",
+      "title": "Fabricating construction components using layered manufacturing technology",
+      "authors": "S Lim, T Le, J Webster, R Buswell, A Austin\u2026",
+      "year": "2009",
+      "cited_by": 72,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17512184750089490113&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Agility through rapid prototyping technology in a manufacturing environment using a 3D printer",
+      "id": "10467556091387701282",
+      "url": "https://www.emeraldinsight.com/doi/abs/10.1108/17410380910984267",
+      "title": "Agility through rapid prototyping technology in a manufacturing environment using a 3D printer",
+      "authors": "S Vinodh, G Sundararaj, SR Devadasan\u2026",
+      "year": "2009",
+      "cited_by": 62,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10467556091387701282&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Three-dimensional printing in the construction industry: A review",
+      "id": "15751980014008758661",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/15623599.2015.1012136",
+      "title": "Three-dimensional printing in the construction industry: A review",
+      "authors": "I Perkins, M Skitmore",
+      "year": "2015",
+      "cited_by": 67,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15751980014008758661&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "3-D printing of open source appropriate technologies for self-directed sustainable development",
+      "id": "12504731026848788361",
+      "url": "https://hal.archives-ouvertes.fr/hal-02120493/",
+      "title": "3-D printing of open source appropriate technologies for self-directed sustainable development",
+      "authors": "J Pearce, C Blair, K Laciak, R Andrews, A Nosrat\u2026",
+      "year": "2010",
+      "cited_by": 259,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12504731026848788361&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Digital anisotropy: A variable elasticity rapid prototyping platform: This paper proposes and demonstrates a digital anisotropic fabrication approach by employing a\u00a0\u2026",
+      "id": "17028282405742151775",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/17452759.2012.731369",
+      "title": "Digital anisotropy: A variable elasticity rapid prototyping platform: This paper proposes and demonstrates a digital anisotropic fabrication approach by employing a\u00a0\u2026",
+      "authors": "N Oxman, E Tsai, M Firstenberg",
+      "year": "2012",
+      "cited_by": 38,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17028282405742151775&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Case study of mass customization of double-curved metal fa\u00e7ade panels using a new hybrid sheet metal processing technique",
+      "id": "13552540695764985930",
+      "url": "https://ascelibrary.org/doi/abs/10.1061/(ASCE)CO.1943-7862.0000551",
+      "title": "Case study of mass customization of double-curved metal fa\u00e7ade panels using a new hybrid sheet metal processing technique",
+      "authors": "G Lee, S Kim",
+      "year": "2012",
+      "cited_by": 32,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13552540695764985930&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Additive manufacturing technology and its implementation in construction as an eco-innovative solution",
+      "id": "3626344404085986417",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0926580517309731",
+      "title": "Additive manufacturing technology and its implementation in construction as an eco-innovative solution",
+      "authors": "SH Ghaffar, J Corker, M Fan",
+      "year": "2018",
+      "cited_by": 27,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3626344404085986417&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Furniture design",
+      "id": "13420150160560349022",
+      "url": "https://books.google.com/books?hl=en&lr=&id=VEKpxZQYzloC&oi=fnd&pg=PP12&ots=2vHllyM0Xz&sig=1Z5j16v6lNPP7e1Ub2-YT2SIvZs",
+      "title": "Furniture design",
+      "authors": "J Postell",
+      "year": "2012",
+      "cited_by": 77,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13420150160560349022&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Computational interlocking furniture assembly",
+      "id": "14652942963928573630",
+      "url": "https://dl.acm.org/citation.cfm?id=2766892",
+      "title": "Computational interlocking furniture assembly",
+      "authors": "CW Fu, P Song, X Yan, LW Yang\u2026",
+      "year": "2015",
+      "cited_by": 46,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14652942963928573630&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Interactive design and stability analysis of decorative joinery for furniture",
+      "id": "13215774060147753281",
+      "url": "https://dl.acm.org/citation.cfm?id=3054740",
+      "title": "Interactive design and stability analysis of decorative joinery for furniture",
+      "authors": "J Yao, DM Kaufman, Y Gingold\u2026",
+      "year": "2017",
+      "cited_by": 20,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13215774060147753281&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Analysis of key environmental areas in the design and labelling of furniture products: Application of a screening approach based on a literature review of LCA\u00a0\u2026",
+      "id": "14028579788788966179",
+      "url": "https://www.sciencedirect.com/science/article/pii/S2352550916300136",
+      "title": "Analysis of key environmental areas in the design and labelling of furniture products: Application of a screening approach based on a literature review of LCA\u00a0\u2026",
+      "authors": "M Cordella, C Hidalgo",
+      "year": "2016",
+      "cited_by": 17,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14028579788788966179&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Materiality and interior construction",
+      "id": "9257249010872963571",
+      "url": "https://books.google.com/books?hl=en&lr=&id=5R1KpqgWjnMC&oi=fnd&pg=PR9&ots=ULJhE-FiQR&sig=0JHol1Ux9bA1Da_C-rMi4Y1yH18",
+      "title": "Materiality and interior construction",
+      "authors": "J Postell, N Gesimondo",
+      "year": "2011",
+      "cited_by": 17,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9257249010872963571&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Physical and mechanical properties of Klainedoxa gabonensis with engineering potential",
+      "id": "15050945082731245460",
+      "url": "https://link.springer.com/article/10.1007/s11676-016-0331-1",
+      "title": "Physical and mechanical properties of Klainedoxa gabonensis with engineering potential",
+      "authors": "KB Boadu, C Antwi-Boasiako\u2026",
+      "year": "2017",
+      "cited_by": 6,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15050945082731245460&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Studi Gaya Vintage pada Interior Cafe Di Surabaya.(Studi Kasus: Canary Cafe, DailySweet Cafe dan Stilrod Cafe)",
+      "id": "13371051696769549672",
+      "url": "http://publication.petra.ac.id/index.php/desain-interior/article/view/2296",
+      "title": "Studi Gaya Vintage pada Interior Cafe Di Surabaya.(Studi Kasus: Canary Cafe, DailySweet Cafe dan Stilrod Cafe)",
+      "authors": "LM Tejo",
+      "year": "2014",
+      "cited_by": 3,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13371051696769549672&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Perancangan Set Furnitur Sebagai Fasilitas Belajar, Bersantai, dan Penyimpanan untuk Anak Usia 3-5 Tahun Dalam Rumah Tinggal",
+      "id": "3634705376557791256",
+      "url": "http://publication.petra.ac.id/index.php/desain-interior/article/view/5913",
+      "title": "Perancangan Set Furnitur Sebagai Fasilitas Belajar, Bersantai, dan Penyimpanan untuk Anak Usia 3-5 Tahun Dalam Rumah Tinggal",
+      "authors": "C Limantara",
+      "year": "2017",
+      "cited_by": 4,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3634705376557791256&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Contested Voices of Professionalism",
+      "id": "7324784243402517222",
+      "url": "http://rave.ohiolink.edu/etdc/view?acc_num=ucin1227204927",
+      "title": "Contested Voices of Professionalism",
+      "authors": "P Kanthasamy",
+      "year": "2008",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7324784243402517222&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Mechanical properties of coppiced and non-coppiced Pterocarpus erinaceus boles and their industrial application",
+      "id": "3220268145403618784",
+      "url": "https://link.springer.com/article/10.1007/s11676-018-0727-1",
+      "title": "Mechanical properties of coppiced and non-coppiced Pterocarpus erinaceus boles and their industrial application",
+      "authors": "C Antwi-Boasiako, FA Anthonio\u2026",
+      "year": "2019",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3220268145403618784&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Furniture Design Identity: Implementation of National Identity into Office Chair Design",
+      "id": "13241590968356110712",
+      "url": "https://link.springer.com/chapter/10.1007/978-981-287-332-3_38",
+      "title": "Furniture Design Identity: Implementation of National Identity into Office Chair Design",
+      "authors": "MF Ahmad, Z Hasan, Z Romli",
+      "year": "2015",
+      "cited_by": 2,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13241590968356110712&as_sdt=40000005&sciodt=0,22&hl=en"
+    }
+  ],
+  "links": [
+    {
+      "source": "16951597402051293520",
+      "target": "7507732243562766228"
+    },
+    {
+      "source": "6027759471136766012",
+      "target": "16951597402051293520"
+    },
+    {
+      "source": "11818067185487769956",
+      "target": "16951597402051293520"
+    },
+    {
+      "source": "6429141039619985773",
+      "target": "16951597402051293520"
+    },
+    {
+      "source": "14974603183473907391",
+      "target": "16951597402051293520"
+    },
+    {
+      "source": "3253879738962161004",
+      "target": "16951597402051293520"
+    },
+    {
+      "source": "6946591980644169812",
+      "target": "16951597402051293520"
+    },
+    {
+      "source": "16842748068224545346",
+      "target": "16951597402051293520"
+    },
+    {
+      "source": "8880502774589459527",
+      "target": "16951597402051293520"
+    },
+    {
+      "source": "3879240372019421962",
+      "target": "16951597402051293520"
+    },
+    {
+      "source": "6304353652323528007",
+      "target": "16951597402051293520"
+    },
+    {
+      "source": "5507613466232573826",
+      "target": "7507732243562766228"
+    },
+    {
+      "source": "14691283186921140293",
+      "target": "5507613466232573826"
+    },
+    {
+      "source": "17390213974630746420",
+      "target": "5507613466232573826"
+    },
+    {
+      "source": "12453149411017315858",
+      "target": "5507613466232573826"
+    },
+    {
+      "source": "6337370092403350792",
+      "target": "5507613466232573826"
+    },
+    {
+      "source": "1500316283164279318",
+      "target": "5507613466232573826"
+    },
+    {
+      "source": "2375998811979904696",
+      "target": "5507613466232573826"
+    },
+    {
+      "source": "16319702180244029222",
+      "target": "5507613466232573826"
+    },
+    {
+      "source": "16319702180244029222",
+      "target": "2826799291066339858"
+    },
+    {
+      "source": "17322954162985341017",
+      "target": "5507613466232573826"
+    },
+    {
+      "source": "17322954162985341017",
+      "target": "2826799291066339858"
+    },
+    {
+      "source": "12028919501274601713",
+      "target": "5507613466232573826"
+    },
+    {
+      "source": "9205605433683998561",
+      "target": "5507613466232573826"
+    },
+    {
+      "source": "12568806091734565652",
+      "target": "7507732243562766228"
+    },
+    {
+      "source": "18295713473652531851",
+      "target": "12568806091734565652"
+    },
+    {
+      "source": "12327494388577812903",
+      "target": "12568806091734565652"
+    },
+    {
+      "source": "1336402511928085439",
+      "target": "12568806091734565652"
+    },
+    {
+      "source": "9433807380803525063",
+      "target": "12568806091734565652"
+    },
+    {
+      "source": "1519635371001736910",
+      "target": "12568806091734565652"
+    },
+    {
+      "source": "1314946717802567675",
+      "target": "12568806091734565652"
+    },
+    {
+      "source": "3179195717907317052",
+      "target": "12568806091734565652"
+    },
+    {
+      "source": "7627560937173052694",
+      "target": "12568806091734565652"
+    },
+    {
+      "source": "7186078601941918540",
+      "target": "12568806091734565652"
+    },
+    {
+      "source": "9600638577219439421",
+      "target": "12568806091734565652"
+    },
+    {
+      "source": "2647543420661552434",
+      "target": "7507732243562766228"
+    },
+    {
+      "source": "6581490292275618014",
+      "target": "2647543420661552434"
+    },
+    {
+      "source": "3566263717681907235",
+      "target": "2647543420661552434"
+    },
+    {
+      "source": "1503735692813391861",
+      "target": "2647543420661552434"
+    },
+    {
+      "source": "14876156790814117635",
+      "target": "2647543420661552434"
+    },
+    {
+      "source": "9371966356122775906",
+      "target": "2647543420661552434"
+    },
+    {
+      "source": "4069401559900267726",
+      "target": "2647543420661552434"
+    },
+    {
+      "source": "5649431426659510991",
+      "target": "2647543420661552434"
+    },
+    {
+      "source": "13133710427378733808",
+      "target": "2647543420661552434"
+    },
+    {
+      "source": "2214152389911898692",
+      "target": "2647543420661552434"
+    },
+    {
+      "source": "9780737307324287657",
+      "target": "2647543420661552434"
+    },
+    {
+      "source": "10858630053257674584",
+      "target": "7507732243562766228"
+    },
+    {
+      "source": "10858630053257674584",
+      "target": "6997834954385070560"
+    },
+    {
+      "source": "5634947064477561886",
+      "target": "10858630053257674584"
+    },
+    {
+      "source": "5634947064477561886",
+      "target": "6997834954385070560"
+    },
+    {
+      "source": "7122333364042098113",
+      "target": "10858630053257674584"
+    },
+    {
+      "source": "2773357144154797671",
+      "target": "10858630053257674584"
+    },
+    {
+      "source": "10600052167805431986",
+      "target": "10858630053257674584"
+    },
+    {
+      "source": "10600052167805431986",
+      "target": "6997834954385070560"
+    },
+    {
+      "source": "16947450745018740442",
+      "target": "10858630053257674584"
+    },
+    {
+      "source": "4229787426262920806",
+      "target": "10858630053257674584"
+    },
+    {
+      "source": "15254985592649787693",
+      "target": "10858630053257674584"
+    },
+    {
+      "source": "11441038859071194357",
+      "target": "10858630053257674584"
+    },
+    {
+      "source": "7514757239807872883",
+      "target": "10858630053257674584"
+    },
+    {
+      "source": "7706147602823414643",
+      "target": "10858630053257674584"
+    },
+    {
+      "source": "6997834954385070560",
+      "target": "7507732243562766228"
+    },
+    {
+      "source": "7085689178980949825",
+      "target": "6997834954385070560"
+    },
+    {
+      "source": "4126310708464191267",
+      "target": "6997834954385070560"
+    },
+    {
+      "source": "10677953081721742392",
+      "target": "6997834954385070560"
+    },
+    {
+      "source": "4245283153722800504",
+      "target": "6997834954385070560"
+    },
+    {
+      "source": "237415814032959764",
+      "target": "6997834954385070560"
+    },
+    {
+      "source": "14422916020991097263",
+      "target": "6997834954385070560"
+    },
+    {
+      "source": "458656311515127278",
+      "target": "6997834954385070560"
+    },
+    {
+      "source": "18237528329207790655",
+      "target": "7507732243562766228"
+    },
+    {
+      "source": "9183372898277849237",
+      "target": "18237528329207790655"
+    },
+    {
+      "source": "3701195584106502113",
+      "target": "18237528329207790655"
+    },
+    {
+      "source": "535260248268964061",
+      "target": "18237528329207790655"
+    },
+    {
+      "source": "13445328929951789420",
+      "target": "18237528329207790655"
+    },
+    {
+      "source": "4298577258187961690",
+      "target": "18237528329207790655"
+    },
+    {
+      "source": "4537973310009143853",
+      "target": "18237528329207790655"
+    },
+    {
+      "source": "16417738583927970182",
+      "target": "18237528329207790655"
+    },
+    {
+      "source": "120881312924298869",
+      "target": "18237528329207790655"
+    },
+    {
+      "source": "7456683457565303752",
+      "target": "18237528329207790655"
+    },
+    {
+      "source": "16322759061972132616",
+      "target": "18237528329207790655"
+    },
+    {
+      "source": "13160054099149903321",
+      "target": "7507732243562766228"
+    },
+    {
+      "source": "5415893329570103031",
+      "target": "13160054099149903321"
+    },
+    {
+      "source": "16430557706585690958",
+      "target": "13160054099149903321"
+    },
+    {
+      "source": "9737923306565418907",
+      "target": "13160054099149903321"
+    },
+    {
+      "source": "8064737239916868182",
+      "target": "13160054099149903321"
+    },
+    {
+      "source": "8604525249447263232",
+      "target": "13160054099149903321"
+    },
+    {
+      "source": "6258082173857036390",
+      "target": "13160054099149903321"
+    },
+    {
+      "source": "7144290256536757450",
+      "target": "13160054099149903321"
+    },
+    {
+      "source": "17039255646191035638",
+      "target": "13160054099149903321"
+    },
+    {
+      "source": "8237537486349101370",
+      "target": "13160054099149903321"
+    },
+    {
+      "source": "17350377797429064080",
+      "target": "13160054099149903321"
+    },
+    {
+      "source": "2826799291066339858",
+      "target": "7507732243562766228"
+    },
+    {
+      "source": "11456636301538354558",
+      "target": "2826799291066339858"
+    },
+    {
+      "source": "17512184750089490113",
+      "target": "2826799291066339858"
+    },
+    {
+      "source": "10467556091387701282",
+      "target": "2826799291066339858"
+    },
+    {
+      "source": "15751980014008758661",
+      "target": "2826799291066339858"
+    },
+    {
+      "source": "12504731026848788361",
+      "target": "2826799291066339858"
+    },
+    {
+      "source": "17028282405742151775",
+      "target": "2826799291066339858"
+    },
+    {
+      "source": "13552540695764985930",
+      "target": "2826799291066339858"
+    },
+    {
+      "source": "3626344404085986417",
+      "target": "2826799291066339858"
+    },
+    {
+      "source": "13420150160560349022",
+      "target": "7507732243562766228"
+    },
+    {
+      "source": "14652942963928573630",
+      "target": "13420150160560349022"
+    },
+    {
+      "source": "13215774060147753281",
+      "target": "13420150160560349022"
+    },
+    {
+      "source": "14028579788788966179",
+      "target": "13420150160560349022"
+    },
+    {
+      "source": "9257249010872963571",
+      "target": "13420150160560349022"
+    },
+    {
+      "source": "15050945082731245460",
+      "target": "13420150160560349022"
+    },
+    {
+      "source": "13371051696769549672",
+      "target": "13420150160560349022"
+    },
+    {
+      "source": "3634705376557791256",
+      "target": "13420150160560349022"
+    },
+    {
+      "source": "7324784243402517222",
+      "target": "13420150160560349022"
+    },
+    {
+      "source": "3220268145403618784",
+      "target": "13420150160560349022"
+    },
+    {
+      "source": "13241590968356110712",
+      "target": "13420150160560349022"
+    }
+  ]
+};
+
+var link = svg.append("g")
+    .attr("class", "links")
+  .selectAll("line")
+  .data(graph.links)
+  .enter().append("line");
+
+var node = svg.append("g")
+    .attr("class", "nodes")
+  .selectAll("circle")
+  .data(graph.nodes)
+  .enter().append("circle")
+    .attr("r", 5)
+    .call(d3.drag()
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended));
+
+node.append("title")
+    .text(function(d) {
+        return d.authors ? d.title + ' - ' + d.authors : d.title
+    });
+
+node.on("click", function(d) {
+  window.open(d.url, '_blank');
+  d3.event.stopPropagation();
+});
+
+simulation
+    .nodes(graph.nodes)
+    .on("tick", ticked);
+
+simulation.force("link")
+    .links(graph.links);
+
+function ticked() {
+  link
+      .attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
+
+  node
+      .attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; });
+}
+
+function dragstarted(d) {
+  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+  d.fx = d.x;
+  d.fy = d.y;
+}
+
+function dragged(d) {
+  d.fx = d3.event.x;
+  d.fy = d3.event.y;
+}
+
+function dragended(d) {
+  if (!d3.event.active) simulation.alphaTarget(0);
+  d.fx = null;
+  d.fy = null;
+}
+
+</script>
