@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<style>
+
+.links line {
+  stroke: #999;
+  stroke-opacity: 0.8;
+  stroke-width: 2px;
+}
+
+.nodes circle {
+  stroke: black;
+  fill: white;
+  stroke-width: 1.5px;
+}
+
+#graph {
+  width: 99vw;
+  height: 99vh;
+}
+
+</style>
+<svg id="graph"></svg>
+<script>
+
+var width = $(window).width();
+var height = $(window).height();
+
+var svg = d3.select("svg")
+    .attr("height", height)
+    .attr("width", width);
+
+var color = d3.scaleOrdinal(d3.schemeCategory20c);
+
+var simulation = d3.forceSimulation()
+    .velocityDecay(0.6)
+    .force("link", d3.forceLink().id(function(d) { return d.id; }))
+    .force("charge", d3.forceManyBody())
+    .force("center", d3.forceCenter(width / 2, height / 2));
+
+var graph = {
+  "nodes": [
+    {
+      "label": "Hydraulic city: Water and the infrastructures of citizenship in Mumbai",
+      "id": "2286195917214051391",
+      "url": "https://books.google.com/books?hl=en&lr=&id=ffo2DgAAQBAJ&oi=fnd&pg=PT8&ots=S5alIwNgTg&sig=oC3KW15TSdZwkBfVf5DMEjv_s8I",
+      "title": "Hydraulic city: Water and the infrastructures of citizenship in Mumbai",
+      "authors": "N Anand",
+      "year": "2017",
+      "cited_by": 183,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2286195917214051391&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Mississippi floods: designing a shifting landscape",
+      "id": "10562656868675532256",
+      "title": "Mississippi floods: designing a shifting landscape"
+    },
+    {
+      "label": "Worlding water supply: Thinking beyond the network in Jakarta",
+      "id": "11740049767506727251",
+      "url": "https://onlinelibrary.wiley.com/doi/abs/10.1111/1468-2427.12582",
+      "title": "Worlding water supply: Thinking beyond the network in Jakarta",
+      "authors": "K Furlong, M Kooy",
+      "year": "2017",
+      "cited_by": 29,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11740049767506727251&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Waste of a Nation: Garbage and Growth in India",
+      "id": "16548541633745375756",
+      "url": "https://books.google.com/books?hl=en&lr=&id=BC1QDwAAQBAJ&oi=fnd&pg=PT4&ots=YrM3tZ7OFI&sig=WeVGissXWIORhW0RU9Ez2NBYdVA",
+      "title": "Waste of a Nation: Garbage and Growth in India",
+      "authors": "A Doron",
+      "year": "2018",
+      "cited_by": 20,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16548541633745375756&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Producing water scarcity in S\u00e3o Paulo, Brazil: The 2014-2015 water crisis and the binding politics of infrastructure",
+      "id": "1343762642252902993",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0962629817301452",
+      "title": "Producing water scarcity in S\u00e3o Paulo, Brazil: The 2014-2015 water crisis and the binding politics of infrastructure",
+      "authors": "N Millington",
+      "year": "2018",
+      "cited_by": 16,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1343762642252902993&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Ruderal ecologies: Rethinking nature, migration, and the urban landscape in Berlin",
+      "id": "16724514307083713699",
+      "url": "https://journal.culanth.org/index.php/ca/article/view/ca33.2.09",
+      "title": "Ruderal ecologies: Rethinking nature, migration, and the urban landscape in Berlin",
+      "authors": "B Stoetzer",
+      "year": "2018",
+      "cited_by": 15,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16724514307083713699&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "From Chicago to China and India: Studying the city in the twenty-first century",
+      "id": "14067229716460280866",
+      "url": "https://www.annualreviews.org/doi/abs/10.1146/annurev-soc-073117-041131",
+      "title": "From Chicago to China and India: Studying the city in the twenty-first century",
+      "authors": "X Ren",
+      "year": "2018",
+      "cited_by": 6,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14067229716460280866&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The anthropology of populism: beyond the liberal settlement",
+      "id": "9942112374916853043",
+      "url": "https://www.annualreviews.org/doi/abs/10.1146/annurev-anthro-102218-011412",
+      "title": "The anthropology of populism: beyond the liberal settlement",
+      "authors": "W Mazzarella",
+      "year": "2019",
+      "cited_by": 6,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9942112374916853043&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Fostering equity and wellbeing through water: A reinterpretation of the goal of securing access",
+      "id": "2818049743107068158",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0305750X17303649",
+      "title": "Fostering equity and wellbeing through water: A reinterpretation of the goal of securing access",
+      "authors": "FM Gimelli, JJ Bos, BC Rogers",
+      "year": "2018",
+      "cited_by": 15,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2818049743107068158&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "An Infrastructural Event: Making Sense of Panama's Drought.",
+      "id": "10305884988392858147",
+      "url": "http://www.water-alternatives.org/index.php/alldoc/articles/vol10/v10issue3/387-a10-3-13/file",
+      "title": "An Infrastructural Event: Making Sense of Panama's Drought.",
+      "authors": "A Carse",
+      "year": "2017",
+      "cited_by": 7,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10305884988392858147&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Sensory politics: The tug-of-war between potability and palatability in municipal water production",
+      "id": "5595813359155714147",
+      "url": "https://journals.sagepub.com/doi/abs/10.1177/0306312718778358",
+      "title": "Sensory politics: The tug-of-war between potability and palatability in municipal water production",
+      "authors": "C Spackman, GA Burlingame",
+      "year": "2018",
+      "cited_by": 6,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5595813359155714147&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Urban service provision: Insights from pragmatism and ethics",
+      "id": "4306864738441793757",
+      "url": "https://journals.sagepub.com/doi/abs/10.1177/0308518X17734547",
+      "title": "Urban service provision: Insights from pragmatism and ethics",
+      "authors": "K Furlong, MN Carr\u00e9\u2026",
+      "year": "2017",
+      "cited_by": 7,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4306864738441793757&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Anthropological futures",
+      "id": "17590700396919104057",
+      "url": "https://books.google.com/books?hl=en&lr=&id=B97bWOGPHIUC&oi=fnd&pg=PT7&ots=Sz1KXrE0Zo&sig=UhmtIEt3kCVXAT3JsI9ICtjP0NI",
+      "title": "Anthropological futures",
+      "authors": "MMJ Fischer",
+      "year": "2009",
+      "cited_by": 132,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17590700396919104057&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The emergence of multispecies ethnography",
+      "id": "8192340665575082509",
+      "url": "https://anthrosource.onlinelibrary.wiley.com/doi/abs/10.1111/j.1548-1360.2010.01069.x",
+      "title": "The emergence of multispecies ethnography",
+      "authors": "SE Kirksey, S Helmreich",
+      "year": "2010",
+      "cited_by": 1183,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8192340665575082509&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Deleuze and the Anthropology of Becoming",
+      "id": "8070025145380509918",
+      "url": "https://www.journals.uchicago.edu/doi/abs/10.1086/651466",
+      "title": "Deleuze and the Anthropology of Becoming",
+      "authors": "J Biehl, P Locke, MMJ Fischer, VL Fong\u2026",
+      "year": "2010",
+      "cited_by": 381,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8070025145380509918&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Ontological anthropology and the deferral of critique",
+      "id": "4937190439886785638",
+      "url": "https://anthrosource.onlinelibrary.wiley.com/doi/abs/10.1111/amet.12083",
+      "title": "Ontological anthropology and the deferral of critique",
+      "authors": "L Bessire, D Bond",
+      "year": "2014",
+      "cited_by": 251,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4937190439886785638&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "When people come first: critical studies in global health",
+      "id": "3475069571193040347",
+      "url": "https://books.google.com/books?hl=en&lr=&id=5GiYDwAAQBAJ&oi=fnd&pg=PA1&ots=m3ePeJoONE&sig=SjqPDgnfmWsPpqZ6aKbyDRuUes8",
+      "title": "When people come first: critical studies in global health",
+      "authors": "J Biehl, A Petryna",
+      "year": "2013",
+      "cited_by": 239,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3475069571193040347&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Fingeryeyes: Impressions of cup corals",
+      "id": "13724838147532245265",
+      "url": "https://anthrosource.onlinelibrary.wiley.com/doi/abs/10.1111/j.1548-1360.2010.01070.x",
+      "title": "Fingeryeyes: Impressions of cup corals",
+      "authors": "E Hayward",
+      "year": "2010",
+      "cited_by": 182,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13724838147532245265&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "How climate change comes to matter: The communal life of facts",
+      "id": "4380791506128184256",
+      "url": "https://books.google.com/books?hl=en&lr=&id=G52iBgAAQBAJ&oi=fnd&pg=PT6&ots=yKT1BK-0N5&sig=S-TosZ1jiBVDT-glzLKKs3odJxA",
+      "title": "How climate change comes to matter: The communal life of facts",
+      "authors": "C Callison",
+      "year": "2015",
+      "cited_by": 124,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4380791506128184256&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Symptom: subjectivities, social ills, technologies",
+      "id": "11303352831003809468",
+      "url": "https://www.annualreviews.org/doi/abs/10.1146/annurev-anthro-091908-164420",
+      "title": "Symptom: subjectivities, social ills, technologies",
+      "authors": "J Biehl, A Moran-Thomas",
+      "year": "2009",
+      "cited_by": 120,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11303352831003809468&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Introduction: The prototype: more than many and less than one",
+      "id": "2613682752691604666",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/17530350.2013.858059",
+      "title": "Introduction: The prototype: more than many and less than one",
+      "authors": "A Cors\u00edn Jim\u00e9nez",
+      "year": "2014",
+      "cited_by": 118,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2613682752691604666&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Rendering life molecular: Models, modelers, and excitable matter",
+      "id": "16768764380203994273",
+      "url": "https://books.google.com/books?hl=en&lr=&id=3lBmCgAAQBAJ&oi=fnd&pg=PT9&ots=h3NQjZhhrS&sig=M8EafBfcHBjASZjEpu5zFoYWg0g",
+      "title": "Rendering life molecular: Models, modelers, and excitable matter",
+      "authors": "N Myers",
+      "year": "2015",
+      "cited_by": 114,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16768764380203994273&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "THE LEGACIES OF WRITING CULTURE AND THE NEAR FUTURE OF THE ETHNOGRAPHIC FORM: A Sketch",
+      "id": "4637476777586333273",
+      "url": "https://anthrosource.onlinelibrary.wiley.com/doi/abs/10.1111/j.1548-1360.2012.01152.x",
+      "title": "THE LEGACIES OF WRITING CULTURE AND THE NEAR FUTURE OF THE ETHNOGRAPHIC FORM: A Sketch",
+      "authors": "GE Marcus",
+      "year": "2012",
+      "cited_by": 91,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4637476777586333273&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Rebuilding urban places after disaster: Lessons from Hurricane Katrina",
+      "id": "12050440134251023922",
+      "url": "https://books.google.com/books?hl=en&lr=&id=43Ag1VfsShEC&oi=fnd&pg=PA13&ots=0vN2MY5yE8&sig=FnK_GinB4r3nDo7ZEOGkVxoJqeQ",
+      "title": "Rebuilding urban places after disaster: Lessons from Hurricane Katrina",
+      "authors": "E Birch, S Wachter",
+      "year": "2006",
+      "cited_by": 117,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12050440134251023922&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Planning in the USA: Policies, issues and processes",
+      "id": "2509886434773018458",
+      "url": "https://www.taylorfrancis.com/books/9780203380444",
+      "title": "Planning in the USA: Policies, issues and processes",
+      "authors": "B Cullingworth",
+      "year": "2004",
+      "cited_by": 480,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2509886434773018458&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Urban transitions: on urban resilience and human-dominated ecosystems",
+      "id": "6131927561220444025",
+      "url": "https://link.springer.com/article/10.1007/s13280-010-0081-9",
+      "title": "Urban transitions: on urban resilience and human-dominated ecosystems",
+      "authors": "H Ernstson, SE Van der Leeuw, CL Redman\u2026",
+      "year": "2010",
+      "cited_by": 461,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6131927561220444025&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "A case study approachto understanding regional resilience",
+      "id": "5405202287314376226",
+      "url": "https://cloudfront.escholarship.org/dist/prd/content/qt8tt02163/qt8tt02163.pdf",
+      "title": "A case study approachto understanding regional resilience",
+      "authors": "KA Foster",
+      "year": "2007",
+      "cited_by": 249,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5405202287314376226&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Markets of sorrow, labors of faith: New Orleans in the wake of Katrina",
+      "id": "240612644793919878",
+      "url": "https://books.google.com/books?hl=en&lr=&id=lDu2AgAAQBAJ&oi=fnd&pg=PP8&ots=5Sz_kRsU-7&sig=0FSod5RSAuF2Fg8-Ll_LWWuBDoE",
+      "title": "Markets of sorrow, labors of faith: New Orleans in the wake of Katrina",
+      "authors": "V Adams",
+      "year": "2013",
+      "cited_by": 250,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=240612644793919878&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "An assessment of the potential impact of climate change on flood risk in Mumbai",
+      "id": "12631206855338106035",
+      "url": "https://link.springer.com/article/10.1007/s10584-010-9979-2",
+      "title": "An assessment of the potential impact of climate change on flood risk in Mumbai",
+      "authors": "N Ranger, S Hallegatte, S Bhattacharya, M Bachu\u2026",
+      "year": "2011",
+      "cited_by": 208,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12631206855338106035&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Changes in impacts of climate extremes: human systems and ecosystems",
+      "id": "18070059269353880053",
+      "url": "http://naosite.lb.nagasaki-u.ac.jp/dspace/handle/10069/35742",
+      "title": "Changes in impacts of climate extremes: human systems and ecosystems",
+      "authors": "J Handmer, Y Honda\u2026",
+      "year": "2012",
+      "cited_by": 193,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=18070059269353880053&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Surviving the turbulent future",
+      "id": "17979928968570154386",
+      "url": "https://journals.sagepub.com/doi/abs/10.1068/d23011",
+      "title": "Surviving the turbulent future",
+      "authors": "A Amin",
+      "year": "2013",
+      "cited_by": 117,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17979928968570154386&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Spaces of aid: how cars, compounds and hotels shape humanitarianism",
+      "id": "7320542172279373811",
+      "url": "https://books.google.com/books?hl=en&lr=&id=WOpiDgAAQBAJ&oi=fnd&pg=PT5&ots=nG0ZOZU-QY&sig=JaAE8Lzn9dg9V7t0r-fnG3w7z0w",
+      "title": "Spaces of aid: how cars, compounds and hotels shape humanitarianism",
+      "authors": "L Smirl",
+      "year": "2015",
+      "cited_by": 127,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7320542172279373811&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Social memory and resilience in New Orleans",
+      "id": "15914059887057621179",
+      "url": "https://link.springer.com/article/10.1007/s11069-008-9267-x",
+      "title": "Social memory and resilience in New Orleans",
+      "authors": "CE Colten, AR Sumpter",
+      "year": "2009",
+      "cited_by": 93,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15914059887057621179&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Seeing cities change: Local culture and class",
+      "id": "18085010086436223848",
+      "url": "https://www.taylorfrancis.com/books/9781315608174",
+      "title": "Seeing cities change: Local culture and class",
+      "authors": "J Krase",
+      "year": "2016",
+      "cited_by": 92,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=18085010086436223848&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Sidewalk city: remapping public space in Ho Chi Minh City",
+      "id": "17845922929735995291",
+      "url": "https://books.google.com/books?hl=en&lr=&id=TzDJBwAAQBAJ&oi=fnd&pg=PR5&ots=DVN8U45Ygm&sig=TRS-8O00sxgdMIrjuO6ekJfxAbU",
+      "title": "Sidewalk city: remapping public space in Ho Chi Minh City",
+      "authors": "AM Kim",
+      "year": "2015",
+      "cited_by": 79,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17845922929735995291&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Walking by drawing",
+      "id": "15685430106524539014",
+      "url": "https://dl.acm.org/citation.cfm?id=2702467",
+      "title": "Walking by drawing",
+      "authors": "DK Rosner, H Saegusa, J Friedland\u2026",
+      "year": "2015",
+      "cited_by": 20,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15685430106524539014&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Beyond mobility: Planning cities for people and places",
+      "id": "6126143930568342290",
+      "url": "https://books.google.com/books?hl=en&lr=&id=9jU8DwAAQBAJ&oi=fnd&pg=PP1&ots=WwbFxVEgUC&sig=UXO9a-LR8OFHz0oZfvacf4kco-M",
+      "title": "Beyond mobility: Planning cities for people and places",
+      "authors": "R Cervero, E Guerra, S Al",
+      "year": "2017",
+      "cited_by": 28,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6126143930568342290&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Urban space and exclusion in Asia",
+      "id": "5790795472446775314",
+      "url": "https://www.annualreviews.org/doi/abs/10.1146/annurev-anthro-102215-100208",
+      "title": "Urban space and exclusion in Asia",
+      "authors": "E Harms",
+      "year": "2016",
+      "cited_by": 12,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5790795472446775314&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Critical cartography 2.0: From \u201cparticipatory mapping\u201d to authored visualizations of power and people",
+      "id": "8859845756564173107",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0169204615001504",
+      "title": "Critical cartography 2.0: From \u201cparticipatory mapping\u201d to authored visualizations of power and people",
+      "authors": "AM Kim",
+      "year": "2015",
+      "cited_by": 22,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8859845756564173107&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Urban streets: Epitomes of planning challenges and opportunities at the interface of public space and mobility",
+      "id": "4098507276792429195",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0264275116302037",
+      "title": "Urban streets: Epitomes of planning challenges and opportunities at the interface of public space and mobility",
+      "authors": "KC von Sch\u00f6nfeld, L Bertolini",
+      "year": "2017",
+      "cited_by": 12,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4098507276792429195&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Guest Editors' Introduction: Contesting the Streets: Vending and Public Space in Global Cities",
+      "id": "4544068550379077320",
+      "url": "https://www.jstor.org/stable/26328237",
+      "title": "Guest Editors' Introduction: Contesting the Streets: Vending and Public Space in Global Cities",
+      "authors": "RW Bostic, AM Kim, A Valenzuela Jr",
+      "year": "2016",
+      "cited_by": 12,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4544068550379077320&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The critical role of street vendor organizations in relocating street vendors into public markets: the case of Hsinchu city, Taiwan",
+      "id": "4776758429285607134",
+      "url": "https://www.jstor.org/stable/26328240",
+      "title": "The critical role of street vendor organizations in relocating street vendors into public markets: the case of Hsinchu city, Taiwan",
+      "authors": "CY Weng, AM Kim",
+      "year": "2016",
+      "cited_by": 12,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4776758429285607134&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "After the ban: The moral economy of property",
+      "id": "15259850685259401196",
+      "url": "https://onlinelibrary.wiley.com/doi/abs/10.1111/anti.12204",
+      "title": "After the ban: The moral economy of property",
+      "authors": "S Langegger",
+      "year": "2016",
+      "cited_by": 8,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15259850685259401196&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Moving on, finding shelter: The spatiotemporal camp",
+      "id": "16204629813728837956",
+      "url": "https://journals.sagepub.com/doi/abs/10.1177/0268580917701584",
+      "title": "Moving on, finding shelter: The spatiotemporal camp",
+      "authors": "S Langegger, S Koester",
+      "year": "2017",
+      "cited_by": 7,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16204629813728837956&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Cartography I: Mapping deeply, mapping the past",
+      "id": "9320048619951573886",
+      "url": "https://journals.sagepub.com/doi/abs/10.1177/0309132516656431",
+      "title": "Cartography I: Mapping deeply, mapping the past",
+      "authors": "M Dodge",
+      "year": "2017",
+      "cited_by": 8,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9320048619951573886&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The big muddy: An environmental history of the Mississippi and its peoples, from Hernando...",
+      "id": "15404514193465789187",
+      "url": "https://books.google.com/books?hl=en&lr=&id=O9WjRAfqfyoC&oi=fnd&pg=PP1&ots=77x9oY8IRV&sig=B4riKEQntVgY1TEvPtOhEGtG-Hk",
+      "title": "The big muddy: An environmental history of the Mississippi and its peoples, from Hernando...",
+      "authors": "C Morris",
+      "year": "2012",
+      "cited_by": 73,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15404514193465789187&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The river, the plain, and the state: An environmental drama in northern Song China, 1048\u20131128",
+      "id": "17215038108982511717",
+      "url": "https://books.google.com/books?hl=en&lr=&id=LFzWDAAAQBAJ&oi=fnd&pg=PR11&ots=09ZQFN3oB2&sig=NK-CO-OQl1YAxzD8NRD0VvNjfMQ",
+      "title": "The river, the plain, and the state: An environmental drama in northern Song China, 1048\u20131128",
+      "authors": "L Zhang",
+      "year": "2016",
+      "cited_by": 36,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17215038108982511717&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Adventurism and Empire: The Struggle for Mastery in the Louisiana-Florida Borderlands, 1762-1803",
+      "id": "2828706811643653233",
+      "url": "https://books.google.com/books?hl=en&lr=&id=LHNpBgAAQBAJ&oi=fnd&pg=PP1&ots=P0vA8VuWfZ&sig=1CCNfUh4c39CQIeW_SrRAAIqGq0",
+      "title": "Adventurism and Empire: The Struggle for Mastery in the Louisiana-Florida Borderlands, 1762-1803",
+      "authors": "D Narrett",
+      "year": "2015",
+      "cited_by": 22,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2828706811643653233&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "A multiple knowledge approach for adaptation to environmental change: lessons learned from coastal Louisiana's tribal communities",
+      "id": "9755272082793098003",
+      "url": "https://journals.uair.arizona.edu/index.php/JPE/article/view/21125",
+      "title": "A multiple knowledge approach for adaptation to environmental change: lessons learned from coastal Louisiana's tribal communities",
+      "authors": "JK Maldonado",
+      "year": "2014",
+      "cited_by": 28,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9755272082793098003&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "No Depression in Heaven: The Great Depression, the New Deal, and the Transformation of Religion in the Delta",
+      "id": "15812165810882775415",
+      "url": "https://books.google.com/books?hl=en&lr=&id=ci2gCgAAQBAJ&oi=fnd&pg=PP1&ots=Mj1w2mF_kY&sig=18EYsdjSxsHWYOR5HhIm0CNB86o",
+      "title": "No Depression in Heaven: The Great Depression, the New Deal, and the Transformation of Religion in the Delta",
+      "authors": "AC Greene",
+      "year": "2016",
+      "cited_by": 18,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15812165810882775415&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Southern water, southern power: how the politics of cheap energy and water scarcity shaped a region",
+      "id": "1408808787961495528",
+      "url": "https://books.google.com/books?hl=en&lr=&id=qT5_BgAAQBAJ&oi=fnd&pg=PP1&ots=4Z9oxW0P1J&sig=5N74A5fYcPeo0FM81F0NTF9JMZY",
+      "title": "Southern water, southern power: how the politics of cheap energy and water scarcity shaped a region",
+      "authors": "CJ Manganiello",
+      "year": "2015",
+      "cited_by": 17,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1408808787961495528&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Historical changes of a major juncture: Lower Old River, Louisiana",
+      "id": "1045041489300151421",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/02723646.2013.847314",
+      "title": "Historical changes of a major juncture: Lower Old River, Louisiana",
+      "authors": "J Mossa",
+      "year": "2013",
+      "cited_by": 13,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1045041489300151421&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Rivers: a very short introduction",
+      "id": "13456430371862847716",
+      "url": "https://books.google.com/books?hl=en&lr=&id=ppV55jYQLUAC&oi=fnd&pg=PP2&ots=Qc0UVEe2yp&sig=Led6ya1dOkq0GyOfa0CobJicBCY",
+      "title": "Rivers: a very short introduction",
+      "authors": "N Middleton",
+      "year": "2012",
+      "cited_by": 15,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13456430371862847716&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The rise and fall of the Lower Mississippi: effects of hydrologic connection on floodplain backwaters",
+      "id": "14737928547771163706",
+      "url": "https://link.springer.com/article/10.1007/s10750-014-1983-5",
+      "title": "The rise and fall of the Lower Mississippi: effects of hydrologic connection on floodplain backwaters",
+      "authors": "O Pongruktham, C Ochs",
+      "year": "2015",
+      "cited_by": 13,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14737928547771163706&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Towards deliberative coastal governance: insights from South Africa and the Mississippi Delta",
+      "id": "1224806184762860778",
+      "url": "https://link.springer.com/article/10.1007/s10113-014-0727-4",
+      "title": "Towards deliberative coastal governance: insights from South Africa and the Mississippi Delta",
+      "authors": "BC Glavovic",
+      "year": "2016",
+      "cited_by": 11,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1224806184762860778&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Adapting to hurricanes. A historical perspective on New Orleans from its foundation to Hurricane Katrina, 1718\u20132005",
+      "id": "6128170903030152846",
+      "url": "https://onlinelibrary.wiley.com/doi/abs/10.1002/wcc.488",
+      "title": "Adapting to hurricanes. A historical perspective on New Orleans from its foundation to Hurricane Katrina, 1718\u20132005",
+      "authors": "E Rohland",
+      "year": "2018",
+      "cited_by": 8,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6128170903030152846&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Ecological urbanism: A framework for the design of resilient cities (2014)",
+      "id": "8680870317819575377",
+      "url": "https://link.springer.com/chapter/10.5822/978-1-61091-491-8_50",
+      "title": "Ecological urbanism: A framework for the design of resilient cities (2014)",
+      "authors": "AW Spirn",
+      "year": "2014",
+      "cited_by": 67,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8680870317819575377&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Ecological resilience and resilient cities",
+      "id": "1847149663204953428",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/09613218.2014.850600",
+      "title": "Ecological resilience and resilient cities",
+      "authors": "STA Pickett, B McGrath, ML Cadenasso\u2026",
+      "year": "2014",
+      "cited_by": 96,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1847149663204953428&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Ecological science and transformation to the sustainable city",
+      "id": "7085102137780773724",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0264275113000267",
+      "title": "Ecological science and transformation to the sustainable city",
+      "authors": "STA Pickett, CG Boone, BP McGrath, ML Cadenasso\u2026",
+      "year": "2013",
+      "cited_by": 99,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7085102137780773724&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Ecological wisdom as an emerging field of scholarly inquiry in urban planning and design",
+      "id": "2456848986949186583",
+      "url": "https://www.sciencedirect.com/science/article/pii/S016920461630086X",
+      "title": "Ecological wisdom as an emerging field of scholarly inquiry in urban planning and design",
+      "authors": "X Wang, D Palazzo, M Carper",
+      "year": "2016",
+      "cited_by": 26,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2456848986949186583&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The ecology of the metacity: shaping the dynamic, patchy, networked, and adaptive cities of the future",
+      "id": "9568928064644261357",
+      "url": "https://link.springer.com/chapter/10.1007/978-94-007-5341-9_28",
+      "title": "The ecology of the metacity: shaping the dynamic, patchy, networked, and adaptive cities of the future",
+      "authors": "STA Pickett, B McGrath, ML Cadenasso",
+      "year": "2013",
+      "cited_by": 16,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9568928064644261357&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Managing deforestation in a tropical compact city (Part B) Urban ecological approaches to landscape design",
+      "id": "15280095724024498346",
+      "url": "https://www.emeraldinsight.com/doi/abs/10.1108/SASBE-08-2015-0023",
+      "title": "Managing deforestation in a tropical compact city (Part B) Urban ecological approaches to landscape design",
+      "authors": "YH Hwang, Y Feng, PY Tan",
+      "year": "2016",
+      "cited_by": 6,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15280095724024498346&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Improvement of Certified Artisan Cheese Production through Systemic Analysis\u2014Serra da Estrela PDO",
+      "id": "12768337074840992155",
+      "url": "https://www.mdpi.com/2071-1050/9/3/468",
+      "title": "Improvement of Certified Artisan Cheese Production through Systemic Analysis\u2014Serra da Estrela PDO",
+      "authors": "D Coelho, T Carrola, A Couvinhas",
+      "year": "2017",
+      "cited_by": 8,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12768337074840992155&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Conex\u00e3o dos padr\u00f5es espaciais dos ecossistemas urbanos: a constru\u00e7\u00e3o de um m\u00e9todo com enfoque transdisciplinar para o processo de desenho urbano sens\u00edvel \u00e0\u00a0\u2026",
+      "id": "8272976838906680581",
+      "url": "http://repositorio.unb.br/handle/10482/18042",
+      "title": "Conex\u00e3o dos padr\u00f5es espaciais dos ecossistemas urbanos: a constru\u00e7\u00e3o de um m\u00e9todo com enfoque transdisciplinar para o processo de desenho urbano sens\u00edvel \u00e0\u00a0\u2026",
+      "authors": "LMS Andrade",
+      "year": "2014",
+      "cited_by": 13,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8272976838906680581&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "What Was So Socialist about the Socialist City? Second World Urbanity in Europe",
+      "id": "245924485299432971",
+      "url": "https://journals.sagepub.com/doi/abs/10.1177/0096144217710229",
+      "title": "What Was So Socialist about the Socialist City? Second World Urbanity in Europe",
+      "authors": "KE Zarecor",
+      "year": "2018",
+      "cited_by": 8,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=245924485299432971&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Phytoremediation-by-design: community-scale landscape systems design for healthy communities",
+      "id": "6682150944835625630",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/13504509.2015.1079276",
+      "title": "Phytoremediation-by-design: community-scale landscape systems design for healthy communities",
+      "authors": "GR Smith",
+      "year": "2015",
+      "cited_by": 5,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6682150944835625630&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Green strategies for flood resilient cities: The Benevento case study",
+      "id": "2363586471981024285",
+      "url": "https://www.sciencedirect.com/science/article/pii/S187802961730052X",
+      "title": "Green strategies for flood resilient cities: The Benevento case study",
+      "authors": "A Galderisi, E Treccozzi",
+      "year": "2017",
+      "cited_by": 4,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2363586471981024285&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Sustaining New Orleans: Literature, local memory, and the fate of a city",
+      "id": "1650633634206002750",
+      "url": "https://books.google.com/books?hl=en&lr=&id=ulVsBgAAQBAJ&oi=fnd&pg=PP1&ots=v9vR11OXRP&sig=5um50EyJ4pkVCUOAIEVDf84GCAU",
+      "title": "Sustaining New Orleans: Literature, local memory, and the fate of a city",
+      "authors": "B Eckstein",
+      "year": "2005",
+      "cited_by": 44,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1650633634206002750&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Authentic New Orleans: Tourism, culture, and race in the big easy",
+      "id": "17839800375868146432",
+      "url": "https://books.google.com/books?hl=en&lr=&id=IknqWUwmXBEC&oi=fnd&pg=PR5&ots=8ak7T_1mPN&sig=Yd62LIOvucxBaBA1Xci5YbOgQd4",
+      "title": "Authentic New Orleans: Tourism, culture, and race in the big easy",
+      "authors": "KF Gotham",
+      "year": "2007",
+      "cited_by": 197,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17839800375868146432&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Putting the ninth ward on the map: Race, place, and transformation in desire, New Orleans",
+      "id": "3846683083758299925",
+      "url": "https://anthrosource.onlinelibrary.wiley.com/doi/abs/10.1525/aa.2006.108.4.744",
+      "title": "Putting the ninth ward on the map: Race, place, and transformation in desire, New Orleans",
+      "authors": "R Breunlin, HA Regis",
+      "year": "2006",
+      "cited_by": 109,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3846683083758299925&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Jazz Religion, the Second Line, and Black New Orleans, New Edition: After Hurricane Katrina",
+      "id": "4596100072524836951",
+      "url": "https://books.google.com/books?hl=en&lr=&id=SJZNDQAAQBAJ&oi=fnd&pg=PP1&ots=rdJzyd3bQB&sig=MEOHP_hwBoVrpqJOdB-NLCqhPos",
+      "title": "Jazz Religion, the Second Line, and Black New Orleans, New Edition: After Hurricane Katrina",
+      "authors": "RB Turner",
+      "year": "2016",
+      "cited_by": 65,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4596100072524836951&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "After the deluge: The post-Katrina cultural revival of New Orleans",
+      "id": "9131857752946078004",
+      "url": "https://www.cambridge.org/core/journals/journal-of-american-studies/article/after-the-deluge-the-postkatrina-cultural-revival-of-new-orleans/3360B29BA8D544E5A3EC84A8C8743EB6",
+      "title": "After the deluge: The post-Katrina cultural revival of New Orleans",
+      "authors": "H Taylor",
+      "year": "2010",
+      "cited_by": 22,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9131857752946078004&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "A transplanted Chicago: Race, place and the press in Iowa City",
+      "id": "8862034668960139073",
+      "url": "https://books.google.com/books?hl=en&lr=&id=_WSWAwAAQBAJ&oi=fnd&pg=PP1&ots=_7-Pr8rjIv&sig=cBTzJQidZ49ckJhcFghwOc6fPRU",
+      "title": "A transplanted Chicago: Race, place and the press in Iowa City",
+      "authors": "RE Gutsche Jr",
+      "year": "2014",
+      "cited_by": 15,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8862034668960139073&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "New Orleans in the world and the world in New Orleans",
+      "id": "14580875362602369846",
+      "url": "https://www.jstor.org/stable/10.5406/blacmusiresej.31.2.0261",
+      "title": "New Orleans in the world and the world in New Orleans",
+      "authors": "G Lipsitz",
+      "year": "2011",
+      "cited_by": 16,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14580875362602369846&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The bridge to Gretna: three faces of a case",
+      "id": "5921314703023776316",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/14649350802041563",
+      "title": "The bridge to Gretna: three faces of a case",
+      "authors": "J Throgmorton",
+      "year": "2008",
+      "cited_by": 12,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5921314703023776316&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "\u201cPeculiar and Characteristic\u201d: New Orleans's Exceptionalism from Olmsted to the Deluge",
+      "id": "6589859594844441143",
+      "url": "https://read.dukeupress.edu/american-literature/article-abstract/86/1/147/5022",
+      "title": "\u201cPeculiar and Characteristic\u201d: New Orleans's Exceptionalism from Olmsted to the Deluge",
+      "authors": "J Lightweis-Goff",
+      "year": "2014",
+      "cited_by": 11,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6589859594844441143&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Invisible commuters: assessing a university's eco-friendly transportation policies and commuting behaviours",
+      "id": "358582693993057750",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0966692314001069",
+      "title": "Invisible commuters: assessing a university's eco-friendly transportation policies and commuting behaviours",
+      "authors": "RB Duque, D Gray, M Harrison, E Davey",
+      "year": "2014",
+      "cited_by": 12,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=358582693993057750&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "After Katrina: race, Neoliberalism, and the end of the American century",
+      "id": "12534243731339832601",
+      "url": "https://books.google.com/books?hl=en&lr=&id=kg_-DQAAQBAJ&oi=fnd&pg=PR7&ots=asvLSNE8ps&sig=rqzNEsB75kUwvFKeP6dpli7sT78",
+      "title": "After Katrina: race, Neoliberalism, and the end of the American century",
+      "authors": "A Hartnell",
+      "year": "2017",
+      "cited_by": 13,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12534243731339832601&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Framed again: the picturesque aesthetics of contemporary landscapes",
+      "id": "12288922735270981016",
+      "url": "http://lj.uwpress.org/content/25/1/22.short",
+      "title": "Framed again: the picturesque aesthetics of contemporary landscapes",
+      "authors": "S Herrington",
+      "year": "2006",
+      "cited_by": 43,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12288922735270981016&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Sustainable landscape planning: the reconnection agenda",
+      "id": "8194018644763911372",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2011-0-06599-8&isbn=9781136317491&format=googlePreviewPdf",
+      "title": "Sustainable landscape planning: the reconnection agenda",
+      "authors": "P Selman",
+      "year": "2012",
+      "cited_by": 99,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8194018644763911372&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Landschaftstheorie und Landschaftspraxis: eine Einf\u00fchrung aus sozialkonstruktivistischer Perspektive",
+      "id": "3744656872571028048",
+      "url": "https://link.springer.com/content/pdf/10.1007/978-3-658-19034-7.pdf",
+      "title": "Landschaftstheorie und Landschaftspraxis: eine Einf\u00fchrung aus sozialkonstruktivistischer Perspektive",
+      "authors": "O K\u00fchne",
+      "year": "2017",
+      "cited_by": 228,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3744656872571028048&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Stadt-Landschaft-Hybridit\u00e4t: \u00c4sthetische Bez\u00fcge im postmodernen Los Angeles mit seinen modernen Persistenzen",
+      "id": "11268579925655386163",
+      "url": "https://books.google.com/books?hl=en&lr=&id=IyUlBAAAQBAJ&oi=fnd&pg=PA7&ots=Z-P2DxByLy&sig=PBkqagAtqfnYI19Pd5jYNSJpqr8",
+      "title": "Stadt-Landschaft-Hybridit\u00e4t: \u00c4sthetische Bez\u00fcge im postmodernen Los Angeles mit seinen modernen Persistenzen",
+      "authors": "O K\u00fchne",
+      "year": "2012",
+      "cited_by": 115,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11268579925655386163&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Re-presenting transgressive ecologies: post-industrial sites as contested terrains",
+      "id": "14341164945251756165",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/13549839.2014.928813",
+      "title": "Re-presenting transgressive ecologies: post-industrial sites as contested terrains",
+      "authors": "J Langhorst",
+      "year": "2014",
+      "cited_by": 24,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14341164945251756165&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Hyper-realism and loose-reality: The limitations of digital realism and alternative principles in landscape design visualization",
+      "id": "12620735017646765983",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/18626033.2014.968412",
+      "title": "Hyper-realism and loose-reality: The limitations of digital realism and alternative principles in landscape design visualization",
+      "authors": "K Kullmann",
+      "year": "2014",
+      "cited_by": 21,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12620735017646765983&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Blank Space: Exploring the sublime qualities of urban wilderness at the former fishing harbour in Tallinn, Estonia",
+      "id": "11267094994625951168",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/01426397.2012.742046",
+      "title": "Blank Space: Exploring the sublime qualities of urban wilderness at the former fishing harbour in Tallinn, Estonia",
+      "authors": "AL Unt, P Travlou, S Bell",
+      "year": "2014",
+      "cited_by": 17,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11267094994625951168&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Landscapes as integrating frameworks for human, environmental and policy processes",
+      "id": "14778279621966171624",
+      "url": "https://books.google.com/books?hl=en&lr=&id=I8X3CwAAQBAJ&oi=fnd&pg=PA27&ots=0A7I8GRSP8&sig=DMHQHXthvZXiMN0Wzg6pqssp1LQ",
+      "title": "Landscapes as integrating frameworks for human, environmental and policy processes",
+      "authors": "P Selman",
+      "year": "2012",
+      "cited_by": 14,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14778279621966171624&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "What roles for ruins? Meaning and narrative of industrial ruins in contemporary parks",
+      "id": "510057876739380587",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/18626033.2009.9723419",
+      "title": "What roles for ruins? Meaning and narrative of industrial ruins in contemporary parks",
+      "authors": "EC Chan",
+      "year": "2009",
+      "cited_by": 17,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=510057876739380587&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Imbricated spaces: The High Line, urban parks, and the cultural meaning of city and nature",
+      "id": "1921984169722641360",
+      "url": "https://journals.sagepub.com/doi/abs/10.1177/0735275116679192",
+      "title": "Imbricated spaces: The High Line, urban parks, and the cultural meaning of city and nature",
+      "authors": "K Loughran",
+      "year": "2016",
+      "cited_by": 15,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1921984169722641360&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Landschaft und Landschaftswahrnehmung",
+      "id": "15806074949239293315",
+      "url": "https://mediatum.ub.tum.de/738822",
+      "title": "Landschaft und Landschaftswahrnehmung",
+      "authors": "D Drexler",
+      "year": "2010",
+      "cited_by": 39,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15806074949239293315&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Extreme cities: The peril and promise of urban life in the age of climate change",
+      "id": "14414419019214904958",
+      "url": "https://books.google.com/books?hl=en&lr=&id=ph-ICwAAQBAJ&oi=fnd&pg=PT6&ots=OJHxnS5R9c&sig=Zqmn-jra7J3ePcjIWVDe264Tmy0",
+      "title": "Extreme cities: The peril and promise of urban life in the age of climate change",
+      "authors": "A Dawson",
+      "year": "2017",
+      "cited_by": 51,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14414419019214904958&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Mobility justice: The politics of movement in an age of extremes",
+      "id": "13736527874798182921",
+      "url": "https://books.google.com/books?hl=en&lr=&id=gJJLDwAAQBAJ&oi=fnd&pg=PT7&ots=FbzprtuBH0&sig=AmQi8-IZ8R_qyulZgy6hQ8zkmzg",
+      "title": "Mobility justice: The politics of movement in an age of extremes",
+      "authors": "M Sheller",
+      "year": "2018",
+      "cited_by": 92,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13736527874798182921&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Aesthetics and Activism",
+      "id": "13679478416235936345",
+      "url": "http://www.mediationsjournal.org/files/Mediations31_2_11.pdf",
+      "title": "Aesthetics and Activism",
+      "authors": "S Balkan",
+      "year": "2018",
+      "cited_by": 2,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13679478416235936345&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Studying urban climate governance: where to begin, what to look for, and how to make a meaningful contribution to scholarship and practice",
+      "id": "10496137983174458423",
+      "url": "https://www.sciencedirect.com/science/article/pii/S2589811619300047",
+      "title": "Studying urban climate governance: where to begin, what to look for, and how to make a meaningful contribution to scholarship and practice",
+      "authors": "J van der Heijden",
+      "year": "2019",
+      "cited_by": 2,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10496137983174458423&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "(Un) learning the city through crisis: lessons from Cape Town",
+      "id": "11975174155571844881",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/03054985.2018.1551197",
+      "title": "(Un) learning the city through crisis: lessons from Cape Town",
+      "authors": "E Robin, C Chazal, M Acuto\u2026",
+      "year": "2019",
+      "cited_by": 2,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11975174155571844881&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Developing age-friendly work in the twenty-first century: new challenges and agendas",
+      "id": "15156989455049132656",
+      "url": "https://www.emeraldinsight.com/doi/abs/10.1108/WWOP-12-2017-0037",
+      "title": "Developing age-friendly work in the twenty-first century: new challenges and agendas",
+      "authors": "C Phillipson",
+      "year": "2018",
+      "cited_by": 2,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15156989455049132656&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The sociology of climate change as a sociology of loss",
+      "id": "2551555403878004243",
+      "url": "https://www.cambridge.org/core/journals/european-journal-of-sociology-archives-europeennes-de-sociologie/article/sociology-of-climate-change-as-a-sociology-of-loss/B16D58EC8D7F9AEE3227A35F4A9A5E20",
+      "title": "The sociology of climate change as a sociology of loss",
+      "authors": "R Elliott",
+      "year": "2018",
+      "cited_by": 6,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2551555403878004243&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Future Societal Vulnerability, Risk and Adaptability",
+      "id": "12627856866182229437",
+      "url": "https://link.springer.com/chapter/10.1007/978-3-319-75453-6_18",
+      "title": "Future Societal Vulnerability, Risk and Adaptability",
+      "authors": "LD Wright",
+      "year": "2019",
+      "cited_by": 3,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12627856866182229437&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Making the urban coast: A geosocial reading of land, sand, and water in Lagos, Nigeria",
+      "id": "8393617693625546294",
+      "url": "https://read.dukeupress.edu/cssaame/article-abstract/38/3/455/137143",
+      "title": "Making the urban coast: A geosocial reading of land, sand, and water in Lagos, Nigeria",
+      "authors": "B Mendelsohn",
+      "year": "2018",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8393617693625546294&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Tomorrow's Coasts: Complex and Impermanent",
+      "id": "6852411613647122408",
+      "url": "https://link.springer.com/content/pdf/10.1007/978-3-319-75453-6.pdf",
+      "title": "Tomorrow's Coasts: Complex and Impermanent",
+      "authors": "LD Wright, CR Nichols",
+      "year": "2019",
+      "cited_by": 5,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6852411613647122408&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Open Space Weathering",
+      "id": "16878817637273550393",
+      "url": "https://journals.sagepub.com/doi/full/10.1057/s41305-018-0097-8",
+      "title": "Open Space Weathering",
+      "authors": "A Neimanis, JM Hamilton",
+      "year": "2018",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16878817637273550393&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Imperialism, Intellectual Networks, and Environmental Change: Origins and Evolution of Global...",
+      "id": "13346050908263236547",
+      "url": "https://www.jstor.org/stable/4418810",
+      "title": "Imperialism, Intellectual Networks, and Environmental Change: Origins and Evolution of Global...",
+      "authors": "R Grove, V Damodaran",
+      "year": "2006",
+      "cited_by": 25,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13346050908263236547&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Green development: Environment and sustainability in a developing world",
+      "id": "14218423832683798978",
+      "url": "https://www.taylorfrancis.com/books/9780203929711",
+      "title": "Green development: Environment and sustainability in a developing world",
+      "authors": "B Adams",
+      "year": "2008",
+      "cited_by": 2293,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14218423832683798978&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Human impact on the natural environment",
+      "id": "784620849585447403",
+      "url": "https://books.google.com/books?hl=en&lr=&id=YZVdDwAAQBAJ&oi=fnd&pg=PP11&ots=i0hjc1vmwy&sig=WHjnBs0_sSd-wz8Zfzd-F7U9JMw",
+      "title": "Human impact on the natural environment",
+      "authors": "AS Goudie",
+      "year": "2018",
+      "cited_by": 1474,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=784620849585447403&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Social metabolism, ecological distribution conflicts, and languages of valuation",
+      "id": "16315871532401165770",
+      "url": "https://www.tandfonline.com/doi/full/10.1080/10455750902727378",
+      "title": "Social metabolism, ecological distribution conflicts, and languages of valuation",
+      "authors": "J Martinez-Alier",
+      "year": "2009",
+      "cited_by": 191,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16315871532401165770&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Geomorphology in the Anthropocene",
+      "id": "13920839443328445753",
+      "url": "https://books.google.com/books?hl=en&lr=&id=drIkDQAAQBAJ&oi=fnd&pg=PR9&ots=4TDTxjyuDm&sig=fC8LK6RYBvoBSsFftt1VYadzCWY",
+      "title": "Geomorphology in the Anthropocene",
+      "authors": "AS Goudie, HA Viles",
+      "year": "2016",
+      "cited_by": 39,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13920839443328445753&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Beyond the water-land binary in geography: Water/lands of Bengal re-visioning hybridity",
+      "id": "7190539763236934087",
+      "url": "https://openresearch-repository.anu.edu.au/handle/1885/57808",
+      "title": "Beyond the water-land binary in geography: Water/lands of Bengal re-visioning hybridity",
+      "authors": "K Lahiri-Dutt",
+      "year": "2014",
+      "cited_by": 26,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7190539763236934087&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Climate, migration, and sex: the biopolitics of climate-induced migration",
+      "id": "7294643413783419509",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/21624887.2014.943578",
+      "title": "Climate, migration, and sex: the biopolitics of climate-induced migration",
+      "authors": "J Reid",
+      "year": "2014",
+      "cited_by": 20,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7294643413783419509&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Islands of inequality: the environmental history of Tobago and the crisis of development and globalisation in the Caribbean 1763\u20132007",
+      "id": "476454587576368439",
+      "url": "http://sro.sussex.ac.uk/id/eprint/2349",
+      "title": "Islands of inequality: the environmental history of Tobago and the crisis of development and globalisation in the Caribbean 1763\u20132007",
+      "authors": "L Woodcock",
+      "year": "2010",
+      "cited_by": 3,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=476454587576368439&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Changing Climates: Deserts, Desiccation, and the Rise of Climate Engineering 1870-1950",
+      "id": "16603579472298460058",
+      "url": "http://search.proquest.com/openview/2e07cdfa474908abcbac2003c4108067/1?pq-origsite=gscholar&cbl=18750&diss=y",
+      "title": "Changing Climates: Deserts, Desiccation, and the Rise of Climate Engineering 1870-1950",
+      "authors": "PN Lehmann",
+      "year": "2014",
+      "cited_by": 3,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16603579472298460058&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Balancing Acts Between Ancient and Modern Cities: The Ancient Greek Cities Project of CA Doxiadis",
+      "id": "10253668055175326346",
+      "url": "https://journal.eahn.org/articles/10.5334/ah.cv/?toggle_hypothesis=off",
+      "title": "Balancing Acts Between Ancient and Modern Cities: The Ancient Greek Cities Project of CA Doxiadis",
+      "authors": "M Zarmakoupi",
+      "year": "2015",
+      "cited_by": 2,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10253668055175326346&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The Importance of the Humanities to the Climate Change Debate",
+      "id": "15571656813807546273",
+      "url": "https://link.springer.com/chapter/10.1057/978-1-137-55124-5_2",
+      "title": "The Importance of the Humanities to the Climate Change Debate",
+      "authors": "A Elliott, J Cullis",
+      "year": "2017",
+      "cited_by": 2,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15571656813807546273&as_sdt=40000005&sciodt=0,22&hl=en"
+    }
+  ],
+  "links": [
+    {
+      "source": "2286195917214051391",
+      "target": "10562656868675532256"
+    },
+    {
+      "source": "11740049767506727251",
+      "target": "2286195917214051391"
+    },
+    {
+      "source": "16548541633745375756",
+      "target": "2286195917214051391"
+    },
+    {
+      "source": "1343762642252902993",
+      "target": "2286195917214051391"
+    },
+    {
+      "source": "16724514307083713699",
+      "target": "2286195917214051391"
+    },
+    {
+      "source": "14067229716460280866",
+      "target": "2286195917214051391"
+    },
+    {
+      "source": "9942112374916853043",
+      "target": "2286195917214051391"
+    },
+    {
+      "source": "2818049743107068158",
+      "target": "2286195917214051391"
+    },
+    {
+      "source": "10305884988392858147",
+      "target": "2286195917214051391"
+    },
+    {
+      "source": "5595813359155714147",
+      "target": "2286195917214051391"
+    },
+    {
+      "source": "4306864738441793757",
+      "target": "2286195917214051391"
+    },
+    {
+      "source": "17590700396919104057",
+      "target": "10562656868675532256"
+    },
+    {
+      "source": "8192340665575082509",
+      "target": "17590700396919104057"
+    },
+    {
+      "source": "8070025145380509918",
+      "target": "17590700396919104057"
+    },
+    {
+      "source": "4937190439886785638",
+      "target": "17590700396919104057"
+    },
+    {
+      "source": "3475069571193040347",
+      "target": "17590700396919104057"
+    },
+    {
+      "source": "13724838147532245265",
+      "target": "17590700396919104057"
+    },
+    {
+      "source": "4380791506128184256",
+      "target": "17590700396919104057"
+    },
+    {
+      "source": "11303352831003809468",
+      "target": "17590700396919104057"
+    },
+    {
+      "source": "2613682752691604666",
+      "target": "17590700396919104057"
+    },
+    {
+      "source": "16768764380203994273",
+      "target": "17590700396919104057"
+    },
+    {
+      "source": "4637476777586333273",
+      "target": "17590700396919104057"
+    },
+    {
+      "source": "12050440134251023922",
+      "target": "10562656868675532256"
+    },
+    {
+      "source": "2509886434773018458",
+      "target": "12050440134251023922"
+    },
+    {
+      "source": "6131927561220444025",
+      "target": "12050440134251023922"
+    },
+    {
+      "source": "5405202287314376226",
+      "target": "12050440134251023922"
+    },
+    {
+      "source": "240612644793919878",
+      "target": "12050440134251023922"
+    },
+    {
+      "source": "12631206855338106035",
+      "target": "12050440134251023922"
+    },
+    {
+      "source": "18070059269353880053",
+      "target": "12050440134251023922"
+    },
+    {
+      "source": "17979928968570154386",
+      "target": "12050440134251023922"
+    },
+    {
+      "source": "7320542172279373811",
+      "target": "12050440134251023922"
+    },
+    {
+      "source": "15914059887057621179",
+      "target": "12050440134251023922"
+    },
+    {
+      "source": "18085010086436223848",
+      "target": "12050440134251023922"
+    },
+    {
+      "source": "17845922929735995291",
+      "target": "10562656868675532256"
+    },
+    {
+      "source": "15685430106524539014",
+      "target": "17845922929735995291"
+    },
+    {
+      "source": "6126143930568342290",
+      "target": "17845922929735995291"
+    },
+    {
+      "source": "5790795472446775314",
+      "target": "17845922929735995291"
+    },
+    {
+      "source": "8859845756564173107",
+      "target": "17845922929735995291"
+    },
+    {
+      "source": "4098507276792429195",
+      "target": "17845922929735995291"
+    },
+    {
+      "source": "4544068550379077320",
+      "target": "17845922929735995291"
+    },
+    {
+      "source": "4776758429285607134",
+      "target": "17845922929735995291"
+    },
+    {
+      "source": "15259850685259401196",
+      "target": "17845922929735995291"
+    },
+    {
+      "source": "16204629813728837956",
+      "target": "17845922929735995291"
+    },
+    {
+      "source": "9320048619951573886",
+      "target": "17845922929735995291"
+    },
+    {
+      "source": "15404514193465789187",
+      "target": "10562656868675532256"
+    },
+    {
+      "source": "17215038108982511717",
+      "target": "15404514193465789187"
+    },
+    {
+      "source": "2828706811643653233",
+      "target": "15404514193465789187"
+    },
+    {
+      "source": "9755272082793098003",
+      "target": "15404514193465789187"
+    },
+    {
+      "source": "15812165810882775415",
+      "target": "15404514193465789187"
+    },
+    {
+      "source": "1408808787961495528",
+      "target": "15404514193465789187"
+    },
+    {
+      "source": "1045041489300151421",
+      "target": "15404514193465789187"
+    },
+    {
+      "source": "13456430371862847716",
+      "target": "15404514193465789187"
+    },
+    {
+      "source": "14737928547771163706",
+      "target": "15404514193465789187"
+    },
+    {
+      "source": "1224806184762860778",
+      "target": "15404514193465789187"
+    },
+    {
+      "source": "6128170903030152846",
+      "target": "15404514193465789187"
+    },
+    {
+      "source": "8680870317819575377",
+      "target": "10562656868675532256"
+    },
+    {
+      "source": "1847149663204953428",
+      "target": "8680870317819575377"
+    },
+    {
+      "source": "7085102137780773724",
+      "target": "8680870317819575377"
+    },
+    {
+      "source": "2456848986949186583",
+      "target": "8680870317819575377"
+    },
+    {
+      "source": "9568928064644261357",
+      "target": "8680870317819575377"
+    },
+    {
+      "source": "15280095724024498346",
+      "target": "8680870317819575377"
+    },
+    {
+      "source": "12768337074840992155",
+      "target": "8680870317819575377"
+    },
+    {
+      "source": "8272976838906680581",
+      "target": "8680870317819575377"
+    },
+    {
+      "source": "245924485299432971",
+      "target": "8680870317819575377"
+    },
+    {
+      "source": "6682150944835625630",
+      "target": "8680870317819575377"
+    },
+    {
+      "source": "2363586471981024285",
+      "target": "8680870317819575377"
+    },
+    {
+      "source": "1650633634206002750",
+      "target": "10562656868675532256"
+    },
+    {
+      "source": "17839800375868146432",
+      "target": "1650633634206002750"
+    },
+    {
+      "source": "3846683083758299925",
+      "target": "1650633634206002750"
+    },
+    {
+      "source": "4596100072524836951",
+      "target": "1650633634206002750"
+    },
+    {
+      "source": "9131857752946078004",
+      "target": "1650633634206002750"
+    },
+    {
+      "source": "8862034668960139073",
+      "target": "1650633634206002750"
+    },
+    {
+      "source": "14580875362602369846",
+      "target": "1650633634206002750"
+    },
+    {
+      "source": "5921314703023776316",
+      "target": "1650633634206002750"
+    },
+    {
+      "source": "6589859594844441143",
+      "target": "1650633634206002750"
+    },
+    {
+      "source": "358582693993057750",
+      "target": "1650633634206002750"
+    },
+    {
+      "source": "12534243731339832601",
+      "target": "1650633634206002750"
+    },
+    {
+      "source": "12288922735270981016",
+      "target": "10562656868675532256"
+    },
+    {
+      "source": "8194018644763911372",
+      "target": "12288922735270981016"
+    },
+    {
+      "source": "3744656872571028048",
+      "target": "12288922735270981016"
+    },
+    {
+      "source": "11268579925655386163",
+      "target": "12288922735270981016"
+    },
+    {
+      "source": "14341164945251756165",
+      "target": "12288922735270981016"
+    },
+    {
+      "source": "12620735017646765983",
+      "target": "12288922735270981016"
+    },
+    {
+      "source": "11267094994625951168",
+      "target": "12288922735270981016"
+    },
+    {
+      "source": "14778279621966171624",
+      "target": "12288922735270981016"
+    },
+    {
+      "source": "510057876739380587",
+      "target": "12288922735270981016"
+    },
+    {
+      "source": "1921984169722641360",
+      "target": "12288922735270981016"
+    },
+    {
+      "source": "15806074949239293315",
+      "target": "12288922735270981016"
+    },
+    {
+      "source": "14414419019214904958",
+      "target": "10562656868675532256"
+    },
+    {
+      "source": "13736527874798182921",
+      "target": "14414419019214904958"
+    },
+    {
+      "source": "13679478416235936345",
+      "target": "14414419019214904958"
+    },
+    {
+      "source": "10496137983174458423",
+      "target": "14414419019214904958"
+    },
+    {
+      "source": "11975174155571844881",
+      "target": "14414419019214904958"
+    },
+    {
+      "source": "15156989455049132656",
+      "target": "14414419019214904958"
+    },
+    {
+      "source": "2551555403878004243",
+      "target": "14414419019214904958"
+    },
+    {
+      "source": "12627856866182229437",
+      "target": "14414419019214904958"
+    },
+    {
+      "source": "8393617693625546294",
+      "target": "14414419019214904958"
+    },
+    {
+      "source": "6852411613647122408",
+      "target": "14414419019214904958"
+    },
+    {
+      "source": "16878817637273550393",
+      "target": "14414419019214904958"
+    },
+    {
+      "source": "13346050908263236547",
+      "target": "10562656868675532256"
+    },
+    {
+      "source": "14218423832683798978",
+      "target": "13346050908263236547"
+    },
+    {
+      "source": "784620849585447403",
+      "target": "13346050908263236547"
+    },
+    {
+      "source": "16315871532401165770",
+      "target": "13346050908263236547"
+    },
+    {
+      "source": "13920839443328445753",
+      "target": "13346050908263236547"
+    },
+    {
+      "source": "7190539763236934087",
+      "target": "13346050908263236547"
+    },
+    {
+      "source": "7294643413783419509",
+      "target": "13346050908263236547"
+    },
+    {
+      "source": "476454587576368439",
+      "target": "13346050908263236547"
+    },
+    {
+      "source": "16603579472298460058",
+      "target": "13346050908263236547"
+    },
+    {
+      "source": "10253668055175326346",
+      "target": "13346050908263236547"
+    },
+    {
+      "source": "15571656813807546273",
+      "target": "13346050908263236547"
+    }
+  ]
+};
+
+var link = svg.append("g")
+    .attr("class", "links")
+  .selectAll("line")
+  .data(graph.links)
+  .enter().append("line");
+
+var node = svg.append("g")
+    .attr("class", "nodes")
+  .selectAll("circle")
+  .data(graph.nodes)
+  .enter().append("circle")
+    .attr("r", 5)
+    .call(d3.drag()
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended));
+
+node.append("title")
+    .text(function(d) {
+        return d.authors ? d.title + ' - ' + d.authors : d.title
+    });
+
+node.on("click", function(d) {
+  window.open(d.url, '_blank');
+  d3.event.stopPropagation();
+});
+
+simulation
+    .nodes(graph.nodes)
+    .on("tick", ticked);
+
+simulation.force("link")
+    .links(graph.links);
+
+function ticked() {
+  link
+      .attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
+
+  node
+      .attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; });
+}
+
+function dragstarted(d) {
+  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+  d.fx = d.x;
+  d.fy = d.y;
+}
+
+function dragged(d) {
+  d.fx = d3.event.x;
+  d.fy = d3.event.y;
+}
+
+function dragended(d) {
+  if (!d3.event.active) simulation.alphaTarget(0);
+  d.fx = null;
+  d.fy = null;
+}
+
+</script>
