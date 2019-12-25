@@ -1,0 +1,1658 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<style>
+
+.links line {
+  stroke: #999;
+  stroke-opacity: 0.8;
+  stroke-width: 2px;
+}
+
+.nodes circle {
+  stroke: black;
+  fill: white;
+  stroke-width: 1.5px;
+}
+
+#graph {
+  width: 99vw;
+  height: 99vh;
+}
+
+</style>
+<svg id="graph"></svg>
+<script>
+
+var width = $(window).width();
+var height = $(window).height();
+
+var svg = d3.select("svg")
+    .attr("height", height)
+    .attr("width", width);
+
+var color = d3.scaleOrdinal(d3.schemeCategory20c);
+
+var simulation = d3.forceSimulation()
+    .velocityDecay(0.6)
+    .force("link", d3.forceLink().id(function(d) { return d.id; }))
+    .force("charge", d3.forceManyBody())
+    .force("center", d3.forceCenter(width / 2, height / 2));
+
+var graph = {
+  "nodes": [
+    {
+      "label": "A brief history of neoliberalism",
+      "id": "5892533485146141989",
+      "url": "https://books.google.com/books?hl=en&lr=&id=2GsTDAAAQBAJ&oi=fnd&pg=PR5&ots=yf_woJFXaF&sig=ro-QepIeWfGyMerevJPaNwRN6IM",
+      "title": "A brief history of neoliberalism",
+      "authors": "D Harvey",
+      "year": "2007",
+      "cited_by": 27105,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5892533485146141989&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Urban leviathan: Mexico City in the twentieth century",
+      "id": "819295295882952177",
+      "title": "Urban leviathan: Mexico City in the twentieth century"
+    },
+    {
+      "label": "The communist manifesto",
+      "id": "13990517224208973018",
+      "url": "https://books.google.com/books?hl=en&lr=&id=CY3b0mcDF9QC&oi=fnd&pg=PA3&ots=q2F90cLBp3&sig=jWh-55Icg1hpRr-ugeNSiScKrEI",
+      "title": "The communist manifesto",
+      "authors": "K Marx, F Engels",
+      "year": "2002",
+      "cited_by": 10744,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13990517224208973018&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Social linguistics and literacies: Ideology in discourses",
+      "id": "7802950214061503871",
+      "url": "https://www.taylorfrancis.com/books/9780203944806",
+      "title": "Social linguistics and literacies: Ideology in discourses",
+      "authors": "J Gee, JP Gee",
+      "year": "2007",
+      "cited_by": 13575,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7802950214061503871&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Rebel cities: From the right to the city to the urban revolution",
+      "id": "18098572309705912187",
+      "url": "https://books.google.com/books?hl=en&lr=&id=IKJE02gfP0cC&oi=fnd&pg=PR9&ots=YQX7q2tAL8&sig=KK9FfQrq7YyCaIOavforF_Jlq8w",
+      "title": "Rebel cities: From the right to the city to the urban revolution",
+      "authors": "D Harvey",
+      "year": "2012",
+      "cited_by": 4246,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=18098572309705912187&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Tourism and sustainability: Development, globalisation and new tourism in the third world",
+      "id": "5924291909489758319",
+      "url": "https://www.taylorfrancis.com/books/9780203891056",
+      "title": "Tourism and sustainability: Development, globalisation and new tourism in the third world",
+      "authors": "M Mowforth, I Munt",
+      "year": "2008",
+      "cited_by": 3775,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5924291909489758319&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The right to the city",
+      "id": "10163731962333493026",
+      "url": "https://kompreser.espivblogs.net/files/2012/11/David-Harvey-The-Right-To-The-City-full.pdf",
+      "title": "The right to the city",
+      "authors": "D Harvey",
+      "year": "2008",
+      "cited_by": 3654,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10163731962333493026&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Development and social change: A global perspective",
+      "id": "8082599051446942000",
+      "url": "https://books.google.com/books?hl=en&lr=&id=RadyCwAAQBAJ&oi=fnd&pg=PP1&ots=SHf4-xnrsf&sig=k_6FF7IeSiF3MEqh84B5mdI2HBs",
+      "title": "Development and social change: A global perspective",
+      "authors": "P McMichael",
+      "year": "2016",
+      "cited_by": 3076,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8082599051446942000&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Critical ethnography: Method, ethics, and performance",
+      "id": "12745076668240467435",
+      "url": "https://books.google.com/books?hl=en&lr=&id=Onvr9DstlrEC&oi=fnd&pg=PP1&ots=KPcFWb983t&sig=BNBWSx_Q62_5E5QVr8RlrlxiQ48",
+      "title": "Critical ethnography: Method, ethics, and performance",
+      "authors": "DS Madison",
+      "year": "2011",
+      "cited_by": 2980,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12745076668240467435&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Post-colonial studies: The key concepts",
+      "id": "14673695542456733687",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2011-0-17875-9&isbn=9781135039752&format=googlePreviewPdf",
+      "title": "Post-colonial studies: The key concepts",
+      "authors": "B Ashcroft, G Griffiths, H Tiffin",
+      "year": "2013",
+      "cited_by": 2981,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14673695542456733687&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Cruising utopia: The then and there of queer futurity",
+      "id": "2143143486232322826",
+      "url": "https://books.google.com/books?hl=en&lr=&id=Xy2RDwAAQBAJ&oi=fnd&pg=PR9&ots=tBzGKMjOPz&sig=6ZC0vmihGCg90XyYbRjRSfZLiww",
+      "title": "Cruising utopia: The then and there of queer futurity",
+      "authors": "JE Mu\u00f1oz, J Chambers-Letson, T Nyong'o, A Pellegrini",
+      "year": "2019",
+      "cited_by": 2951,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2143143486232322826&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Globalizing education policy",
+      "id": "991374878313562099",
+      "url": "https://www.taylorfrancis.com/books/9780203867396",
+      "title": "Globalizing education policy",
+      "authors": "F Rizvi, B Lingard",
+      "year": "2009",
+      "cited_by": 2440,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=991374878313562099&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Acts of faith: Explaining the human side of religion",
+      "id": "5156160328767168040",
+      "url": "https://books.google.com/books?hl=en&lr=&id=ObAwDwAAQBAJ&oi=fnd&pg=PA1&ots=78Rrxl-FNt&sig=OptNf5uipf5su5TATQd48RjbF7A",
+      "title": "Acts of faith: Explaining the human side of religion",
+      "authors": "R Stark, R Finke",
+      "year": "2000",
+      "cited_by": 3016,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5156160328767168040&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Understanding terror networks",
+      "id": "11476377324222652756",
+      "url": "https://books.google.com/books?hl=en&lr=&id=SAQ8Oa6zWF4C&oi=fnd&pg=PR7&ots=qVC6tLamSb&sig=mHQB-lEU7js9zq12kWPc_lxdD5g",
+      "title": "Understanding terror networks",
+      "authors": "M Sageman",
+      "year": "2004",
+      "cited_by": 3907,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11476377324222652756&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The spiritual revolution: Why religion is giving way to spirituality",
+      "id": "16425936764267544215",
+      "url": "https://pdfs.semanticscholar.org/2e8a/8711be23fdcc16cf3c6db98fbd23877f6037.pdf",
+      "title": "The spiritual revolution: Why religion is giving way to spirituality",
+      "authors": "P Heelas, L Woodhead, B Seel, B Szerszynski\u2026",
+      "year": "2005",
+      "cited_by": 2634,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16425936764267544215&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Breaking the spell: Religion as a natural phenomenon",
+      "id": "7818278974524225660",
+      "url": "https://books.google.com/books?hl=en&lr=&id=yWtwDDqR61QC&oi=fnd&pg=PR13&ots=zLt_n0Fyow&sig=rr3grD1zs-lEA_oUMZToNNOaqdg",
+      "title": "Breaking the spell: Religion as a natural phenomenon",
+      "authors": "DC Dennett",
+      "year": "2006",
+      "cited_by": 2483,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7818278974524225660&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "In gods we trust: The evolutionary landscape of religion",
+      "id": "16224816075849824613",
+      "url": "https://books.google.com/books?hl=en&lr=&id=BH08DwAAQBAJ&oi=fnd&pg=PR13&ots=_R3dOxtSwR&sig=w3Q3WjcKKx6ii9Zm2b2UysWit1Y",
+      "title": "In gods we trust: The evolutionary landscape of religion",
+      "authors": "S Atran",
+      "year": "2002",
+      "cited_by": 2121,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16224816075849824613&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Religion and politics in the United States",
+      "id": "8846113396480428725",
+      "url": "https://books.google.com/books?hl=en&lr=&id=Jy8EAwAAQBAJ&oi=fnd&pg=PR5&ots=lVvv-BJBqa&sig=KHdWKfVQ_zc4xmZcm9mD3ZFQ46k",
+      "title": "Religion and politics in the United States",
+      "authors": "KD Wald, A Calhoun-Brown",
+      "year": "2014",
+      "cited_by": 1309,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8846113396480428725&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Lived religion: Faith and practice in everyday life",
+      "id": "16639668779162687233",
+      "url": "https://books.google.com/books?hl=en&lr=&id=eTyJX69ocsgC&oi=fnd&pg=PR11&ots=YcpG7DSpPR&sig=NI2KBYt1dvPs5CKFKxVFzMuqrH0",
+      "title": "Lived religion: Faith and practice in everyday life",
+      "authors": "MB McGuire",
+      "year": "2008",
+      "cited_by": 1377,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16639668779162687233&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The marriage-go-round: The state of marriage and the family in America today",
+      "id": "5890826075553821430",
+      "url": "https://books.google.com/books?hl=en&lr=&id=mfRvDwAAQBAJ&oi=fnd&pg=PP13&ots=L1KHvpgZDd&sig=bHorsb-4bE_DfG8rmkSY_kXXbwo",
+      "title": "The marriage-go-round: The state of marriage and the family in America today",
+      "authors": "AJ Cherlin",
+      "year": "2010",
+      "cited_by": 1189,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5890826075553821430&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "On secularization: Towards a revised general theory",
+      "id": "10558676771956274058",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2016-0-35479-7&isbn=9781351913829&format=googlePreviewPdf",
+      "title": "On secularization: Towards a revised general theory",
+      "authors": "D Martin",
+      "year": "2017",
+      "cited_by": 1075,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10558676771956274058&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Religion's evolutionary landscape: Counterintuition, commitment, compassion, communion",
+      "id": "16085144887307862176",
+      "url": "https://www.cambridge.org/core/journals/behavioral-and-brain-sciences/article/religions-evolutionary-landscape-counterintuition-commitment-compassion-communion/1284A46B2AC1AD2E9579ABEFFF5EF228",
+      "title": "Religion's evolutionary landscape: Counterintuition, commitment, compassion, communion",
+      "authors": "S Atran, A Norenzayan",
+      "year": "2004",
+      "cited_by": 1018,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16085144887307862176&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The sociology of religion: A critical agenda",
+      "id": "8929743165529820430",
+      "url": "https://books.google.com/books?hl=en&lr=&id=e1_SH0rB4NAC&oi=fnd&pg=PP1&ots=ylZAZfzdV3&sig=MHae6XYH3fuBgk5f03W7KHnbWmg",
+      "title": "The sociology of religion: A critical agenda",
+      "authors": "G Davie",
+      "year": "2013",
+      "cited_by": 896,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8929743165529820430&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Global networks, linked cities",
+      "id": "4787031455032416962",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2010-0-40101-3&isbn=9781134954896&format=googlePreviewPdf",
+      "title": "Global networks, linked cities",
+      "authors": "S Sassen",
+      "year": "2016",
+      "cited_by": 1302,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4787031455032416962&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Globalization in question",
+      "id": "10741453737225943588",
+      "url": "https://books.google.com/books?hl=en&lr=&id=5Bh0BgAAQBAJ&oi=fnd&pg=PT8&ots=JsX3DDcb8y&sig=EebXKsqBCDwUTPwcLBiaP3zSVeo",
+      "title": "Globalization in question",
+      "authors": "P Hirst, G Thompson, S Bromley",
+      "year": "2015",
+      "cited_by": 8326,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10741453737225943588&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Globalization: A critical introduction",
+      "id": "10636104253961903537",
+      "url": "https://books.google.com/books?hl=en&lr=&id=XZwcBQAAQBAJ&oi=fnd&pg=PR11&ots=562FInmnLW&sig=X5XK-rsYjx6Q2hliQLZu-BNq_SI",
+      "title": "Globalization: A critical introduction",
+      "authors": "JA Scholte",
+      "year": "2005",
+      "cited_by": 5387,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10636104253961903537&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "World city network: a global urban analysis",
+      "id": "5813750197845728778",
+      "url": "https://www.taylorfrancis.com/books/9781315730950",
+      "title": "World city network: a global urban analysis",
+      "authors": "PJ Taylor, B Derudder",
+      "year": "2015",
+      "cited_by": 2560,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5813750197845728778&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Colonial and postcolonial literature: migrant metaphors",
+      "id": "18163517279363026399",
+      "url": "https://books.google.com/books?hl=en&lr=&id=CtjOlhs3kokC&oi=fnd&pg=PR9&ots=cXvbpbr0uR&sig=J29cFzaTf7RDQrhB39ekmqdn6NQ",
+      "title": "Colonial and postcolonial literature: migrant metaphors",
+      "authors": "E Boehmer",
+      "year": "2005",
+      "cited_by": 2376,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=18163517279363026399&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Ordinary cities: between modernity and development",
+      "id": "16109084315140887089",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2010-0-43647-7&isbn=9781134406951&format=googlePreviewPdf",
+      "title": "Ordinary cities: between modernity and development",
+      "authors": "J Robinson",
+      "year": "2013",
+      "cited_by": 1979,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16109084315140887089&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Cosmopolis II: Mongrel cities of the 21st century",
+      "id": "14555046644643364587",
+      "url": "https://books.google.com/books?hl=en&lr=&id=2fsB1rNT4fUC&oi=fnd&pg=PP13&ots=r5obBdzXPo&sig=QgjaYMGhYqHcOmVZWh3-QkooYkM",
+      "title": "Cosmopolis II: Mongrel cities of the 21st century",
+      "authors": "L Sandercock, P Lyssiotis",
+      "year": "2003",
+      "cited_by": 1309,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14555046644643364587&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Urban growth in developing countries: a review of current trends and a caution regarding existing forecasts",
+      "id": "8841765338369772183",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0305750X03001967",
+      "title": "Urban growth in developing countries: a review of current trends and a caution regarding existing forecasts",
+      "authors": "B Cohen",
+      "year": "2004",
+      "cited_by": 891,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8841765338369772183&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "If mayors ruled the world: Dysfunctional nations, rising cities",
+      "id": "5514235339708775800",
+      "url": "https://books.google.com/books?hl=en&lr=&id=RdA_AQAAQBAJ&oi=fnd&pg=PT1&ots=GZ9zVkc1hI&sig=-Pb5ugkA3qjVDZXSvhF9e3OHICc",
+      "title": "If mayors ruled the world: Dysfunctional nations, rising cities",
+      "authors": "BR Barber",
+      "year": "2013",
+      "cited_by": 862,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5514235339708775800&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Cities in a world of cities: the comparative gesture",
+      "id": "17000501129672288944",
+      "url": "https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1468-2427.2010.00982.x",
+      "title": "Cities in a world of cities: the comparative gesture",
+      "authors": "J Robinson",
+      "year": "2011",
+      "cited_by": 831,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17000501129672288944&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Human Adaptability, Student Economy Edition: An Introduction to Ecological Anthropology",
+      "id": "7984025732658315210",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2017-0-76777-1&isbn=9780429493706&format=googlePreviewPdf",
+      "title": "Human Adaptability, Student Economy Edition: An Introduction to Ecological Anthropology",
+      "authors": "E Moran",
+      "year": "2018",
+      "cited_by": 774,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7984025732658315210&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "On the plaza: The politics of public space and culture",
+      "id": "9326637504365018550",
+      "url": "https://books.google.com/books?hl=en&lr=&id=SHpaBAAAQBAJ&oi=fnd&pg=PP8&ots=foqPI01Zwk&sig=eA5yFUGh9zXePb_uTnxwYdZECFM",
+      "title": "On the plaza: The politics of public space and culture",
+      "authors": "SM Low",
+      "year": "2010",
+      "cited_by": 1062,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9326637504365018550&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The right to the city: Social justice and the fight for public space",
+      "id": "11487110714760567487",
+      "url": "https://books.google.com/books?hl=en&lr=&id=2NKoBQAAQBAJ&oi=fnd&pg=PP1&ots=jZbCfTtDY5&sig=zbwffixLaqSJSE3wrJot_ApRKYs",
+      "title": "The right to the city: Social justice and the fight for public space",
+      "authors": "D Mitchell",
+      "year": "2003",
+      "cited_by": 3598,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11487110714760567487&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Behind the gates: Life, security, and the pursuit of happiness in fortress America",
+      "id": "13286574838942888768",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2009-0-14499-8&isbn=9781135945305&format=googlePreviewPdf",
+      "title": "Behind the gates: Life, security, and the pursuit of happiness in fortress America",
+      "authors": "S Low",
+      "year": "2004",
+      "cited_by": 1549,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13286574838942888768&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Beyond house and haven: Toward a revisioning of emotional relationships with places",
+      "id": "1465502995952923960",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0272494402000749",
+      "title": "Beyond house and haven: Toward a revisioning of emotional relationships with places",
+      "authors": "LC Manzo",
+      "year": "2003",
+      "cited_by": 974,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1465502995952923960&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The politics of public space",
+      "id": "318257089182038630",
+      "url": "https://books.google.com/books?hl=en&lr=&id=x8T7qheiI2oC&oi=fnd&pg=PR1&ots=RNogIZx8tF&sig=R56R_hTgsAXyuH4DyeEcV1pJcuE",
+      "title": "The politics of public space",
+      "authors": "S Low, N Smith",
+      "year": "2013",
+      "cited_by": 838,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=318257089182038630&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The edge and the center: Gated communities and the discourse of urban fear",
+      "id": "9397512082628093526",
+      "url": "https://anthrosource.onlinelibrary.wiley.com/doi/abs/10.1525/aa.2001.103.1.45",
+      "title": "The edge and the center: Gated communities and the discourse of urban fear",
+      "authors": "SM Low",
+      "year": "2001",
+      "cited_by": 760,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9397512082628093526&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "For better or worse: Exploring multiple dimensions of place meaning",
+      "id": "2476071549476820327",
+      "url": "https://www.sciencedirect.com/science/article/pii/S027249440500006X",
+      "title": "For better or worse: Exploring multiple dimensions of place meaning",
+      "authors": "LC Manzo",
+      "year": "2005",
+      "cited_by": 772,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2476071549476820327&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Rethinking urban parks: Public space and cultural diversity",
+      "id": "12590043264289775528",
+      "url": "https://books.google.com/books?hl=en&lr=&id=cUhYBCSAYIEC&oi=fnd&pg=PR5&ots=NvWqHm61xz&sig=yApZogcpTSwgLg7WkpYv3hgBBiQ",
+      "title": "Rethinking urban parks: Public space and cultural diversity",
+      "authors": "S Low, D Taplin, S Scheld",
+      "year": "2009",
+      "cited_by": 539,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12590043264289775528&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Loose space: possibility and diversity in urban life",
+      "id": "4553923157863447061",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2009-0-22664-0&isbn=9781135993184&format=googlePreviewPdf",
+      "title": "Loose space: possibility and diversity in urban life",
+      "authors": "K Franck, Q Stevens",
+      "year": "2006",
+      "cited_by": 518,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4553923157863447061&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The measurement of place attachment: Personal, community, and environmental connections",
+      "id": "7378151629574840802",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0272494410000794",
+      "title": "The measurement of place attachment: Personal, community, and environmental connections",
+      "authors": "CM Raymond, G Brown, D Weber",
+      "year": "2010",
+      "cited_by": 547,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7378151629574840802&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The spectacular city: Violence and performance in urban Bolivia",
+      "id": "7039151756252894075",
+      "url": "https://books.google.com/books?hl=en&lr=&id=rWGow6dBKncC&oi=fnd&pg=PR7&ots=o-UjiaBZ9m&sig=ulPcV66RVAYFR0J8xXjy6Jo30Xg",
+      "title": "The spectacular city: Violence and performance in urban Bolivia",
+      "authors": "DM Goldstein",
+      "year": "2004",
+      "cited_by": 459,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7039151756252894075&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Militants and citizens: The politics of participatory democracy in Porto Alegre",
+      "id": "9948404148143502674",
+      "url": "https://books.google.com/books?hl=en&lr=&id=Ta_hXPAUKTMC&oi=fnd&pg=PR9&ots=boIdny3uOf&sig=oL8ncySXDfCvo_U2HMowY3HHTgY",
+      "title": "Militants and citizens: The politics of participatory democracy in Porto Alegre",
+      "authors": "G Baiocchi",
+      "year": "2005",
+      "cited_by": 828,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9948404148143502674&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Envisioning real utopias",
+      "id": "4215109141178101311",
+      "url": "https://www.ssc.wisc.edu/~wright/ERU_files/ERU-full-manuscript.pdf",
+      "title": "Envisioning real utopias",
+      "authors": "EO Wright",
+      "year": "2010",
+      "cited_by": 1532,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4215109141178101311&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Democratic innovations: Designing institutions for citizen participation",
+      "id": "14966483633110429469",
+      "url": "https://books.google.com/books?hl=en&lr=&id=gz8gAwAAQBAJ&oi=fnd&pg=PR8&ots=AVvAElRRvY&sig=N88T0iMXTqDl66TKuZe86HS1DtU",
+      "title": "Democratic innovations: Designing institutions for citizen participation",
+      "authors": "G Smith",
+      "year": "2009",
+      "cited_by": 1455,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14966483633110429469&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Democracy and knowledge: Innovation and learning in classical Athens",
+      "id": "12680471247525311060",
+      "url": "https://books.google.com/books?hl=en&lr=&id=Jge0MlZTKhQC&oi=fnd&pg=PR7&ots=cxe10BuGMn&sig=Cy3SrNPsAzjLq5lIsGs-9GKYEII",
+      "title": "Democracy and knowledge: Innovation and learning in classical Athens",
+      "authors": "J Ober",
+      "year": "2008",
+      "cited_by": 587,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12680471247525311060&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Participatory democracy revisited",
+      "id": "15747388382420703101",
+      "url": "https://www.cambridge.org/core/journals/perspectives-on-politics/article/participatory-democracy-revisited/A6D459BB654AD3AA9152FDDC682AC364",
+      "title": "Participatory democracy revisited",
+      "authors": "C Pateman",
+      "year": "2012",
+      "cited_by": 584,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15747388382420703101&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Passive revolution: Absorbing the Islamic challenge to capitalism",
+      "id": "4236076122526754977",
+      "url": "https://books.google.com/books?hl=en&lr=&id=AzDgC9jAkiMC&oi=fnd&pg=PR9&ots=9fadRc2Jqt&sig=HsYHa6HnUJwcV7lRpV9TrM1HEZk",
+      "title": "Passive revolution: Absorbing the Islamic challenge to capitalism",
+      "authors": "C Tu\u011fal",
+      "year": "2009",
+      "cited_by": 532,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4236076122526754977&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Fast policy: Experimental statecraft at the thresholds of neoliberalism",
+      "id": "8432237773789826089",
+      "url": "https://books.google.com/books?hl=en&lr=&id=PzB0DwAAQBAJ&oi=fnd&pg=PT6&ots=5MOtUoa1lv&sig=I0pVkoVbNSWlWj2oj09G1DfWZFk",
+      "title": "Fast policy: Experimental statecraft at the thresholds of neoliberalism",
+      "authors": "J Peck, N Theodore",
+      "year": "2015",
+      "cited_by": 489,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8432237773789826089&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Participatory budgeting in Europe: potentials and challenges",
+      "id": "2901533516865341012",
+      "url": "https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1468-2427.2008.00777.x",
+      "title": "Participatory budgeting in Europe: potentials and challenges",
+      "authors": "Y Sintomer, C Herzberg, A R\u00f6cke",
+      "year": "2008",
+      "cited_by": 461,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2901533516865341012&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Patients of the state: The politics of waiting in Argentina",
+      "id": "6224435631355743088",
+      "url": "https://books.google.com/books?hl=en&lr=&id=6EHbfnTBuDAC&oi=fnd&pg=PR9&ots=s0jgh3h-pi&sig=UNunmvFnhXrJd-Zhd5IzyrexCwg",
+      "title": "Patients of the state: The politics of waiting in Argentina",
+      "authors": "J Auyero",
+      "year": "2012",
+      "cited_by": 372,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6224435631355743088&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Bootstrapping democracy: Transforming local governance and civil society in Brazil",
+      "id": "9405382624832418511",
+      "url": "https://books.google.com/books?hl=en&lr=&id=e5lWpzypUyQC&oi=fnd&pg=PR7&ots=5NolnP15UN&sig=i7nY4zb3HwlOlNW7h2R224HjPVU",
+      "title": "Bootstrapping democracy: Transforming local governance and civil society in Brazil",
+      "authors": "G Baiocchi, P Heller, MK Silva, M Silva",
+      "year": "2011",
+      "cited_by": 340,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9405382624832418511&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Making volunteers: Civic life after welfare's end",
+      "id": "16168260777353912217",
+      "url": "https://books.google.com/books?hl=en&lr=&id=vGqYDwAAQBAJ&oi=fnd&pg=PR7&ots=dxo9c1bmzd&sig=-c0TN182yRMDCzghuBpOnobNctM",
+      "title": "Making volunteers: Civic life after welfare's end",
+      "authors": "N Eliasoph",
+      "year": "2013",
+      "cited_by": 316,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16168260777353912217&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Women and social movements in Latin America: Power from below",
+      "id": "6689495299434165540",
+      "url": "https://books.google.com/books?hl=en&lr=&id=7W5D_qz2TeEC&oi=fnd&pg=PR9&ots=Xo_QahhsaN&sig=AcY_wAhLFGD1GjcTH7MOmYYGIiU",
+      "title": "Women and social movements in Latin America: Power from below",
+      "authors": "L Stephen",
+      "year": "1997",
+      "cited_by": 596,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6689495299434165540&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Gendered transitions: Mexican experiences of immigration",
+      "id": "722901382413854297",
+      "url": "https://books.google.com/books?hl=en&lr=&id=KQAHbl06pIYC&oi=fnd&pg=PR9&ots=4AcAmNmUzv&sig=ZDiLAxwWbHqW9cxqWe5T-x3haAY",
+      "title": "Gendered transitions: Mexican experiences of immigration",
+      "authors": "P Hondagneu-Sotelo",
+      "year": "1994",
+      "cited_by": 2625,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=722901382413854297&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The local and the global: The anthropology of globalization and transnationalism",
+      "id": "8077722733334514745",
+      "url": "https://www.annualreviews.org/doi/abs/10.1146/annurev.an.24.100195.002555",
+      "title": "The local and the global: The anthropology of globalization and transnationalism",
+      "authors": "M Kearney",
+      "year": "1995",
+      "cited_by": 2323,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8077722733334514745&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Development sociology: actor perspectives",
+      "id": "1160609721044159032",
+      "url": "https://www.taylorfrancis.com/books/9780203398531",
+      "title": "Development sociology: actor perspectives",
+      "authors": "N Long",
+      "year": "2003",
+      "cited_by": 2340,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1160609721044159032&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "[CITATION][C]",
+      "id": "11814492788825506048",
+      "title": "[CITATION][C]",
+      "authors": "J Gledhill",
+      "year": "2000",
+      "cited_by": 899,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11814492788825506048&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Reconceptualizing the peasantry: anthropology in global perspective",
+      "id": "16180868338768715203",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2017-0-73290-1&isbn=9780429966330&format=googlePreviewPdf",
+      "title": "Reconceptualizing the peasantry: anthropology in global perspective",
+      "authors": "M Kearney",
+      "year": "2018",
+      "cited_by": 822,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16180868338768715203&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Social movements: changing paradigms and forms of politics",
+      "id": "12154168200225931770",
+      "url": "https://www.annualreviews.org/doi/abs/10.1146/annurev.anthro.30.1.285",
+      "title": "Social movements: changing paradigms and forms of politics",
+      "authors": "M Edelman",
+      "year": "2001",
+      "cited_by": 780,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12154168200225931770&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "A courtship after marriage: Sexuality and love in Mexican transnational families",
+      "id": "2719635199060263927",
+      "url": "https://books.google.com/books?hl=en&lr=&id=CnQRggXwZWcC&oi=fnd&pg=PR9&ots=mOgMlWfVy4&sig=WjJCMNxqZb1JMaxvDsHuqOE-DGk",
+      "title": "A courtship after marriage: Sexuality and love in Mexican transnational families",
+      "authors": "J Hirsch",
+      "year": "2003",
+      "cited_by": 769,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2719635199060263927&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "A finger in the wound: Body politics in quincentennial Guatemala",
+      "id": "5341744068816419242",
+      "url": "https://books.google.com/books?hl=en&lr=&id=y6QwDwAAQBAJ&oi=fnd&pg=PR9&ots=JoUXP37kiT&sig=aTDzrHT7yfxnfj5TQCrhT30RS6w",
+      "title": "A finger in the wound: Body politics in quincentennial Guatemala",
+      "authors": "DM Nelson",
+      "year": "1999",
+      "cited_by": 723,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5341744068816419242&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Mayan visions: The quest for autonomy in an age of globalization",
+      "id": "11362132098572554123",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2009-0-24347-0&isbn=9781135957131&format=googlePreviewPdf",
+      "title": "Mayan visions: The quest for autonomy in an age of globalization",
+      "authors": "JC Nash",
+      "year": "2002",
+      "cited_by": 561,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11362132098572554123&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The secret history of gender: Women, men, and power in late colonial Mexico",
+      "id": "12550097557218253234",
+      "url": "https://books.google.com/books?hl=en&lr=&id=6WBMMF-FqeQC&oi=fnd&pg=PR9&ots=ge4n0ThLFg&sig=FGlLC-xIhO-RWqU7sRfgMJsK3bc",
+      "title": "The secret history of gender: Women, men, and power in late colonial Mexico",
+      "authors": "SJ Stern",
+      "year": "1997",
+      "cited_by": 546,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12550097557218253234&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Informal politics: Street vendors and the state in Mexico City",
+      "id": "9316349746856144798",
+      "url": "https://books.google.com/books?hl=en&lr=&id=iWWPHMG0zGwC&oi=fnd&pg=PP9&ots=wRxlv4e4jC&sig=0MPXV0KG83VUV30K47mzYlagU5k",
+      "title": "Informal politics: Street vendors and the state in Mexico City",
+      "authors": "JC Cross",
+      "year": "1998",
+      "cited_by": 587,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9316349746856144798&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Latin American class structures: Their composition and change during the neoliberal era",
+      "id": "17301979139514688559",
+      "url": "https://www.jstor.org/stable/1555434",
+      "title": "Latin American class structures: Their composition and change during the neoliberal era",
+      "authors": "A Portes, K Hoffman",
+      "year": "2003",
+      "cited_by": 856,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17301979139514688559&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The ethnic economy",
+      "id": "12846169557787927570",
+      "url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2761948",
+      "title": "The ethnic economy",
+      "authors": "I Light",
+      "year": "2005",
+      "cited_by": 594,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12846169557787927570&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Women's activism and globalization: Linking local struggles and global politics",
+      "id": "5186734077206155803",
+      "url": "https://books.google.com/books?hl=en&lr=&id=COGSAgAAQBAJ&oi=fnd&pg=PP1&ots=TraiqjeqUb&sig=69YoqoImqUac4GDjIDNwTj2zKR0",
+      "title": "Women's activism and globalization: Linking local struggles and global politics",
+      "authors": "NA Naples, M Desai",
+      "year": "2004",
+      "cited_by": 480,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5186734077206155803&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "El Alto, rebel city: Self and citizenship in Andean Bolivia",
+      "id": "16101824307437336997",
+      "url": "https://books.google.com/books?hl=en&lr=&id=HhLsIOMOXBIC&oi=fnd&pg=PP1&ots=kGbqxBTiLi&sig=L6c-I5wIcnmkEWgBY9HpdJBnm2k",
+      "title": "El Alto, rebel city: Self and citizenship in Andean Bolivia",
+      "authors": "S Lazar",
+      "year": "2008",
+      "cited_by": 459,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16101824307437336997&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Street vending and public policy: a global review",
+      "id": "13050794768732542173",
+      "url": "https://www.emeraldinsight.com/doi/abs/10.1108/01443330010789052",
+      "title": "Street vending and public policy: a global review",
+      "authors": "R Bromley",
+      "year": "2000",
+      "cited_by": 402,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13050794768732542173&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The cultural study of music: A critical introduction",
+      "id": "6677240797545614127",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2009-0-12542-9&isbn=9781136754333&format=googlePreviewPdf",
+      "title": "The cultural study of music: A critical introduction",
+      "authors": "M Clayton",
+      "year": "2013",
+      "cited_by": 404,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6677240797545614127&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Street vendors, and postmodernity: conflict and compromise in the global economy",
+      "id": "11495831790922941183",
+      "url": "https://www.emeraldinsight.com/doi/abs/10.1108/01443330010789061",
+      "title": "Street vendors, and postmodernity: conflict and compromise in the global economy",
+      "authors": "J Cross",
+      "year": "2000",
+      "cited_by": 361,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11495831790922941183&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Economic sociology: a systematic inquiry",
+      "id": "188038418093453725",
+      "url": "https://books.google.com/books?hl=en&lr=&id=AcSMK5dbQKUC&oi=fnd&pg=PP1&ots=Z_HvogR4WW&sig=XnTHU75ZaJ8ePfSCsFbZ75e3qJ0",
+      "title": "Economic sociology: a systematic inquiry",
+      "authors": "A Portes",
+      "year": "2010",
+      "cited_by": 392,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=188038418093453725&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Shadow economies of cinema: Mapping informal film distribution",
+      "id": "5436571146606410017",
+      "url": "https://books.google.com/books?hl=en&lr=&id=3x9dDwAAQBAJ&oi=fnd&pg=PP1&ots=Ygk2wSptFp&sig=-DEoqyKacWTB0-rYmdFc5RFDWzo",
+      "title": "Shadow economies of cinema: Mapping informal film distribution",
+      "authors": "R Lobato",
+      "year": "2012",
+      "cited_by": 313,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5436571146606410017&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Violent Democracies in Latin America",
+      "id": "18244224495158274850",
+      "url": "https://books.google.com/books?hl=en&lr=&id=876bwnRHiH0C&oi=fnd&pg=PP6&ots=l3HZToJzNu&sig=kkuIOuMH93fBefvcZEs-A35m0_I",
+      "title": "Violent Democracies in Latin America",
+      "authors": "NL Whitehead, JE Fair, LA Payne",
+      "year": "2010",
+      "cited_by": 299,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=18244224495158274850&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Urban Transport Environment and Equity: The case for developing countries",
+      "id": "18162065814368176492",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2011-0-08007-8&isbn=9781134201341&format=googlePreviewPdf",
+      "title": "Urban Transport Environment and Equity: The case for developing countries",
+      "authors": "EA Vasconcellos",
+      "year": "2014",
+      "cited_by": 451,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=18162065814368176492&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Unsustainable transport: city transport in the new century",
+      "id": "1283530713374542139",
+      "url": "https://www.taylorfrancis.com/books/9780203003886",
+      "title": "Unsustainable transport: city transport in the new century",
+      "authors": "D Banister",
+      "year": "2005",
+      "cited_by": 869,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1283530713374542139&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Urban transport crisis in India",
+      "id": "6966778568205153556",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0967070X05000272",
+      "title": "Urban transport crisis in India",
+      "authors": "J Pucher, N Korattyswaropam, N Mittal, N Ittyerah",
+      "year": "2005",
+      "cited_by": 323,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6966778568205153556&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Urban transport trends and policies in China and India: impacts of rapid economic growth",
+      "id": "14175868304374592851",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/01441640601089988",
+      "title": "Urban transport trends and policies in China and India: impacts of rapid economic growth",
+      "authors": "J Pucher, Z Peng, N Mittal, Y Zhu\u2026",
+      "year": "2007",
+      "cited_by": 307,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14175868304374592851&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "An introduction to sustainable transportation: Policy, planning and implementation",
+      "id": "6464806118484328351",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2014-0-31192-8&isbn=9781317289159&format=googlePreviewPdf",
+      "title": "An introduction to sustainable transportation: Policy, planning and implementation",
+      "authors": "PL Schiller, JR Kenworthy",
+      "year": "2017",
+      "cited_by": 271,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6464806118484328351&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Climate change mitigation and transport in developing nations",
+      "id": "12207114693881556940",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/01441640500360951",
+      "title": "Climate change mitigation and transport in developing nations",
+      "authors": "L Wright, L Fulton",
+      "year": "2005",
+      "cited_by": 248,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12207114693881556940&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Linking urban transport and land use in developing countries",
+      "id": "581933628528961027",
+      "url": "https://www.jstor.org/stable/26202644",
+      "title": "Linking urban transport and land use in developing countries",
+      "authors": "R Cervero",
+      "year": "2013",
+      "cited_by": 240,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=581933628528961027&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The crisis of public transport in India: overwhelming needs but limited resources",
+      "id": "17649244583514783210",
+      "url": "https://scholarcommons.usf.edu/jpt/vol7/iss4/1/",
+      "title": "The crisis of public transport in India: overwhelming needs but limited resources",
+      "authors": "J Pucher, N Korattyswaroopam\u2026",
+      "year": "2004",
+      "cited_by": 158,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17649244583514783210&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Sustainable urban transport in the developing world: beyond megacities",
+      "id": "2857567649687539868",
+      "url": "https://www.mdpi.com/2071-1050/7/6/7784",
+      "title": "Sustainable urban transport in the developing world: beyond megacities",
+      "authors": "D Pojani, D Stead",
+      "year": "2015",
+      "cited_by": 181,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2857567649687539868&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Bus Rapid Transit: Is Transmilenio a Miracle Cure?",
+      "id": "12310767571207210202",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/01441640701785733",
+      "title": "Bus Rapid Transit: Is Transmilenio a Miracle Cure?",
+      "authors": "A Gilbert",
+      "year": "2008",
+      "cited_by": 137,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12310767571207210202&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Ecological footprint analysis of road transport related to tourism activity: The case for Lanzarote Island",
+      "id": "18388244478349290491",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0261517709000119",
+      "title": "Ecological footprint analysis of road transport related to tourism activity: The case for Lanzarote Island",
+      "authors": "RR Mart\u00edn-Cejas, PPR S\u00e1nchez",
+      "year": "2010",
+      "cited_by": 131,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=18388244478349290491&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Collective action across borders: Opportunity structures, network capacities, and communicative...",
+      "id": "15008271832455385585",
+      "url": "https://journals.sagepub.com/doi/abs/10.2307/1389565",
+      "title": "Collective action across borders: Opportunity structures, network capacities, and communicative...",
+      "authors": "MS Schulz",
+      "year": "1998",
+      "cited_by": 209,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15008271832455385585&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Protest in an information society: A review of literature on social movements and new ICTs",
+      "id": "17408185919235931229",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/13691180600630773",
+      "title": "Protest in an information society: A review of literature on social movements and new ICTs",
+      "authors": "R Kelly Garrett",
+      "year": "2006",
+      "cited_by": 981,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17408185919235931229&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Cyberprotest: New media, citizens and social movements",
+      "id": "15058339465831720277",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2010-0-47823-3&isbn=9781134429707&format=googlePreviewPdf",
+      "title": "Cyberprotest: New media, citizens and social movements",
+      "authors": "W Van de Donk, BD Loader, PG Nixon, D Rucht",
+      "year": "2004",
+      "cited_by": 769,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15058339465831720277&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Global citizen action",
+      "id": "14301507148913291686",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2011-0-07109-1&isbn=9781134205820&format=googlePreviewPdf",
+      "title": "Global citizen action",
+      "authors": "M Edwards, J Gaventa",
+      "year": "2014",
+      "cited_by": 588,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14301507148913291686&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Global justice movement: Cross-national and transnational perspectives",
+      "id": "13886415461748792789",
+      "url": "https://books.google.com/books?hl=en&lr=&id=OyrvCgAAQBAJ&oi=fnd&pg=PP1&ots=Ur10t8R0gk&sig=h0hyQIiyFdSyOuH_qpZ8DD0opQo",
+      "title": "Global justice movement: Cross-national and transnational perspectives",
+      "authors": "D Della Porta, M Andretta, A Calle, H Combes\u2026",
+      "year": "2015",
+      "cited_by": 515,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13886415461748792789&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Islam, charity, and activism: Middle-class networks and social welfare in Egypt, Jordan, and Yemen",
+      "id": "14938145343138951952",
+      "url": "https://books.google.com/books?hl=en&lr=&id=qeDTkch44AAC&oi=fnd&pg=PP1&ots=dwdJDQ1Mx7&sig=6oEc6POfymccX6BcQDFSDIuQUGM",
+      "title": "Islam, charity, and activism: Middle-class networks and social welfare in Egypt, Jordan, and Yemen",
+      "authors": "JA Clark",
+      "year": "2004",
+      "cited_by": 500,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14938145343138951952&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Internet and social movement action repertoires: Opportunities and limitations",
+      "id": "13395211541562033210",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/13691181003628307",
+      "title": "Internet and social movement action repertoires: Opportunities and limitations",
+      "authors": "J Van Laer, P Van Aelst",
+      "year": "2010",
+      "cited_by": 508,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13395211541562033210&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "From the streets to the Internet: The cyber-diffusion of contention",
+      "id": "18269347086471427736",
+      "url": "https://journals.sagepub.com/doi/abs/10.1177/000271629956600111",
+      "title": "From the streets to the Internet: The cyber-diffusion of contention",
+      "authors": "JM Ayres",
+      "year": "1999",
+      "cited_by": 477,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=18269347086471427736&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Fighting \u201cFrankenfoods\u201d: Industry opportunity structures and the efficacy of the anti-biotech movement in Western Europe",
+      "id": "6501963731051079366",
+      "url": "https://academic.oup.com/socpro/article-abstract/51/2/243/1663305",
+      "title": "Fighting \u201cFrankenfoods\u201d: Industry opportunity structures and the efficacy of the anti-biotech movement in Western Europe",
+      "authors": "R Schurman",
+      "year": "2004",
+      "cited_by": 313,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6501963731051079366&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Communicating social change: Structure, culture, and agency",
+      "id": "17611837410492756361",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2009-0-15385-3&isbn=9781136848810&format=googlePreviewPdf",
+      "title": "Communicating social change: Structure, culture, and agency",
+      "authors": "MJ Dutta",
+      "year": "2011",
+      "cited_by": 331,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17611837410492756361&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "From Solidarity to Fluidarity: Social movements beyond'collective identity'--the case of globalization conflicts",
+      "id": "15144244236720173783",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/1474283022000010637",
+      "title": "From Solidarity to Fluidarity: Social movements beyond'collective identity'--the case of globalization conflicts",
+      "authors": "K McDonald",
+      "year": "2002",
+      "cited_by": 306,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15144244236720173783&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Street meeting: Multiethnic neighborhoods in early twentieth-century Los Angeles",
+      "id": "17042211603121474797",
+      "url": "https://books.google.com/books?hl=en&lr=&id=LPTlKSPFVwgC&oi=fnd&pg=PR9&ots=wdvuWCbN8Q&sig=ja3rWcJWai_elPl-A9ZNHDNmDjk",
+      "title": "Street meeting: Multiethnic neighborhoods in early twentieth-century Los Angeles",
+      "authors": "M Wild",
+      "year": "2005",
+      "cited_by": 147,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17042211603121474797&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Stranger intimacy: Contesting race, sexuality and the law in the North American West",
+      "id": "3207152886228341692",
+      "url": "https://books.google.com/books?hl=en&lr=&id=R6kwDwAAQBAJ&oi=fnd&pg=PR9&ots=dO2PFApyfD&sig=LejZoEUm-yHWCt8BIXGAIg_zu0k",
+      "title": "Stranger intimacy: Contesting race, sexuality and the law in the North American West",
+      "authors": "N Shah",
+      "year": "2011",
+      "cited_by": 259,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3207152886228341692&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Sidewalks: Conflict and negotiation over public space",
+      "id": "402960174805380009",
+      "url": "https://books.google.com/books?hl=en&lr=&id=yTqARXDtXrgC&oi=fnd&pg=PR7&ots=IQeMr6rvtj&sig=FRNQp3sZpop_U7QYM8pbZkiLEKs",
+      "title": "Sidewalks: Conflict and negotiation over public space",
+      "authors": "A Loukaitou-Sideris, R Ehrenfeucht",
+      "year": "2009",
+      "cited_by": 233,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=402960174805380009&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "How cities won the West: Four centuries of urban change in western North America",
+      "id": "8695213757647074569",
+      "url": "https://books.google.com/books?hl=en&lr=&id=Toh4g9cTiegC&oi=fnd&pg=PP6&ots=j7Qjwu209e&sig=SDIiqtgzqXvSemJQXDGCdPeGVRs",
+      "title": "How cities won the West: Four centuries of urban change in western North America",
+      "authors": "C Abbott",
+      "year": "2008",
+      "cited_by": 82,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8695213757647074569&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Bridges of reform: Interracial civil rights activism in twentieth-century Los Angeles",
+      "id": "17859357851728212851",
+      "url": "https://books.google.com/books?hl=en&lr=&id=NQwSDAAAQBAJ&oi=fnd&pg=PR7&ots=MxX5f5qQ-Z&sig=P-GWrJg9Qwjfhimp-AwOkWv96KA",
+      "title": "Bridges of reform: Interracial civil rights activism in twentieth-century Los Angeles",
+      "authors": "S Bernstein",
+      "year": "2011",
+      "cited_by": 80,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17859357851728212851&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Reimagining Indian country: native American migration and identity in twentieth-century Los Angeles",
+      "id": "6468137932549418230",
+      "url": "https://books.google.com/books?hl=en&lr=&id=EElRnt06QUkC&oi=fnd&pg=PP1&ots=k_rl6N1d-e&sig=aWHdx-fQKScorUYIVCvuN8UZ2Ec",
+      "title": "Reimagining Indian country: native American migration and identity in twentieth-century Los Angeles",
+      "authors": "NG Rosenthal",
+      "year": "2012",
+      "cited_by": 84,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6468137932549418230&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The folklore of the freeway: Race and revolt in the modernist city",
+      "id": "11989071914965412945",
+      "url": "https://books.google.com/books?hl=en&lr=&id=3y90DwAAQBAJ&oi=fnd&pg=PT8&ots=Zf5ePXZ3cy&sig=TBnOFkCxGWSz8107vGDNH_XtzJw",
+      "title": "The folklore of the freeway: Race and revolt in the modernist city",
+      "authors": "E Avila",
+      "year": "2014",
+      "cited_by": 83,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11989071914965412945&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The Changs next door to the D\u00edazes: Remapping race in suburban California",
+      "id": "17846867962224670793",
+      "url": "https://books.google.com/books?hl=en&lr=&id=pu5zDwAAQBAJ&oi=fnd&pg=PT4&ots=8T6pLXZnSm&sig=ADVl6joIECtSzUx9Xn0r0nagLHc",
+      "title": "The Changs next door to the D\u00edazes: Remapping race in suburban California",
+      "authors": "W Cheng",
+      "year": "2013",
+      "cited_by": 85,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17846867962224670793&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Making a Non-White America: Californians Coloring Outside Ethnic Lines, 1925-1955",
+      "id": "4421820520955349552",
+      "url": "https://books.google.com/books?hl=en&lr=&id=wUs1Y9X1QREC&oi=fnd&pg=PR7&ots=H5SSVBWtGe&sig=jttvX-BUu5xBAdSJRlQ5xxocREc",
+      "title": "Making a Non-White America: Californians Coloring Outside Ethnic Lines, 1925-1955",
+      "authors": "A Varzally",
+      "year": "2008",
+      "cited_by": 68,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4421820520955349552&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Little Manila is in the heart: The making of the Filipina/o American community in Stockton, California",
+      "id": "16119808094287802997",
+      "url": "https://books.google.com/books?hl=en&lr=&id=1ES2AgAAQBAJ&oi=fnd&pg=PR7&ots=uNFegL46WX&sig=ag4G-KD2J1GbzV9p90kqd_qpeVI",
+      "title": "Little Manila is in the heart: The making of the Filipina/o American community in Stockton, California",
+      "authors": "DB Mabalon",
+      "year": "2013",
+      "cited_by": 77,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16119808094287802997&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The Battle for Los Angeles: Racial Ideology and World War II",
+      "id": "2224322865925783234",
+      "url": "https://books.google.com/books?hl=en&lr=&id=tCgYv-AOozwC&oi=fnd&pg=PR7&ots=NBXkCTkD06&sig=v0IWnRuqSimrqHbkBYpPv6ya1Ag",
+      "title": "The Battle for Los Angeles: Racial Ideology and World War II",
+      "authors": "KA Leonard",
+      "year": "2006",
+      "cited_by": 64,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2224322865925783234&as_sdt=40000005&sciodt=0,22&hl=en"
+    }
+  ],
+  "links": [
+    {
+      "source": "5892533485146141989",
+      "target": "819295295882952177"
+    },
+    {
+      "source": "13990517224208973018",
+      "target": "5892533485146141989"
+    },
+    {
+      "source": "7802950214061503871",
+      "target": "5892533485146141989"
+    },
+    {
+      "source": "18098572309705912187",
+      "target": "5892533485146141989"
+    },
+    {
+      "source": "5924291909489758319",
+      "target": "5892533485146141989"
+    },
+    {
+      "source": "10163731962333493026",
+      "target": "5892533485146141989"
+    },
+    {
+      "source": "8082599051446942000",
+      "target": "5892533485146141989"
+    },
+    {
+      "source": "12745076668240467435",
+      "target": "5892533485146141989"
+    },
+    {
+      "source": "14673695542456733687",
+      "target": "5892533485146141989"
+    },
+    {
+      "source": "2143143486232322826",
+      "target": "5892533485146141989"
+    },
+    {
+      "source": "991374878313562099",
+      "target": "5892533485146141989"
+    },
+    {
+      "source": "5156160328767168040",
+      "target": "819295295882952177"
+    },
+    {
+      "source": "11476377324222652756",
+      "target": "5156160328767168040"
+    },
+    {
+      "source": "16425936764267544215",
+      "target": "5156160328767168040"
+    },
+    {
+      "source": "7818278974524225660",
+      "target": "5156160328767168040"
+    },
+    {
+      "source": "16224816075849824613",
+      "target": "5156160328767168040"
+    },
+    {
+      "source": "8846113396480428725",
+      "target": "5156160328767168040"
+    },
+    {
+      "source": "16639668779162687233",
+      "target": "5156160328767168040"
+    },
+    {
+      "source": "5890826075553821430",
+      "target": "5156160328767168040"
+    },
+    {
+      "source": "10558676771956274058",
+      "target": "5156160328767168040"
+    },
+    {
+      "source": "16085144887307862176",
+      "target": "5156160328767168040"
+    },
+    {
+      "source": "8929743165529820430",
+      "target": "5156160328767168040"
+    },
+    {
+      "source": "4787031455032416962",
+      "target": "819295295882952177"
+    },
+    {
+      "source": "10741453737225943588",
+      "target": "4787031455032416962"
+    },
+    {
+      "source": "10636104253961903537",
+      "target": "4787031455032416962"
+    },
+    {
+      "source": "5813750197845728778",
+      "target": "4787031455032416962"
+    },
+    {
+      "source": "18163517279363026399",
+      "target": "4787031455032416962"
+    },
+    {
+      "source": "16109084315140887089",
+      "target": "4787031455032416962"
+    },
+    {
+      "source": "14555046644643364587",
+      "target": "4787031455032416962"
+    },
+    {
+      "source": "8841765338369772183",
+      "target": "4787031455032416962"
+    },
+    {
+      "source": "5514235339708775800",
+      "target": "4787031455032416962"
+    },
+    {
+      "source": "17000501129672288944",
+      "target": "4787031455032416962"
+    },
+    {
+      "source": "7984025732658315210",
+      "target": "4787031455032416962"
+    },
+    {
+      "source": "9326637504365018550",
+      "target": "819295295882952177"
+    },
+    {
+      "source": "11487110714760567487",
+      "target": "9326637504365018550"
+    },
+    {
+      "source": "13286574838942888768",
+      "target": "9326637504365018550"
+    },
+    {
+      "source": "1465502995952923960",
+      "target": "9326637504365018550"
+    },
+    {
+      "source": "318257089182038630",
+      "target": "9326637504365018550"
+    },
+    {
+      "source": "9397512082628093526",
+      "target": "9326637504365018550"
+    },
+    {
+      "source": "2476071549476820327",
+      "target": "9326637504365018550"
+    },
+    {
+      "source": "12590043264289775528",
+      "target": "9326637504365018550"
+    },
+    {
+      "source": "4553923157863447061",
+      "target": "9326637504365018550"
+    },
+    {
+      "source": "7378151629574840802",
+      "target": "9326637504365018550"
+    },
+    {
+      "source": "7039151756252894075",
+      "target": "9326637504365018550"
+    },
+    {
+      "source": "9948404148143502674",
+      "target": "819295295882952177"
+    },
+    {
+      "source": "4215109141178101311",
+      "target": "9948404148143502674"
+    },
+    {
+      "source": "14966483633110429469",
+      "target": "9948404148143502674"
+    },
+    {
+      "source": "12680471247525311060",
+      "target": "9948404148143502674"
+    },
+    {
+      "source": "15747388382420703101",
+      "target": "9948404148143502674"
+    },
+    {
+      "source": "4236076122526754977",
+      "target": "9948404148143502674"
+    },
+    {
+      "source": "8432237773789826089",
+      "target": "9948404148143502674"
+    },
+    {
+      "source": "2901533516865341012",
+      "target": "9948404148143502674"
+    },
+    {
+      "source": "6224435631355743088",
+      "target": "9948404148143502674"
+    },
+    {
+      "source": "9405382624832418511",
+      "target": "9948404148143502674"
+    },
+    {
+      "source": "16168260777353912217",
+      "target": "9948404148143502674"
+    },
+    {
+      "source": "6689495299434165540",
+      "target": "819295295882952177"
+    },
+    {
+      "source": "722901382413854297",
+      "target": "6689495299434165540"
+    },
+    {
+      "source": "8077722733334514745",
+      "target": "6689495299434165540"
+    },
+    {
+      "source": "1160609721044159032",
+      "target": "6689495299434165540"
+    },
+    {
+      "source": "11814492788825506048",
+      "target": "6689495299434165540"
+    },
+    {
+      "source": "16180868338768715203",
+      "target": "6689495299434165540"
+    },
+    {
+      "source": "12154168200225931770",
+      "target": "6689495299434165540"
+    },
+    {
+      "source": "2719635199060263927",
+      "target": "6689495299434165540"
+    },
+    {
+      "source": "5341744068816419242",
+      "target": "6689495299434165540"
+    },
+    {
+      "source": "11362132098572554123",
+      "target": "6689495299434165540"
+    },
+    {
+      "source": "12550097557218253234",
+      "target": "6689495299434165540"
+    },
+    {
+      "source": "9316349746856144798",
+      "target": "819295295882952177"
+    },
+    {
+      "source": "17301979139514688559",
+      "target": "9316349746856144798"
+    },
+    {
+      "source": "12846169557787927570",
+      "target": "9316349746856144798"
+    },
+    {
+      "source": "5186734077206155803",
+      "target": "9316349746856144798"
+    },
+    {
+      "source": "16101824307437336997",
+      "target": "9316349746856144798"
+    },
+    {
+      "source": "13050794768732542173",
+      "target": "9316349746856144798"
+    },
+    {
+      "source": "6677240797545614127",
+      "target": "9316349746856144798"
+    },
+    {
+      "source": "11495831790922941183",
+      "target": "9316349746856144798"
+    },
+    {
+      "source": "188038418093453725",
+      "target": "9316349746856144798"
+    },
+    {
+      "source": "5436571146606410017",
+      "target": "9316349746856144798"
+    },
+    {
+      "source": "18244224495158274850",
+      "target": "9316349746856144798"
+    },
+    {
+      "source": "18162065814368176492",
+      "target": "819295295882952177"
+    },
+    {
+      "source": "1283530713374542139",
+      "target": "18162065814368176492"
+    },
+    {
+      "source": "6966778568205153556",
+      "target": "18162065814368176492"
+    },
+    {
+      "source": "14175868304374592851",
+      "target": "18162065814368176492"
+    },
+    {
+      "source": "6464806118484328351",
+      "target": "18162065814368176492"
+    },
+    {
+      "source": "12207114693881556940",
+      "target": "18162065814368176492"
+    },
+    {
+      "source": "581933628528961027",
+      "target": "18162065814368176492"
+    },
+    {
+      "source": "17649244583514783210",
+      "target": "18162065814368176492"
+    },
+    {
+      "source": "2857567649687539868",
+      "target": "18162065814368176492"
+    },
+    {
+      "source": "12310767571207210202",
+      "target": "18162065814368176492"
+    },
+    {
+      "source": "18388244478349290491",
+      "target": "18162065814368176492"
+    },
+    {
+      "source": "15008271832455385585",
+      "target": "819295295882952177"
+    },
+    {
+      "source": "17408185919235931229",
+      "target": "15008271832455385585"
+    },
+    {
+      "source": "15058339465831720277",
+      "target": "15008271832455385585"
+    },
+    {
+      "source": "14301507148913291686",
+      "target": "15008271832455385585"
+    },
+    {
+      "source": "13886415461748792789",
+      "target": "15008271832455385585"
+    },
+    {
+      "source": "14938145343138951952",
+      "target": "15008271832455385585"
+    },
+    {
+      "source": "13395211541562033210",
+      "target": "15008271832455385585"
+    },
+    {
+      "source": "18269347086471427736",
+      "target": "15008271832455385585"
+    },
+    {
+      "source": "6501963731051079366",
+      "target": "15008271832455385585"
+    },
+    {
+      "source": "17611837410492756361",
+      "target": "15008271832455385585"
+    },
+    {
+      "source": "15144244236720173783",
+      "target": "15008271832455385585"
+    },
+    {
+      "source": "17042211603121474797",
+      "target": "819295295882952177"
+    },
+    {
+      "source": "3207152886228341692",
+      "target": "17042211603121474797"
+    },
+    {
+      "source": "402960174805380009",
+      "target": "17042211603121474797"
+    },
+    {
+      "source": "8695213757647074569",
+      "target": "17042211603121474797"
+    },
+    {
+      "source": "17859357851728212851",
+      "target": "17042211603121474797"
+    },
+    {
+      "source": "6468137932549418230",
+      "target": "17042211603121474797"
+    },
+    {
+      "source": "11989071914965412945",
+      "target": "17042211603121474797"
+    },
+    {
+      "source": "17846867962224670793",
+      "target": "17042211603121474797"
+    },
+    {
+      "source": "4421820520955349552",
+      "target": "17042211603121474797"
+    },
+    {
+      "source": "16119808094287802997",
+      "target": "17042211603121474797"
+    },
+    {
+      "source": "2224322865925783234",
+      "target": "17042211603121474797"
+    }
+  ]
+};
+
+var link = svg.append("g")
+    .attr("class", "links")
+  .selectAll("line")
+  .data(graph.links)
+  .enter().append("line");
+
+var node = svg.append("g")
+    .attr("class", "nodes")
+  .selectAll("circle")
+  .data(graph.nodes)
+  .enter().append("circle")
+    .attr("r", 5)
+    .call(d3.drag()
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended));
+
+node.append("title")
+    .text(function(d) {
+        return d.authors ? d.title + ' - ' + d.authors : d.title
+    });
+
+node.on("click", function(d) {
+  window.open(d.url, '_blank');
+  d3.event.stopPropagation();
+});
+
+simulation
+    .nodes(graph.nodes)
+    .on("tick", ticked);
+
+simulation.force("link")
+    .links(graph.links);
+
+function ticked() {
+  link
+      .attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
+
+  node
+      .attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; });
+}
+
+function dragstarted(d) {
+  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+  d.fx = d.x;
+  d.fy = d.y;
+}
+
+function dragged(d) {
+  d.fx = d3.event.x;
+  d.fy = d3.event.y;
+}
+
+function dragended(d) {
+  if (!d3.event.active) simulation.alphaTarget(0);
+  d.fx = null;
+  d.fy = null;
+}
+
+</script>
