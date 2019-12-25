@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<style>
+
+.links line {
+  stroke: #999;
+  stroke-opacity: 0.8;
+  stroke-width: 2px;
+}
+
+.nodes circle {
+  stroke: black;
+  fill: white;
+  stroke-width: 1.5px;
+}
+
+#graph {
+  width: 99vw;
+  height: 99vh;
+}
+
+</style>
+<svg id="graph"></svg>
+<script>
+
+var width = $(window).width();
+var height = $(window).height();
+
+var svg = d3.select("svg")
+    .attr("height", height)
+    .attr("width", width);
+
+var color = d3.scaleOrdinal(d3.schemeCategory20c);
+
+var simulation = d3.forceSimulation()
+    .velocityDecay(0.6)
+    .force("link", d3.forceLink().id(function(d) { return d.id; }))
+    .force("charge", d3.forceManyBody())
+    .force("center", d3.forceCenter(width / 2, height / 2));
+
+var graph = {
+  "nodes": [
+    {
+      "label": "Kenzo Tange and the Metabolist movement: urban utopias of modern Japan",
+      "id": "9721009172318430205",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2009-0-02874-X&isbn=9781135281984&format=googlePreviewPdf",
+      "title": "Kenzo Tange and the Metabolist movement: urban utopias of modern Japan",
+      "authors": "Z Lin",
+      "year": "2010",
+      "cited_by": 143,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9721009172318430205&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Japan-ness in Architecture",
+      "id": "17797966948606668804",
+      "title": "Japan-ness in Architecture"
+    },
+    {
+      "label": "The boundaries of urban metabolism: Towards a political\u2013industrial ecology",
+      "id": "9738889714921293496",
+      "url": "https://journals.sagepub.com/doi/abs/10.1177/0309132514558442",
+      "title": "The boundaries of urban metabolism: Towards a political\u2013industrial ecology",
+      "authors": "JP Newell, JJ Cousins",
+      "year": "2015",
+      "cited_by": 131,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9738889714921293496&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The Icon Project: Architecture, cities, and capitalist globalization",
+      "id": "11317351899032488949",
+      "url": "https://books.google.com/books?hl=en&lr=&id=Gr_XDQAAQBAJ&oi=fnd&pg=PP1&ots=YRZR9pW51I&sig=pfXxUMK5XHmEySxV1p7dahViSak",
+      "title": "The Icon Project: Architecture, cities, and capitalist globalization",
+      "authors": "L Sklair",
+      "year": "2017",
+      "cited_by": 65,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11317351899032488949&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "A visual history of the future",
+      "id": "9474346252234246630",
+      "url": "https://www.researchgate.net/profile/Paul_Cureton/publication/321625853_Future_of_cities_a_visual_history_of_the_future/links/5a295c9baca2728e05dab02f/Future-of-cities-a-visual-history-of-the-future.pdf",
+      "title": "A visual history of the future",
+      "authors": "N Dunn, P Cureton, S Pollastri",
+      "year": "2014",
+      "cited_by": 33,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9474346252234246630&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Adaptable architecture: Theory and practice",
+      "id": "433819564265314862",
+      "url": "https://www.taylorfrancis.com/books/9781315722931",
+      "title": "Adaptable architecture: Theory and practice",
+      "authors": "R Schmidt III, S Austin",
+      "year": "2016",
+      "cited_by": 36,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=433819564265314862&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Performativity and event in 1960s Japan: City, body, memory",
+      "id": "1435609373846071518",
+      "url": "https://books.google.com/books?hl=en&lr=&id=oR8hAQAAQBAJ&oi=fnd&pg=PP1&ots=NoljMRa7QV&sig=UyNCF_GFkALt71dqQ_QS9KOGkKA",
+      "title": "Performativity and event in 1960s Japan: City, body, memory",
+      "authors": "P Eckersall",
+      "year": "2013",
+      "cited_by": 26,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1435609373846071518&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Exploring the emerging design territory of construction 3D printing-project led architectural research",
+      "id": "17022610662603794755",
+      "url": "https://researchbank.rmit.edu.au/view/rmit:160277",
+      "title": "Exploring the emerging design territory of construction 3D printing-project led architectural research",
+      "authors": "J Gardiner",
+      "year": "2011",
+      "cited_by": 24,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17022610662603794755&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The architecture of metabolism. Inventing a culture of resilience",
+      "id": "14844157177833327240",
+      "url": "https://www.mdpi.com/2076-0752/3/2/279",
+      "title": "The architecture of metabolism. Inventing a culture of resilience",
+      "authors": "M Schalk",
+      "year": "2014",
+      "cited_by": 22,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14844157177833327240&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Architect knows best: Environmental determinism in architecture culture from 1956 to the present",
+      "id": "10532786499006959482",
+      "url": "https://www.taylorfrancis.com/books/9781315567587",
+      "title": "Architect knows best: Environmental determinism in architecture culture from 1956 to the present",
+      "authors": "S Richards",
+      "year": "2016",
+      "cited_by": 16,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10532786499006959482&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Bionic building energy efficiency and bionic green architecture: A review",
+      "id": "11501295903848147153",
+      "url": "https://www.sciencedirect.com/science/article/pii/S1364032117303246",
+      "title": "Bionic building energy efficiency and bionic green architecture: A review",
+      "authors": "Y Yuan, X Yu, X Yang, Y Xiao, B Xiang\u2026",
+      "year": "2017",
+      "cited_by": 15,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11501295903848147153&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The Emotional Geography of Shinjuku: The Case of Chikatetsu Hiroba (Underground Plaza, 1970)",
+      "id": "1859136887353308130",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/10371397.2011.619167",
+      "title": "The Emotional Geography of Shinjuku: The Case of Chikatetsu Hiroba (Underground Plaza, 1970)",
+      "authors": "P Eckersall",
+      "year": "2011",
+      "cited_by": 11,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1859136887353308130&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Making tea, making Japan: Cultural nationalism in practice",
+      "id": "2853362544378621897",
+      "url": "https://books.google.com/books?hl=en&lr=&id=Ydn9RLK4NGMC&oi=fnd&pg=PR5&ots=N2zQaj6mOq&sig=42n1ppiGu2-3JIEx5CD_035hbjs",
+      "title": "Making tea, making Japan: Cultural nationalism in practice",
+      "authors": "K Surak",
+      "year": "2012",
+      "cited_by": 77,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2853362544378621897&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Nationalism in settled times",
+      "id": "11100197476129472410",
+      "url": "https://www.annualreviews.org/doi/abs/10.1146/annurev-soc-081715-074412",
+      "title": "Nationalism in settled times",
+      "authors": "B Bonikowski",
+      "year": "2016",
+      "cited_by": 94,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11100197476129472410&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Heritage agnosticism: a third path for the study of cultural heritage",
+      "id": "965186114927363326",
+      "url": "https://onlinelibrary.wiley.com/doi/abs/10.1111/1469-8676.12068",
+      "title": "Heritage agnosticism: a third path for the study of cultural heritage",
+      "authors": "C Brumann",
+      "year": "2014",
+      "cited_by": 62,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=965186114927363326&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Word of mouth: What we talk about when we talk about food",
+      "id": "11184872829581685866",
+      "url": "https://books.google.com/books?hl=en&lr=&id=Z3-XAwAAQBAJ&oi=fnd&pg=PP1&ots=mVyj9J_MJi&sig=u15vdwQ_vRy00BuvSIKK4rkYE1k",
+      "title": "Word of mouth: What we talk about when we talk about food",
+      "authors": "PP Ferguson",
+      "year": "2014",
+      "cited_by": 45,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11184872829581685866&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Empire of tea: The Asian leaf that conquered the world",
+      "id": "2991745732439007572",
+      "url": "https://books.google.com/books?hl=en&lr=&id=nDwpCgAAQBAJ&oi=fnd&pg=PT7&ots=Z9GtWqSrLg&sig=odf7PCZyoSHnTeG5t-qMbAQ9omw",
+      "title": "Empire of tea: The Asian leaf that conquered the world",
+      "authors": "M Ellis, R Coulton, M Mauger",
+      "year": "2015",
+      "cited_by": 33,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2991745732439007572&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Vision and Society: Towards a sociology and anthropology from art",
+      "id": "3550773790218139057",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2013-0-19934-2&isbn=9781315858197&format=googlePreviewPdf",
+      "title": "Vision and Society: Towards a sociology and anthropology from art",
+      "authors": "J Clammer",
+      "year": "2014",
+      "cited_by": 26,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3550773790218139057&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Aesthetics of the Familiar: Everyday Life and World-Making",
+      "id": "4147764788755009699",
+      "url": "https://books.google.com/books?hl=en&lr=&id=1DoqDwAAQBAJ&oi=fnd&pg=PP1&ots=uE9X7QvmTf&sig=i6zlfVU8g6TYE17PGVOfhSCt318",
+      "title": "Aesthetics of the Familiar: Everyday Life and World-Making",
+      "authors": "Y Saito",
+      "year": "2017",
+      "cited_by": 27,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4147764788755009699&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Effect of green tea phytochemicals on mood and cognition",
+      "id": "16562669390658486470",
+      "url": "https://www.ingentaconnect.com/contentone/ben/cpd/2017/00000023/00000019/art00012",
+      "title": "Effect of green tea phytochemicals on mood and cognition",
+      "authors": "C Dietz, M Dekker",
+      "year": "2017",
+      "cited_by": 24,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16562669390658486470&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The rise of the joyful economy: Artistic invention and economic growth from Brunelleschi to Murakami",
+      "id": "17415190773409127911",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2013-0-28746-3&isbn=9781317636373&format=googlePreviewPdf",
+      "title": "The rise of the joyful economy: Artistic invention and economic growth from Brunelleschi to Murakami",
+      "authors": "M Hutter",
+      "year": "2015",
+      "cited_by": 13,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17415190773409127911&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Gathering the Potawatomi Nation: Revitalization and Identity",
+      "id": "2466405539776150648",
+      "url": "https://books.google.com/books?hl=en&lr=&id=Mz8_CQAAQBAJ&oi=fnd&pg=PR9&ots=sn68Zf6iHg&sig=QnbchfpXLddCDCcs9JBXpYd3b8Q",
+      "title": "Gathering the Potawatomi Nation: Revitalization and Identity",
+      "authors": "C Wetzel",
+      "year": "2015",
+      "cited_by": 14,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2466405539776150648&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Pharmacological properties of agarwood tea derived from Aquilaria (Thymelaeaceae) leaves: An emerging contemporary herbal drink",
+      "id": "1857358228177665668",
+      "url": "https://www.sciencedirect.com/science/article/pii/S2210803317300477",
+      "title": "Pharmacological properties of agarwood tea derived from Aquilaria (Thymelaeaceae) leaves: An emerging contemporary herbal drink",
+      "authors": "AZ Adam, SY Lee, R Mohamed",
+      "year": "2017",
+      "cited_by": 11,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1857358228177665668&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Architecture of Regionalism in the age of globalization: Peaks and Valleys in the Flat World",
+      "id": "6677390068530975011",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2009-0-16898-9&isbn=9781135719722&format=googlePreviewPdf",
+      "title": "Architecture of Regionalism in the age of globalization: Peaks and Valleys in the Flat World",
+      "authors": "L Lefaivre, A Tzonis",
+      "year": "2012",
+      "cited_by": 52,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6677390068530975011&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Nationalism and architecture",
+      "id": "6177849933340540573",
+      "url": "https://books.google.com/books?hl=en&lr=&id=WIYVvCGQkcgC&oi=fnd&pg=PR13&ots=4A6CDKk10P&sig=6aM1NdSs64cfpHFO4v-hfOaUnkA",
+      "title": "Nationalism and architecture",
+      "authors": "R Quek, D Deane, S Butler",
+      "year": "2012",
+      "cited_by": 15,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6177849933340540573&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Chosen Legacies: Heritage in Regional Identity",
+      "id": "8832043359377953660",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2015-0-84599-0&isbn=9781317166849&format=googlePreviewPdf",
+      "title": "Chosen Legacies: Heritage in Regional Identity",
+      "authors": "L Egberts",
+      "year": "2017",
+      "cited_by": 13,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8832043359377953660&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Researching globalisation and landscape",
+      "id": "4311071197231675577",
+      "url": "https://books.google.com/books?hl=en&lr=&id=fwxpDwAAQBAJ&oi=fnd&pg=PT403&ots=tZdowQDuwP&sig=hjRxec4PaePzQon1avMzRLNpHqM",
+      "title": "Researching globalisation and landscape",
+      "authors": "J Bowring",
+      "year": "2018",
+      "cited_by": 5,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4311071197231675577&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Intersecting itineraries beyond the Strada Novissima: the converging authorship of critical regionalism",
+      "id": "7870944419412756303",
+      "url": "http://discovery.ucl.ac.uk/id/eprint/1503939",
+      "title": "Intersecting itineraries beyond the Strada Novissima: the converging authorship of critical regionalism",
+      "authors": "S Giamarelos",
+      "year": "2016",
+      "cited_by": 4,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7870944419412756303&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The end of cities: Erwin Anton Gutkind and the inevitability of decentralization and dispersal",
+      "id": "10567162315019973806",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/02665433.2018.1427618",
+      "title": "The end of cities: Erwin Anton Gutkind and the inevitability of decentralization and dispersal",
+      "authors": "M Vellinga",
+      "year": "2019",
+      "cited_by": 3,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10567162315019973806&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Rethinking of critical regionalism in high-rise buildings",
+      "id": "12453304131523683620",
+      "url": "https://www.mdpi.com/2075-5309/7/1/4",
+      "title": "Rethinking of critical regionalism in high-rise buildings",
+      "authors": "N Zahiri, O Dezhdar, M Foroutan",
+      "year": "2017",
+      "cited_by": 3,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12453304131523683620&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "'Genuine Invariants': The Origins of Regional Modernity in Twentieth-Century Spain",
+      "id": "4897086050305605377",
+      "url": "https://www.cambridge.org/core/journals/architectural-history/article/genuine-invariants-the-origins-of-regional-modernity-in-twentiethcentury-spain/F03EBE2ECC99DC3E3A266DBB2EAB74ED",
+      "title": "'Genuine Invariants': The Origins of Regional Modernity in Twentieth-Century Spain",
+      "authors": "B Tippey",
+      "year": "2013",
+      "cited_by": 2,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4897086050305605377&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Transnational mobilities: Western European architects and planners in the Soviet industrial cities, 1928\u20131933",
+      "id": "14302326804367730965",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/02665433.2017.1310629",
+      "title": "Transnational mobilities: Western European architects and planners in the Soviet industrial cities, 1928\u20131933",
+      "authors": "N Barykina",
+      "year": "2017",
+      "cited_by": 2,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14302326804367730965&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Ba\u011flamsalc\u0131l\u0131\u011f\u0131n \u0130ki Y\u00fcz\u00fc: Tepeleri ve Vadileri Pahlanm\u0131\u015f Bir D\u00fcnyada Ba\u011flamsalc\u0131l\u0131k Hususuna Yeniden Bir Bak\u0131\u015f.",
+      "id": "16748780185728282804",
+      "url": "https://www.journalagent.com/z4/download_fulltext.asp?pdir=megaron&plng=tur&un=MEGARON-82957",
+      "title": "Ba\u011flamsalc\u0131l\u0131\u011f\u0131n \u0130ki Y\u00fcz\u00fc: Tepeleri ve Vadileri Pahlanm\u0131\u015f Bir D\u00fcnyada Ba\u011flamsalc\u0131l\u0131k Hususuna Yeniden Bir Bak\u0131\u015f.",
+      "authors": "\u00dc \u00d6zten, H Anay",
+      "year": "2017",
+      "cited_by": 2,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16748780185728282804&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The Transnational capitalist class, social movements, and alternatives to capitalist globalization",
+      "id": "5248370711167793783",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/21598282.2016.1197997",
+      "title": "The Transnational capitalist class, social movements, and alternatives to capitalist globalization",
+      "authors": "L Sklair",
+      "year": "2016",
+      "cited_by": 14,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5248370711167793783&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The geopolitics of spectacle: Space, synecdoche, and the new capitals of Asia",
+      "id": "9676534807633054659",
+      "url": "https://books.google.com/books?hl=en&lr=&id=YIJZDwAAQBAJ&oi=fnd&pg=PR7&ots=zKobvWlJbT&sig=YeRIMGf_O5-_iiC591aqEaY16Wg",
+      "title": "The geopolitics of spectacle: Space, synecdoche, and the new capitals of Asia",
+      "authors": "N Koch",
+      "year": "2018",
+      "cited_by": 16,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9676534807633054659&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Spaces of visibility in the smart city: Flagship urban spaces and the smart urban imaginary",
+      "id": "6597565325089408807",
+      "url": "https://journals.sagepub.com/doi/abs/10.1177/0042098018798597",
+      "title": "Spaces of visibility in the smart city: Flagship urban spaces and the smart urban imaginary",
+      "authors": "F Caprotti",
+      "year": "2019",
+      "cited_by": 6,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6597565325089408807&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The Transnational Capitalist Class",
+      "id": "1464959129807648090",
+      "url": "https://books.google.com/books?hl=en&lr=&id=3dp1DwAAQBAJ&oi=fnd&pg=PA309&ots=cbBTdynZ0f&sig=BK9hgHSAs-MEXtNCu1JSSWgnCpk",
+      "title": "The Transnational Capitalist Class",
+      "authors": "WI Robinson, J Sprague",
+      "year": "2018",
+      "cited_by": 7,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1464959129807648090&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Participatory culture and the social value of an architectural icon: Sydney Opera House",
+      "id": "15372361068661731980",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2015-0-84220-6&isbn=9781317083863&format=googlePreviewPdf",
+      "title": "Participatory culture and the social value of an architectural icon: Sydney Opera House",
+      "authors": "CG Freeman",
+      "year": "2017",
+      "cited_by": 3,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15372361068661731980&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Future Cities: Architecture and the Imagination",
+      "id": "6216907742193070087",
+      "url": "https://books.google.com/books?hl=en&lr=&id=caCKDwAAQBAJ&oi=fnd&pg=PP1&ots=x3NZ3wUJtR&sig=1_P-kzJfe5K_qdsoUaDZzwceiBs",
+      "title": "Future Cities: Architecture and the Imagination",
+      "authors": "P Dobraszczyk",
+      "year": "2019",
+      "cited_by": 5,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6216907742193070087&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Reaching new heights: Post-politicizing high-rise planning in Jerusalem",
+      "id": "12199745079501537246",
+      "url": "https://www.ingentaconnect.com/content/alex/benv/2018/00000043/00000004/art00006",
+      "title": "Reaching new heights: Post-politicizing high-rise planning in Jerusalem",
+      "authors": "G Rosen, I Charney",
+      "year": "2018",
+      "cited_by": 4,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12199745079501537246&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Local Responses to Right-Wing Populism: Building Human Rights Cities",
+      "id": "5667454337714493723",
+      "url": "http://d-scholarship.pitt.edu/33193/",
+      "title": "Local Responses to Right-Wing Populism: Building Human Rights Cities",
+      "authors": "J Smith",
+      "year": "2017",
+      "cited_by": 5,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5667454337714493723&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Local responses to right-wing populism: Building human rights cities",
+      "id": "13444991051687800080",
+      "url": "http://d-scholarship.pitt.edu/35882/",
+      "title": "Local responses to right-wing populism: Building human rights cities",
+      "authors": "J Smith",
+      "year": "2017",
+      "cited_by": 3,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13444991051687800080&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Arquitectura, museos, turismo: la guerra de las marcas",
+      "id": "13081477829180277498",
+      "url": "http://www.scielo.org.co/scielo.php?pid=S1657-03082018000100102&script=sci_abstract&tlng=pt",
+      "title": "Arquitectura, museos, turismo: la guerra de las marcas",
+      "authors": "M Gravari-Barbas, A Avila-G\u00f3mez, DC Ruiz",
+      "year": "2018",
+      "cited_by": 5,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13081477829180277498&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The fascist effect: Japan and Italy, 1915\u20131952",
+      "id": "9209882238343158024",
+      "url": "https://books.google.com/books?hl=en&lr=&id=QJYkCgAAQBAJ&oi=fnd&pg=PR7&ots=dOo5pGQP03&sig=S4iTedDxDRMQJDTVO9tb-LJNYyQ",
+      "title": "The fascist effect: Japan and Italy, 1915\u20131952",
+      "authors": "R Hofmann",
+      "year": "2015",
+      "cited_by": 37,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9209882238343158024&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Corporatism and Fascism: The corporatist wave in Europe",
+      "id": "17833200820427510192",
+      "url": "https://www.taylorfrancis.com/books/9781315388908",
+      "title": "Corporatism and Fascism: The corporatist wave in Europe",
+      "authors": "AC Pinto",
+      "year": "2017",
+      "cited_by": 34,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17833200820427510192&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Revolutionary Nativism: Fascism and Culture in China, 1925-1937",
+      "id": "10647881736711386936",
+      "url": "https://books.google.com/books?hl=en&lr=&id=Efs2DgAAQBAJ&oi=fnd&pg=PT5&ots=O1FFBkFzXD&sig=m0ohURf7h1Re9QMFqUMTefTsp6o",
+      "title": "Revolutionary Nativism: Fascism and Culture in China, 1925-1937",
+      "authors": "M Clinton",
+      "year": "2017",
+      "cited_by": 11,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10647881736711386936&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Claretta: Mussolini's Last Lover",
+      "id": "11060615909374864079",
+      "url": "https://books.google.com/books?hl=en&lr=&id=qGEbDgAAQBAJ&oi=fnd&pg=PP1&ots=pH_c_PGLSn&sig=qagF5hScFZ6WUCf6VdJdaSYGKWc",
+      "title": "Claretta: Mussolini's Last Lover",
+      "authors": "RJB Bosworth",
+      "year": "2017",
+      "cited_by": 6,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11060615909374864079&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Corporatism and 'organic representation'in European dictatorships",
+      "id": "3873794399658821454",
+      "url": "https://content.taylorfrancis.com/books/e/download?dac=C2016-0-24442-3&isbn=9781315388892&doi=10.4324/9781315388908-8&format=pdf",
+      "title": "Corporatism and 'organic representation'in European dictatorships",
+      "authors": "AC Pinto",
+      "year": "2017",
+      "cited_by": 3,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3873794399658821454&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Colonizing Language: Cultural Production and Language Politics in Modern Japan and Korea",
+      "id": "7851893545092934948",
+      "url": "https://books.google.com/books?hl=en&lr=&id=o0pBDwAAQBAJ&oi=fnd&pg=PT6&ots=HGAtBwWXOU&sig=MtZnln6Pco_2eKWsCsHKnmynN3o",
+      "title": "Colonizing Language: Cultural Production and Language Politics in Modern Japan and Korea",
+      "authors": "C Yi",
+      "year": "2018",
+      "cited_by": 2,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7851893545092934948&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "China's Conservative Revolution: The Quest for a New Order, 1927\u20131949",
+      "id": "42901546126632863",
+      "url": "https://books.google.com/books?hl=en&lr=&id=51BSDwAAQBAJ&oi=fnd&pg=PR6&ots=8s6oPGfwdu&sig=3iRK7UKS3_lPkJIG4xhse_NkTBk",
+      "title": "China's Conservative Revolution: The Quest for a New Order, 1927\u20131949",
+      "authors": "B Tsui",
+      "year": "2018",
+      "cited_by": 6,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=42901546126632863&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Transnational History and Japan's\" Comparative Advantage\"",
+      "id": "13428153536109789515",
+      "url": "https://muse.jhu.edu/article/646941/summary",
+      "title": "Transnational History and Japan's\" Comparative Advantage\"",
+      "authors": "S Garon",
+      "year": "2017",
+      "cited_by": 3,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13428153536109789515&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Ezra Pound in the Present: Essays on Pound's Contemporaneity",
+      "id": "10073749646008115933",
+      "url": "https://books.google.com/books?hl=en&lr=&id=Hf_pDAAAQBAJ&oi=fnd&pg=PP1&ots=usFxlFvo2q&sig=5kgV9rdj_zUN5Ehr9V-VGuqE6ZA",
+      "title": "Ezra Pound in the Present: Essays on Pound's Contemporaneity",
+      "authors": "P Stasi, J Park",
+      "year": "2016",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10073749646008115933&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "When fascism met empire in Japanese-occupied Manchuria",
+      "id": "3112741543673454158",
+      "url": "https://www.cambridge.org/core/journals/journal-of-global-history/article/when-fascism-met-empire-in-japaneseoccupied-manchuria/4D050824AA8EA411A0D9B1884935FB23",
+      "title": "When fascism met empire in Japanese-occupied Manchuria",
+      "authors": "L Young",
+      "year": "2017",
+      "cited_by": 5,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3112741543673454158&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The imperial nexus: the Second World War and the Axis in global perspective",
+      "id": "10713247114388028135",
+      "url": "https://www.cambridge.org/core/journals/journal-of-global-history/article/imperial-nexus-the-second-world-war-and-the-axis-in-global-perspective/CEF0EC2E543E3457D6569CF82FFDA913",
+      "title": "The imperial nexus: the Second World War and the Axis in global perspective",
+      "authors": "D Hedinger",
+      "year": "2017",
+      "cited_by": 4,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10713247114388028135&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Aesthetics of sustainable architecture",
+      "id": "10103339068018101848",
+      "url": "https://www.researchgate.net/profile/Sang_Lee4/publication/282247320_Aesthetics_of_Sustainable_Architecture/links/587372aa08ae8fce492431a7/Aesthetics-of-Sustainable-Architecture.pdf",
+      "title": "Aesthetics of sustainable architecture",
+      "authors": "S Lee",
+      "year": "2011",
+      "cited_by": 29,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10103339068018101848&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Relational architectural ecologies: architecture, nature and subjectivity",
+      "id": "11599205795445376994",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2011-0-15637-4&isbn=9781135037222&format=googlePreviewPdf",
+      "title": "Relational architectural ecologies: architecture, nature and subjectivity",
+      "authors": "P Rawes",
+      "year": "2013",
+      "cited_by": 42,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11599205795445376994&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "User Perception of Green Spaces in the Context of Architectural Composition of Jos Metropolis, Nigeria",
+      "id": "7146032049031048602",
+      "url": "https://pdfs.semanticscholar.org/e237/0335c511b262be53f6b6b5075acbfa660aff.pdf",
+      "title": "User Perception of Green Spaces in the Context of Architectural Composition of Jos Metropolis, Nigeria",
+      "authors": "YC Sati",
+      "year": "2015",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7146032049031048602&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Is radical innovation in architecture crucial to sustainability? Lessons from three Scottish contemporary buildings",
+      "id": "15579861477720234013",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/17452007.2018.1465392",
+      "title": "Is radical innovation in architecture crucial to sustainability? Lessons from three Scottish contemporary buildings",
+      "authors": "M Nigra, B Dimitrijevic",
+      "year": "2018",
+      "cited_by": 2,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15579861477720234013&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Principles In Green Architecture: An Inquiry Into The Evaluation Criteria Of Green Awards",
+      "id": "15450481953272613282",
+      "url": "http://etd.lib.metu.edu.tr/upload/12615893/index.pdf",
+      "title": "Principles In Green Architecture: An Inquiry Into The Evaluation Criteria Of Green Awards",
+      "authors": "SHN DAMATI",
+      "year": "2013",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15450481953272613282&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The passive capacity of wood",
+      "id": "o_3ME7r6sl8J",
+      "url": "http://www.whatremimakes.com/wp-content/uploads/2018/11/AR1AE020_ExtremeResearch_RemiGroenendijk_4153588_ThePassiveCapacityOfWood.pdf",
+      "title": "The passive capacity of wood",
+      "authors": "R Groenendijk",
+      "year": "whatremimakes.com"
+    },
+    {
+      "label": "THE VERNACULAR AS EXAMPLE",
+      "id": "HSVWH9QUR0sJ",
+      "url": "http://www.whatremimakes.com/wp-content/uploads/2019/09/RemiGroenendijk_P2_ResearchPaper_Updated.pdf",
+      "title": "THE VERNACULAR AS EXAMPLE",
+      "authors": "R Groenendijk",
+      "year": "whatremimakes.com"
+    },
+    {
+      "label": "Revisiting Japan's Fictional Gardens: An Ecocritical Reading of Nature Imagery in Contemporary Architectural Essays",
+      "id": "18192863107542223215",
+      "url": "https://www.mdpi.com/2076-0787/7/2/58",
+      "title": "Revisiting Japan's Fictional Gardens: An Ecocritical Reading of Nature Imagery in Contemporary Architectural Essays",
+      "authors": "C Vitorino",
+      "year": "2018"
+    },
+    {
+      "label": "Perceptible Attributes of Urban Greenspaces in the Architectural Characterization of Metropolitan Areas in Jos, Nigeria",
+      "id": "16345212217450982208",
+      "url": "http://irepos.unijos.edu.ng/jspui/handle/123456789/1324",
+      "title": "Perceptible Attributes of Urban Greenspaces in the Architectural Characterization of Metropolitan Areas in Jos, Nigeria",
+      "authors": "YC Sati, ZA Uji, JO Popoola",
+      "year": "2016"
+    },
+    {
+      "label": "Patterns of Sustainable Innovation in the Building Industry",
+      "id": "20rDTMbuKSoJ",
+      "url": "https://iris.polito.it/retrieve/handle/11583/2729358/238635/conv_thesis_marianna_nigra_jan.pdf",
+      "title": "Patterns of Sustainable Innovation in the Building Industry",
+      "authors": "M Nigra",
+      "year": "iris.polito.it"
+    },
+    {
+      "label": "The Saturday club for people with big plans to build",
+      "id": "5157324510759089756",
+      "url": "http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.367.7745&rep=rep1&type=pdf",
+      "title": "The Saturday club for people with big plans to build",
+      "authors": "I Abley",
+      "year": "2012"
+    },
+    {
+      "label": "World's Fairs on the Eve of War: Science, Technology, and Modernity, 1937\u20131942",
+      "id": "9172727990650833695",
+      "url": "https://books.google.com/books?hl=en&lr=&id=K1rkCgAAQBAJ&oi=fnd&pg=PT4&ots=113OsYS-Fm&sig=eeYLQawwKOv3jAMeAAO2JvJta0M",
+      "title": "World's Fairs on the Eve of War: Science, Technology, and Modernity, 1937\u20131942",
+      "authors": "RH Kargon, K Fiss, M Low, AP Molella",
+      "year": "2015",
+      "cited_by": 20,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9172727990650833695&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "A History of the Future: Prophets of Progress from HG Wells to Isaac Asimov",
+      "id": "1348204269967690714",
+      "url": "https://books.google.com/books?hl=en&lr=&id=JXA4DwAAQBAJ&oi=fnd&pg=PP1&ots=bZUViuYIz9&sig=j-YJ3zgk6xGR0zwtYQkzGKl12FQ",
+      "title": "A History of the Future: Prophets of Progress from HG Wells to Isaac Asimov",
+      "authors": "PJ Bowler",
+      "year": "2017",
+      "cited_by": 10,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1348204269967690714&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The dream that never dies: the ideals and realities of cosmopolitanism in science, 1870\u20131940",
+      "id": "2738090313275932512",
+      "url": "http://cejsh.icm.edu.pl/cejsh/element/bwmeta1.element.desklight-8312611c-49ff-44c2-8bdf-ece3ef4459b4",
+      "title": "The dream that never dies: the ideals and realities of cosmopolitanism in science, 1870\u20131940",
+      "authors": "R Fox",
+      "year": "2017",
+      "cited_by": 3,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2738090313275932512&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Here and Now: From \u201cAestheticizing Politics\u201d to \u201cPoliticizing Art\u201d",
+      "id": "5359944038868487197",
+      "url": "https://link.springer.com/chapter/10.1007/978-3-319-75497-0_7",
+      "title": "Here and Now: From \u201cAestheticizing Politics\u201d to \u201cPoliticizing Art\u201d",
+      "authors": "D Manderson",
+      "year": "2018",
+      "cited_by": 4,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5359944038868487197&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Nazi Exhibition Design and Modernism",
+      "id": "16102162116131171149",
+      "url": "https://books.google.com/books?hl=en&lr=&id=Vip0DwAAQBAJ&oi=fnd&pg=PT6&ots=WsFnZcyBHX&sig=xgI9OndXpcC8Z6p7b_P9KI2GP0U",
+      "title": "Nazi Exhibition Design and Modernism",
+      "authors": "M Tymkiw",
+      "year": "2018",
+      "cited_by": 4,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16102162116131171149&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Assembly and Care of Memory: Placing Objects and Hybrid Media to Revisit International Expositions",
+      "id": "15862661731786346242",
+      "url": "https://onlinelibrary.wiley.com/doi/abs/10.1111/cura.12291",
+      "title": "Assembly and Care of Memory: Placing Objects and Hybrid Media to Revisit International Expositions",
+      "authors": "J Minner",
+      "year": "2019",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15862661731786346242&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Epilogue: Science after modernity",
+      "id": "9284162255014768986",
+      "url": "https://www.jstor.org/stable/pdf/j.ctv550d3p.24.pdf",
+      "title": "Epilogue: Science after modernity",
+      "authors": "FAJ James, R Bud",
+      "year": "2018",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9284162255014768986&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Marzenie, kt\u00f3re nigdy nie umiera: idea\u0142y i realia kosmopolityzmu w nauce w latach 1870\u20131940",
+      "id": "7051236878559757840",
+      "url": "http://www.ejournals.eu/sj/index.php/SHS/article/view/6835",
+      "title": "Marzenie, kt\u00f3re nigdy nie umiera: idea\u0142y i realia kosmopolityzmu w nauce w latach 1870\u20131940",
+      "authors": "R Fox",
+      "year": "2017",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7051236878559757840&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Being Modern: The Cultural Impact of Science in the Early Twentieth Century",
+      "id": "18343418954787051335",
+      "url": "https://www.oapen.org/download?type=document&docid=1001815",
+      "title": "Being Modern: The Cultural Impact of Science in the Early Twentieth Century",
+      "authors": "F James, R Bud, M Shiach, P Greenhalgh",
+      "year": "2018"
+    },
+    {
+      "label": "Public technology: nuclear energy in Europe",
+      "id": "8927826056344246994",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/07341512.2018.1570674",
+      "title": "Public technology: nuclear energy in Europe",
+      "authors": "H Trischler, R Bud",
+      "year": "2018",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8927826056344246994&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Stars, Stripes, and the Streamlined Body: American Identity in the Costumes and Performance of \u201cBilly Rose's Aquacade,\u201d New York",
+      "id": "ml-6WdmivWYJ",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/03612112.2018.1496975",
+      "title": "Stars, Stripes, and the Streamlined Body: American Identity in the Costumes and Performance of \u201cBilly Rose's Aquacade,\u201d New York",
+      "authors": "Y Lesger",
+      "year": "2018"
+    },
+    {
+      "label": "Nakagin capsule tower: revisiting the future of the recent past",
+      "id": "2267971358701387440",
+      "url": "https://www.tandfonline.com/doi/abs/10.1111/j.1531-314X.2011.01158.x",
+      "title": "Nakagin capsule tower: revisiting the future of the recent past",
+      "authors": "Z Lin",
+      "year": "2011",
+      "cited_by": 20,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2267971358701387440&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "\u0130STANBUL TEKN\u0130K \u00dcN\u0130VERS\u0130TES\u0130\u2605 FEN B\u0130L\u0130MLER\u0130 ENST\u0130T\u00dcS\u00dc",
+      "id": "192618216799834556",
+      "url": "https://www.researchgate.net/profile/Ashal_Tyurkay/publication/333668003_Mimari_tasarimda_detaylarin_performans_degerlendirmesine_yonelik_bir_analiz_araci_onerisi_An_analysis_tool_for_performance_evaluation_of_architectural_details_A_proposal/links/5cfcc0e4299bf13a38489936/Mimari-tasarimda-detaylarin-performans-degerlendirmesine-yoenelik-bir-analiz-araci-oenerisi-An-analysis-tool-for-performance-evaluation-of-architectural-details-A-proposal.pdf",
+      "title": "\u0130STANBUL TEKN\u0130K \u00dcN\u0130VERS\u0130TES\u0130\u2605 FEN B\u0130L\u0130MLER\u0130 ENST\u0130T\u00dcS\u00dc",
+      "authors": "MTD PERFORMANS, DYB\u0130RAA \u00d6NER\u0130S\u0130",
+      "year": "2017",
+      "cited_by": 11,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=192618216799834556&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Recycling industrial architecture: the redefinition of the recycling principles in the context of sustainable architectural design",
+      "id": "855495585136774560",
+      "url": "https://upcommons.upc.edu/handle/2117/95789",
+      "title": "Recycling industrial architecture: the redefinition of the recycling principles in the context of sustainable architectural design",
+      "authors": "M \u0160ijakovi\u0107",
+      "year": "2015",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=855495585136774560&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The Self-Organizing City and the Architecture of Metabolism: An Architectural Critique on Urban Growth and Reorganization",
+      "id": "4133001206072806634",
+      "url": "https://www.mdpi.com/2071-1050/11/19/5326",
+      "title": "The Self-Organizing City and the Architecture of Metabolism: An Architectural Critique on Urban Growth and Reorganization",
+      "authors": "C Eken, R Alpar Atun",
+      "year": "2019"
+    },
+    {
+      "label": "In the Projects: Rebuilding Social Housing in New York City",
+      "id": "7206447350467926142",
+      "url": "https://surface.syr.edu/cgi/viewcontent.cgi?article=2012&context=honors_capstone",
+      "title": "In the Projects: Rebuilding Social Housing in New York City",
+      "authors": "RP Chen",
+      "year": "2017"
+    },
+    {
+      "label": "Liberating Architecture: A Critical Review of the Landscapes of Innovation+ Advancement in Modular Design+ Construction",
+      "id": "nkm3L9DmbtYJ",
+      "url": "https://www.researchgate.net/profile/Chinyere_Dara2/publication/332353570_Liberating_Architecture_A_Critical_Review_of_the_Landscapes_of_Innovation_Advancement_in_Modular_Design_Construction/links/5caf94fb4585156cd7915a1d/Liberating-Architecture-A-Critical-Review-of-the-Landscapes-of-Innovation-Advancement-in-Modular-Design-Construction.pdf",
+      "title": "Liberating Architecture: A Critical Review of the Landscapes of Innovation+ Advancement in Modular Design+ Construction",
+      "authors": "C Dara, BR Sinclair",
+      "year": "researchgate.net"
+    },
+    {
+      "label": "Nov. 26 NO CLASS THANKSGIVING DAY",
+      "id": "5g7JQWQ5igIJ",
+      "url": "http://www.academia.edu/download/47535434/Foxwell_Traveling_Seminar_Naoshima_Syllabus.docx",
+      "title": "Nov. 26 NO CLASS THANKSGIVING DAY",
+      "authors": "C Foxwell",
+      "year": "academia.edu"
+    },
+    {
+      "label": "LEARNING FROM ARCHITECTURE OF METABOLISM: FUTURE CITY AND URBANISM",
+      "id": "VdXVYHB8pwYJ",
+      "url": "http://search.proquest.com/openview/cd27a0b027544e004658169321406ebc/1?pq-origsite=gscholar&cbl=456297",
+      "title": "LEARNING FROM ARCHITECTURE OF METABOLISM: FUTURE CITY AND URBANISM",
+      "authors": "C Eken",
+      "year": "2017"
+    },
+    {
+      "label": "RE-READING CRITICAL INDICATIONS OF METABOLISIM.",
+      "id": "18025260659731100233",
+      "url": "http://search.ebscohost.com/login.aspx?direct=true&profile=ehost&scope=site&authtype=crawler&jrnl=01682601&AN=124313029&h=z23PRUNkOQ%2BtTpcLd0oh0vq6dtv8ByxiP3VroIKoAeU%2FtZU2k5CdijO4wL5oOMLIO2DG0mBHenMrToPeUe3rkg%3D%3D&crl=c",
+      "title": "RE-READING CRITICAL INDICATIONS OF METABOLISIM.",
+      "authors": "C Eken",
+      "year": "2017"
+    },
+    {
+      "label": "Modern Japanese Art and Architecture",
+      "id": "6267000659962809184",
+      "url": "http://www.academia.edu/download/54105132/Foxwell_ArtJ_16910_Syllabus_2017.pdf",
+      "title": "Modern Japanese Art and Architecture",
+      "authors": "C Foxwell",
+      "year": "academia.edu"
+    },
+    {
+      "label": "TOWARD RUSSOPHONE SUPER-LITERATURE: MAKING SUBJECTIVITIES, SPACES AND TEMPORALITIES IN POST-SOVIET KAZAKHSTANI RUSSOPHONE\u00a0\u2026",
+      "id": "WlRsfEXfPQYJ",
+      "url": "https://nur.nu.edu.kz/handle/123456789/2454",
+      "title": "TOWARD RUSSOPHONE SUPER-LITERATURE: MAKING SUBJECTIVITIES, SPACES AND TEMPORALITIES IN POST-SOVIET KAZAKHSTANI RUSSOPHONE\u00a0\u2026",
+      "authors": "D Melnikov",
+      "year": "2017"
+    },
+    {
+      "label": "Materials and meaning in contemporary Japanese architecture: Tradition and today",
+      "id": "17791022573299209893",
+      "url": "https://books.google.com/books?hl=en&lr=&id=eTzcAAAAQBAJ&oi=fnd&pg=PP1&ots=U2mRjGTqQh&sig=omK49HcVwf-RVp9CP9aWH8qiuUg",
+      "title": "Materials and meaning in contemporary Japanese architecture: Tradition and today",
+      "authors": "D Buntrock",
+      "year": "2013",
+      "cited_by": 18,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17791022573299209893&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The architectural legacies of Kisho Kurokawa in China",
+      "id": "8913308855465770436",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/13602365.2011.591605",
+      "title": "The architectural legacies of Kisho Kurokawa in China",
+      "authors": "CQL Xue, LL Sun, L Tsai",
+      "year": "2011",
+      "cited_by": 4,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8913308855465770436&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Illusion of Ruin and Rebirth-A Study on Terunobu Fujimori's Diploma Design (1971)-",
+      "id": "3645322893591260215",
+      "url": "http://www.koreascience.or.kr/article/JAKO201216238702479.page",
+      "title": "Illusion of Ruin and Rebirth-A Study on Terunobu Fujimori's Diploma Design (1971)-",
+      "authors": "HS Kim",
+      "year": "2012",
+      "cited_by": 3,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3645322893591260215&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Reconciling sustainable and resilient design in cities: cross laminated timber and the future of japanese wooden buildings",
+      "id": "16977631320456969437",
+      "url": "https://scholarworks.iu.edu/dspace/handle/2022/20341",
+      "title": "Reconciling sustainable and resilient design in cities: cross laminated timber and the future of japanese wooden buildings",
+      "authors": "AK Fuentes",
+      "year": "2015",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16977631320456969437&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Taif\u016brin: Wind-Chime Installation As A Novel Typhoon Early Warning System",
+      "id": "2755954648848552335",
+      "url": "https://dl.acm.org/citation.cfm?id=3001830",
+      "title": "Taif\u016brin: Wind-Chime Installation As A Novel Typhoon Early Warning System",
+      "authors": "P Haimes, T Baba, K Kushiyama",
+      "year": "2016",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2755954648848552335&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "HERITAGE, HISTORY AND DESIGN BETWEEN EAST AND",
+      "id": "16193174931354192534",
+      "url": "https://pdfs.semanticscholar.org/e441/9ebe888434a11fc3ca5faa46c2dec114df58.pdf",
+      "title": "HERITAGE, HISTORY AND DESIGN BETWEEN EAST AND",
+      "authors": "W Close",
+      "year": "pdfs.semanticscholar.org"
+    },
+    {
+      "label": "Playing with Fire: Analysing the Role of Fire in Architecture",
+      "id": "QRUxFzyrov0J",
+      "url": "http://researcharchive.vuw.ac.nz/handle/10063/1607",
+      "title": "Playing with Fire: Analysing the Role of Fire in Architecture",
+      "authors": "J Goei",
+      "year": "2011"
+    },
+    {
+      "label": "The architectural image: space, movement and myth",
+      "id": "3083225532007664253",
+      "url": "http://www.academia.edu/download/34133455/malsaatiPHD_20131007_72dpi_NOappdx.pdf",
+      "title": "The architectural image: space, movement and myth",
+      "authors": "MZ Al-Saati",
+      "year": "2013"
+    },
+    {
+      "label": "Taif\u016brin: IoT sound installation as a typhoon warning system",
+      "id": "aYlSQDtIZzoJ",
+      "url": "https://www.researchgate.net/profile/Paul_Haimes/publication/312492150_Taifurin_IoT_sound_installation_as_a_typhoon_warning_system/links/587ecc8008ae9a860ff540da/Taifurin-IoT-sound-installation-as-a-typhoon-warning-system.pdf",
+      "title": "Taif\u016brin: IoT sound installation as a typhoon warning system",
+      "authors": "T Baba, K Kushiyama",
+      "year": "researchgate.net"
+    },
+    {
+      "label": "Taif\u016brin: IoT sound installation as a typhoon warning system",
+      "id": "5547582110415653045",
+      "url": "http://kc.umn.ac.id/3861/",
+      "title": "Taif\u016brin: IoT sound installation as a typhoon warning system",
+      "authors": "P Haimes, T Baba, K Kushiyama",
+      "year": "2016"
+    },
+    {
+      "label": "Japanese Mythic Imaginaries and the Symbolic Structure of Traditional Space Designs",
+      "id": "9479553004089451632",
+      "url": "http://www.koreascience.or.kr/article/JAKO201520448048153.page",
+      "title": "Japanese Mythic Imaginaries and the Symbolic Structure of Traditional Space Designs",
+      "authors": "K Park",
+      "year": "2015"
+    },
+    {
+      "label": "Rethinking the global heritage discourse\u2013overcoming \u2018East\u2019and \u2018West\u2019?",
+      "id": "9733608379433217317",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/13527258.2015.1068213",
+      "title": "Rethinking the global heritage discourse\u2013overcoming \u2018East\u2019and \u2018West\u2019?",
+      "authors": "N Akagawa",
+      "year": "2016",
+      "cited_by": 17,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9733608379433217317&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Sensuous (re) collections: The sight and taste of socialism at Gr\u016btas Statue Park, Lithuania",
+      "id": "10672387690275367961",
+      "url": "https://www.tandfonline.com/doi/abs/10.2752/174589206778055682",
+      "title": "Sensuous (re) collections: The sight and taste of socialism at Gr\u016btas Statue Park, Lithuania",
+      "authors": "G Lankauskas",
+      "year": "2006",
+      "cited_by": 34,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10672387690275367961&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Dilemma of local socio-economic perspectives in management of historic ruins in Kilwa Kisiwani World Heritage Site, Tanzania",
+      "id": "12322444784865662898",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/13527258.2018.1430604",
+      "title": "Dilemma of local socio-economic perspectives in management of historic ruins in Kilwa Kisiwani World Heritage Site, Tanzania",
+      "authors": "NB Lwoga",
+      "year": "2018",
+      "cited_by": 3,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12322444784865662898&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Dealing with a Difficult Past: Japan, South Korea and the UNESCO World Heritage List",
+      "id": "7833761387239257327",
+      "url": "https://link.springer.com/chapter/10.1007/978-3-319-91914-0_10",
+      "title": "Dealing with a Difficult Past: Japan, South Korea and the UNESCO World Heritage List",
+      "authors": "I Trifu",
+      "year": "2018",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7833761387239257327&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Rediscovering the Idea of Cultural Heritage and the Relationship with Nature: Four Schools of Essential Thought of the Ancient Han Chinese",
+      "id": "11151466698355600285",
+      "url": "https://www.mdpi.com/2571-9408/2/3/111",
+      "title": "Rediscovering the Idea of Cultural Heritage and the Relationship with Nature: Four Schools of Essential Thought of the Ancient Han Chinese",
+      "authors": "O Chen, D Han",
+      "year": "2019"
+    },
+    {
+      "label": "Ritual Comes Before Shooting",
+      "id": "-DgAGgeMhRoJ",
+      "url": "https://openaccess.leidenuniv.nl/bitstream/handle/1887/77310/MA%20Thesis%20Ritual%20Comes%20Before%20Shooting_Hye%20Ji%20Jang.pdf?sequence=1",
+      "title": "Ritual Comes Before Shooting",
+      "authors": "HJ Jang",
+      "year": "2019"
+    },
+    {
+      "label": "Cultural landscape meanings. The case of West Lake, Hangzhou, China",
+      "id": "LVM1LahNc9oJ",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/01426397.2019.1589438",
+      "title": "Cultural landscape meanings. The case of West Lake, Hangzhou, China",
+      "authors": "R Zhang, K Taylor",
+      "year": "2019"
+    },
+    {
+      "label": "National identity, culinary heritage and UNESCO",
+      "id": "6909408315088056512",
+      "url": "https://books.google.com/books?hl=en&lr=&id=wS9iDwAAQBAJ&oi=fnd&pg=PT349&ots=9nsH494E6x&sig=FzJI8wY4PrGYj9rgKQRy1axJYZs",
+      "title": "National identity, culinary heritage and UNESCO",
+      "authors": "N Akagawa",
+      "year": "2018",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6909408315088056512&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Authorized Heritage Discourse",
+      "id": "17218056817863891042",
+      "url": "https://onlinelibrary.wiley.com/doi/abs/10.1002/9781119188230.saseas0056",
+      "title": "Authorized Heritage Discourse",
+      "authors": "N Akagawa",
+      "year": "2019"
+    },
+    {
+      "label": "Cities, towards Missing Identities? Synergy Management of Sustainable Protection and Use of Cultural Urban Heritage in the Context of Global Change-the case of\u00a0\u2026",
+      "id": "1399293870847958974",
+      "url": "https://tuprints.ulb.tu-darmstadt.de/id/eprint/8980",
+      "title": "Cities, towards Missing Identities? Synergy Management of Sustainable Protection and Use of Cultural Urban Heritage in the Context of Global Change-the case of\u00a0\u2026",
+      "authors": "S Khoshnood",
+      "year": "2019"
+    },
+    {
+      "label": "CulturalBase. Social Platform on Cultural Heritage and European Identities",
+      "id": "NKvrooPc0oQJ",
+      "url": "https://culturalbase.eu/documents/Synthetic%20Report%20on%20Cultural%20Memory.docx",
+      "title": "CulturalBase. Social Platform on Cultural Heritage and European Identities",
+      "authors": "J Chalcraft, G Delanty",
+      "year": "culturalbase.eu"
+    }
+  ],
+  "links": [
+    {
+      "source": "9721009172318430205",
+      "target": "17797966948606668804"
+    },
+    {
+      "source": "9738889714921293496",
+      "target": "9721009172318430205"
+    },
+    {
+      "source": "11317351899032488949",
+      "target": "9721009172318430205"
+    },
+    {
+      "source": "11317351899032488949",
+      "target": "6677390068530975011"
+    },
+    {
+      "source": "11317351899032488949",
+      "target": "17797966948606668804"
+    },
+    {
+      "source": "9474346252234246630",
+      "target": "9721009172318430205"
+    },
+    {
+      "source": "433819564265314862",
+      "target": "9721009172318430205"
+    },
+    {
+      "source": "1435609373846071518",
+      "target": "9721009172318430205"
+    },
+    {
+      "source": "17022610662603794755",
+      "target": "9721009172318430205"
+    },
+    {
+      "source": "14844157177833327240",
+      "target": "9721009172318430205"
+    },
+    {
+      "source": "10532786499006959482",
+      "target": "9721009172318430205"
+    },
+    {
+      "source": "11501295903848147153",
+      "target": "9721009172318430205"
+    },
+    {
+      "source": "1859136887353308130",
+      "target": "9721009172318430205"
+    },
+    {
+      "source": "2853362544378621897",
+      "target": "17797966948606668804"
+    },
+    {
+      "source": "11100197476129472410",
+      "target": "2853362544378621897"
+    },
+    {
+      "source": "965186114927363326",
+      "target": "2853362544378621897"
+    },
+    {
+      "source": "11184872829581685866",
+      "target": "2853362544378621897"
+    },
+    {
+      "source": "2991745732439007572",
+      "target": "2853362544378621897"
+    },
+    {
+      "source": "3550773790218139057",
+      "target": "2853362544378621897"
+    },
+    {
+      "source": "4147764788755009699",
+      "target": "2853362544378621897"
+    },
+    {
+      "source": "16562669390658486470",
+      "target": "2853362544378621897"
+    },
+    {
+      "source": "17415190773409127911",
+      "target": "2853362544378621897"
+    },
+    {
+      "source": "2466405539776150648",
+      "target": "2853362544378621897"
+    },
+    {
+      "source": "1857358228177665668",
+      "target": "2853362544378621897"
+    },
+    {
+      "source": "6677390068530975011",
+      "target": "17797966948606668804"
+    },
+    {
+      "source": "6177849933340540573",
+      "target": "6677390068530975011"
+    },
+    {
+      "source": "8832043359377953660",
+      "target": "6677390068530975011"
+    },
+    {
+      "source": "4311071197231675577",
+      "target": "6677390068530975011"
+    },
+    {
+      "source": "7870944419412756303",
+      "target": "6677390068530975011"
+    },
+    {
+      "source": "10567162315019973806",
+      "target": "6677390068530975011"
+    },
+    {
+      "source": "12453304131523683620",
+      "target": "6677390068530975011"
+    },
+    {
+      "source": "4897086050305605377",
+      "target": "6677390068530975011"
+    },
+    {
+      "source": "14302326804367730965",
+      "target": "6677390068530975011"
+    },
+    {
+      "source": "16748780185728282804",
+      "target": "6677390068530975011"
+    },
+    {
+      "source": "5248370711167793783",
+      "target": "11317351899032488949"
+    },
+    {
+      "source": "9676534807633054659",
+      "target": "11317351899032488949"
+    },
+    {
+      "source": "6597565325089408807",
+      "target": "11317351899032488949"
+    },
+    {
+      "source": "1464959129807648090",
+      "target": "11317351899032488949"
+    },
+    {
+      "source": "15372361068661731980",
+      "target": "11317351899032488949"
+    },
+    {
+      "source": "6216907742193070087",
+      "target": "11317351899032488949"
+    },
+    {
+      "source": "12199745079501537246",
+      "target": "11317351899032488949"
+    },
+    {
+      "source": "5667454337714493723",
+      "target": "11317351899032488949"
+    },
+    {
+      "source": "13444991051687800080",
+      "target": "11317351899032488949"
+    },
+    {
+      "source": "13081477829180277498",
+      "target": "11317351899032488949"
+    },
+    {
+      "source": "9209882238343158024",
+      "target": "17797966948606668804"
+    },
+    {
+      "source": "17833200820427510192",
+      "target": "9209882238343158024"
+    },
+    {
+      "source": "10647881736711386936",
+      "target": "9209882238343158024"
+    },
+    {
+      "source": "11060615909374864079",
+      "target": "9209882238343158024"
+    },
+    {
+      "source": "3873794399658821454",
+      "target": "9209882238343158024"
+    },
+    {
+      "source": "7851893545092934948",
+      "target": "9209882238343158024"
+    },
+    {
+      "source": "42901546126632863",
+      "target": "9209882238343158024"
+    },
+    {
+      "source": "13428153536109789515",
+      "target": "9209882238343158024"
+    },
+    {
+      "source": "10073749646008115933",
+      "target": "9209882238343158024"
+    },
+    {
+      "source": "3112741543673454158",
+      "target": "9209882238343158024"
+    },
+    {
+      "source": "10713247114388028135",
+      "target": "9209882238343158024"
+    },
+    {
+      "source": "10103339068018101848",
+      "target": "17797966948606668804"
+    },
+    {
+      "source": "11599205795445376994",
+      "target": "10103339068018101848"
+    },
+    {
+      "source": "7146032049031048602",
+      "target": "10103339068018101848"
+    },
+    {
+      "source": "15579861477720234013",
+      "target": "10103339068018101848"
+    },
+    {
+      "source": "15450481953272613282",
+      "target": "10103339068018101848"
+    },
+    {
+      "source": "o_3ME7r6sl8J",
+      "target": "10103339068018101848"
+    },
+    {
+      "source": "HSVWH9QUR0sJ",
+      "target": "10103339068018101848"
+    },
+    {
+      "source": "18192863107542223215",
+      "target": "10103339068018101848"
+    },
+    {
+      "source": "16345212217450982208",
+      "target": "10103339068018101848"
+    },
+    {
+      "source": "20rDTMbuKSoJ",
+      "target": "10103339068018101848"
+    },
+    {
+      "source": "5157324510759089756",
+      "target": "10103339068018101848"
+    },
+    {
+      "source": "9172727990650833695",
+      "target": "17797966948606668804"
+    },
+    {
+      "source": "1348204269967690714",
+      "target": "9172727990650833695"
+    },
+    {
+      "source": "2738090313275932512",
+      "target": "9172727990650833695"
+    },
+    {
+      "source": "5359944038868487197",
+      "target": "9172727990650833695"
+    },
+    {
+      "source": "16102162116131171149",
+      "target": "9172727990650833695"
+    },
+    {
+      "source": "15862661731786346242",
+      "target": "9172727990650833695"
+    },
+    {
+      "source": "9284162255014768986",
+      "target": "9172727990650833695"
+    },
+    {
+      "source": "7051236878559757840",
+      "target": "9172727990650833695"
+    },
+    {
+      "source": "18343418954787051335",
+      "target": "9172727990650833695"
+    },
+    {
+      "source": "8927826056344246994",
+      "target": "9172727990650833695"
+    },
+    {
+      "source": "ml-6WdmivWYJ",
+      "target": "9172727990650833695"
+    },
+    {
+      "source": "2267971358701387440",
+      "target": "17797966948606668804"
+    },
+    {
+      "source": "192618216799834556",
+      "target": "2267971358701387440"
+    },
+    {
+      "source": "855495585136774560",
+      "target": "2267971358701387440"
+    },
+    {
+      "source": "4133001206072806634",
+      "target": "2267971358701387440"
+    },
+    {
+      "source": "7206447350467926142",
+      "target": "2267971358701387440"
+    },
+    {
+      "source": "nkm3L9DmbtYJ",
+      "target": "2267971358701387440"
+    },
+    {
+      "source": "5g7JQWQ5igIJ",
+      "target": "2267971358701387440"
+    },
+    {
+      "source": "VdXVYHB8pwYJ",
+      "target": "2267971358701387440"
+    },
+    {
+      "source": "18025260659731100233",
+      "target": "2267971358701387440"
+    },
+    {
+      "source": "6267000659962809184",
+      "target": "2267971358701387440"
+    },
+    {
+      "source": "WlRsfEXfPQYJ",
+      "target": "2267971358701387440"
+    },
+    {
+      "source": "17791022573299209893",
+      "target": "17797966948606668804"
+    },
+    {
+      "source": "8913308855465770436",
+      "target": "17791022573299209893"
+    },
+    {
+      "source": "3645322893591260215",
+      "target": "17791022573299209893"
+    },
+    {
+      "source": "16977631320456969437",
+      "target": "17791022573299209893"
+    },
+    {
+      "source": "2755954648848552335",
+      "target": "17791022573299209893"
+    },
+    {
+      "source": "16193174931354192534",
+      "target": "17791022573299209893"
+    },
+    {
+      "source": "QRUxFzyrov0J",
+      "target": "17791022573299209893"
+    },
+    {
+      "source": "3083225532007664253",
+      "target": "17791022573299209893"
+    },
+    {
+      "source": "aYlSQDtIZzoJ",
+      "target": "17791022573299209893"
+    },
+    {
+      "source": "5547582110415653045",
+      "target": "17791022573299209893"
+    },
+    {
+      "source": "9479553004089451632",
+      "target": "17791022573299209893"
+    },
+    {
+      "source": "9733608379433217317",
+      "target": "17797966948606668804"
+    },
+    {
+      "source": "10672387690275367961",
+      "target": "9733608379433217317"
+    },
+    {
+      "source": "12322444784865662898",
+      "target": "9733608379433217317"
+    },
+    {
+      "source": "7833761387239257327",
+      "target": "9733608379433217317"
+    },
+    {
+      "source": "11151466698355600285",
+      "target": "9733608379433217317"
+    },
+    {
+      "source": "-DgAGgeMhRoJ",
+      "target": "9733608379433217317"
+    },
+    {
+      "source": "LVM1LahNc9oJ",
+      "target": "9733608379433217317"
+    },
+    {
+      "source": "6909408315088056512",
+      "target": "9733608379433217317"
+    },
+    {
+      "source": "17218056817863891042",
+      "target": "9733608379433217317"
+    },
+    {
+      "source": "1399293870847958974",
+      "target": "9733608379433217317"
+    },
+    {
+      "source": "NKvrooPc0oQJ",
+      "target": "9733608379433217317"
+    }
+  ]
+};
+
+var link = svg.append("g")
+    .attr("class", "links")
+  .selectAll("line")
+  .data(graph.links)
+  .enter().append("line");
+
+var node = svg.append("g")
+    .attr("class", "nodes")
+  .selectAll("circle")
+  .data(graph.nodes)
+  .enter().append("circle")
+    .attr("r", 5)
+    .call(d3.drag()
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended));
+
+node.append("title")
+    .text(function(d) {
+        return d.authors ? d.title + ' - ' + d.authors : d.title
+    });
+
+node.on("click", function(d) {
+  window.open(d.url, '_blank');
+  d3.event.stopPropagation();
+});
+
+simulation
+    .nodes(graph.nodes)
+    .on("tick", ticked);
+
+simulation.force("link")
+    .links(graph.links);
+
+function ticked() {
+  link
+      .attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
+
+  node
+      .attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; });
+}
+
+function dragstarted(d) {
+  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+  d.fx = d.x;
+  d.fy = d.y;
+}
+
+function dragged(d) {
+  d.fx = d3.event.x;
+  d.fy = d3.event.y;
+}
+
+function dragended(d) {
+  if (!d3.event.active) simulation.alphaTarget(0);
+  d.fx = null;
+  d.fy = null;
+}
+
+</script>
