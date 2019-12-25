@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<style>
+
+.links line {
+  stroke: #999;
+  stroke-opacity: 0.8;
+  stroke-width: 2px;
+}
+
+.nodes circle {
+  stroke: black;
+  fill: white;
+  stroke-width: 1.5px;
+}
+
+#graph {
+  width: 99vw;
+  height: 99vh;
+}
+
+</style>
+<svg id="graph"></svg>
+<script>
+
+var width = $(window).width();
+var height = $(window).height();
+
+var svg = d3.select("svg")
+    .attr("height", height)
+    .attr("width", width);
+
+var color = d3.scaleOrdinal(d3.schemeCategory20c);
+
+var simulation = d3.forceSimulation()
+    .velocityDecay(0.6)
+    .force("link", d3.forceLink().id(function(d) { return d.id; }))
+    .force("charge", d3.forceManyBody())
+    .force("center", d3.forceCenter(width / 2, height / 2));
+
+var graph = {
+  "nodes": [
+    {
+      "label": "Mapping controversies in architecture",
+      "id": "11244293858113798874",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2015-0-80784-2&isbn=9781317100935&format=googlePreviewPdf",
+      "title": "Mapping controversies in architecture",
+      "authors": "A Yaneva",
+      "year": "2016",
+      "cited_by": 217,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11244293858113798874&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Digital culture in architecture",
+      "id": "8476807844307919048",
+      "title": "Digital culture in architecture"
+    },
+    {
+      "label": "Waiting for Gaia: Composing the common world through arts and politics",
+      "id": "7734411929509306183",
+      "url": "https://www.taylorfrancis.com/books/e/9781315545721/chapters/10.4324/9781315545721-9",
+      "title": "Waiting for Gaia: Composing the common world through arts and politics",
+      "authors": "B Latour",
+      "year": "2017",
+      "cited_by": 155,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7734411929509306183&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Mundane governance: Ontology and accountability",
+      "id": "3538236727389985683",
+      "url": "https://books.google.com/books?hl=en&lr=&id=5sF7AgAAQBAJ&oi=fnd&pg=PP1&ots=hPDOMZPfTn&sig=eYbwiuIYl8ywvr2l5mlglZmUQtU",
+      "title": "Mundane governance: Ontology and accountability",
+      "authors": "S Woolgar, D Neyland",
+      "year": "2013",
+      "cited_by": 149,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3538236727389985683&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "An anthropology of architecture",
+      "id": "3831639673457127331",
+      "url": "https://books.google.com/books?hl=en&lr=&id=XRzwAAAAQBAJ&oi=fnd&pg=PR7&ots=pHAZGTN0Jb&sig=VdvBfBV48Jf6OQw2HPO2O8lbS8c",
+      "title": "An anthropology of architecture",
+      "authors": "V Buchli",
+      "year": "2013",
+      "cited_by": 148,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3831639673457127331&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Why map issues? On controversy analysis as a digital method",
+      "id": "2981428655877438499",
+      "url": "https://journals.sagepub.com/doi/abs/10.1177/0162243915574602",
+      "title": "Why map issues? On controversy analysis as a digital method",
+      "authors": "N Marres",
+      "year": "2015",
+      "cited_by": 131,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2981428655877438499&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Low-budget Berlin: Towards an understanding of low-budget urbanity as assemblage",
+      "id": "2933923163944750679",
+      "url": "https://academic.oup.com/cjres/article-abstract/7/1/119/365007",
+      "title": "Low-budget Berlin: Towards an understanding of low-budget urbanity as assemblage",
+      "authors": "A F\u00e4rber",
+      "year": "2014",
+      "cited_by": 45,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2933923163944750679&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Object-oriented publics",
+      "id": "18406641731304936948",
+      "url": "https://dl.acm.org/citation.cfm?id=2858565",
+      "title": "Object-oriented publics",
+      "authors": "T Jenkins, CA Le Dantec, C Disalvo, T Lodato\u2026",
+      "year": "2016",
+      "cited_by": 37,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=18406641731304936948&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Experiments in participation",
+      "id": "11593615735529873550",
+      "url": "https://books.google.com/books?hl=en&lr=&id=4GTUDQAAQBAJ&oi=fnd&pg=PA195&ots=l-d-T0xTBN&sig=jyrCS8txBMpMbC7uCAAekddialw",
+      "title": "Experiments in participation",
+      "authors": "J Lezaun, N Marres, M Tironi",
+      "year": "2016",
+      "cited_by": 30,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11593615735529873550&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Questioning architectural judgment: the problem of codes in the United States",
+      "id": "938285620772532416",
+      "url": "https://www.taylorfrancis.com/books/9780203796658",
+      "title": "Questioning architectural judgment: the problem of codes in the United States",
+      "authors": "SA Moore, BB Wilson",
+      "year": "2013",
+      "cited_by": 24,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=938285620772532416&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Web-visions as controversy-lenses",
+      "id": "6625024565000359248",
+      "url": "https://www.tandfonline.com/doi/abs/10.1179/0308018812Z.0000000004",
+      "title": "Web-visions as controversy-lenses",
+      "authors": "A Koed Madsen",
+      "year": "2012",
+      "cited_by": 24,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6625024565000359248&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Atmospheres of indagation: disasters and the politics of excessiveness",
+      "id": "1985113819836296545",
+      "url": "https://onlinelibrary.wiley.com/doi/abs/10.1111/1467-954X.12126",
+      "title": "Atmospheres of indagation: disasters and the politics of excessiveness",
+      "authors": "M Tironi",
+      "year": "2014",
+      "cited_by": 21,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1985113819836296545&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Ornament: The politics of architecture and subjectivity",
+      "id": "7680592228252568088",
+      "url": "https://books.google.com/books?hl=en&lr=&id=gZ6zAwAAQBAJ&oi=fnd&pg=PT7&ots=51dS9y1Hmq&sig=IaYqpZo9T4pxVceKTGb-8nWeSfU",
+      "title": "Ornament: The politics of architecture and subjectivity",
+      "authors": "A Picon",
+      "year": "2014",
+      "cited_by": 87,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7680592228252568088&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The architecture of neoliberalism: How contemporary architecture became an instrument of control and compliance",
+      "id": "10881085281107066117",
+      "url": "https://books.google.com/books?hl=en&lr=&id=jp3pDAAAQBAJ&oi=fnd&pg=PR3&ots=Jnuozeny9t&sig=EZ4mBtTeYaSGOLsKzbdB3RAJaVQ",
+      "title": "The architecture of neoliberalism: How contemporary architecture became an instrument of control and compliance",
+      "authors": "D Spencer",
+      "year": "2016",
+      "cited_by": 74,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10881085281107066117&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Five ways to make architecture political: An introduction to the politics of design practice",
+      "id": "12798093957460660945",
+      "url": "https://books.google.com/books?hl=en&lr=&id=Wx9oDgAAQBAJ&oi=fnd&pg=PP1&ots=0FOmyIc1di&sig=WKRcu6Ffqa2R26PLQib7CjXGDlI",
+      "title": "Five ways to make architecture political: An introduction to the politics of design practice",
+      "authors": "A Yaneva",
+      "year": "2017",
+      "cited_by": 25,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12798093957460660945&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Iron, ornament and architecture in Victorian Britain: Myth and modernity, excess and enchantment",
+      "id": "16686552515626699286",
+      "url": "https://www.taylorfrancis.com/books/9781315092430",
+      "title": "Iron, ornament and architecture in Victorian Britain: Myth and modernity, excess and enchantment",
+      "authors": "P Dobraszczyk",
+      "year": "2017",
+      "cited_by": 13,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16686552515626699286&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Architecture, innovation and tradition",
+      "id": "17631908195474930437",
+      "url": "https://onlinelibrary.wiley.com/doi/abs/10.1002/ad.1535",
+      "title": "Architecture, innovation and tradition",
+      "authors": "A Picon",
+      "year": "2013",
+      "cited_by": 6,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17631908195474930437&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Touching the City: Thoughts on Urban Scale",
+      "id": "1203226838820369386",
+      "url": "https://books.google.com/books?hl=en&lr=&id=i6PHBAAAQBAJ&oi=fnd&pg=PA5&ots=Z998qz0AK3&sig=J6Lgt3REl6lS2eL6ukzcKLzKfvE",
+      "title": "Touching the City: Thoughts on Urban Scale",
+      "authors": "T Makower",
+      "year": "2014",
+      "cited_by": 5,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1203226838820369386&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "A critical review of ornament in contemporary architectural theory and practice",
+      "id": "103594326575137679",
+      "url": "https://www.journalagent.com/itujfa/pdfs/ITUJFA-73745-THEORY_ARTICLES-BALIK.pdf",
+      "title": "A critical review of ornament in contemporary architectural theory and practice",
+      "authors": "D Balik, A Allmer",
+      "year": "2016",
+      "cited_by": 9,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=103594326575137679&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Design for values in architecture",
+      "id": "1944984241316034587",
+      "url": "https://link.springer.com/content/pdf/10.1007/978-94-007-6970-0_22.pdf",
+      "title": "Design for values in architecture",
+      "authors": "L Schrijver",
+      "year": "2015",
+      "cited_by": 5,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1944984241316034587&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "3dj: 3d Sampling Haptic and Optically Performative Textures Remixed from 3d Scans",
+      "id": "7016418567020193153",
+      "url": "https://link.springer.com/chapter/10.1007/978-3-319-24208-8_44",
+      "title": "3dj: 3d Sampling Haptic and Optically Performative Textures Remixed from 3d Scans",
+      "authors": "SV Patel, CT Mueller",
+      "year": "2015",
+      "cited_by": 4,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7016418567020193153&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Beauty of the back",
+      "id": "3540774304360858015",
+      "url": "https://link.springer.com/chapter/10.1007/978-3-319-64858-3_2",
+      "title": "Beauty of the back",
+      "authors": "J Valsiner",
+      "year": "2017",
+      "cited_by": 3,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3540774304360858015&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Projeto param\u00e9trico com fractais no detalhamento de uma fachada",
+      "id": "16692402039081143280",
+      "url": "https://periodicos.sbu.unicamp.br/ojs/index.php/parc/article/view/8634548",
+      "title": "Projeto param\u00e9trico com fractais no detalhamento de uma fachada",
+      "authors": "M Sedrez\u2026",
+      "year": "2013",
+      "cited_by": 4,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16692402039081143280&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Co-designers: cultures of computer simulation in architecture",
+      "id": "13298417023162186480",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2010-0-27156-5&isbn=9781136336836&format=googlePreviewPdf",
+      "title": "Co-designers: cultures of computer simulation in architecture",
+      "authors": "Y Loukissas",
+      "year": "2012",
+      "cited_by": 60,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13298417023162186480&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Builders of the Vision: Software and the Imagination of Design",
+      "id": "8183350149250071367",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2013-0-20376-4&isbn=9781317755968&format=googlePreviewPdf",
+      "title": "Builders of the Vision: Software and the Imagination of Design",
+      "authors": "DC Llach",
+      "year": "2015",
+      "cited_by": 59,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8183350149250071367&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Reading and interpreting ethnography",
+      "id": "5526371405745974412",
+      "url": "https://link.springer.com/chapter/10.1007/978-1-4939-0378-8_1",
+      "title": "Reading and interpreting ethnography",
+      "authors": "P Dourish",
+      "year": "2014",
+      "cited_by": 40,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5526371405745974412&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Elements of architecture: assembling archaeology, atmosphere and the performance of building spaces",
+      "id": "10584823769911105682",
+      "url": "https://books.google.com/books?hl=en&lr=&id=BM6jCwAAQBAJ&oi=fnd&pg=PP1&ots=VITHsN0oe9&sig=gRG6XEkV6GkxmsCCBf7HBg-xips",
+      "title": "Elements of architecture: assembling archaeology, atmosphere and the performance of building spaces",
+      "authors": "M Bille, TF Sorensen",
+      "year": "2016",
+      "cited_by": 20,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10584823769911105682&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Building simulation visualization for the boardroom: an exploratory study",
+      "id": "16553336782489732141",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/19401493.2013.767377",
+      "title": "Building simulation visualization for the boardroom: an exploratory study",
+      "authors": "N Hamza, P DeWilde",
+      "year": "2014",
+      "cited_by": 9,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16553336782489732141&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Expanding the representation of user activities",
+      "id": "14368481292393226025",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/09613218.2014.932621",
+      "title": "Expanding the representation of user activities",
+      "authors": "FMC van Amstel, V Zerjav, T Hartmann\u2026",
+      "year": "2015",
+      "cited_by": 8,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14368481292393226025&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Architecture and the structured image: software simulations as infrastructures for building production",
+      "id": "12258166919394478530",
+      "url": "https://link.springer.com/chapter/10.1007/978-3-319-56466-1_2",
+      "title": "Architecture and the structured image: software simulations as infrastructures for building production",
+      "authors": "DC Llach",
+      "year": "2017",
+      "cited_by": 9,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12258166919394478530&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Integrating acoustic simulation in architectural design workflows: the FabPod meeting room prototype",
+      "id": "7906843352526234511",
+      "url": "https://journals.sagepub.com/doi/abs/10.1177/0037549715603480",
+      "title": "Integrating acoustic simulation in architectural design workflows: the FabPod meeting room prototype",
+      "authors": "B Peters",
+      "year": "2015",
+      "cited_by": 6,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7906843352526234511&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Efficient, Visual, and Interactive Architectural Design Optimization with Model-based Methods",
+      "id": "5339747615197070850",
+      "url": "https://www.researchgate.net/profile/Thomas_Wortmann/publication/327199280_Efficient_Visual_and_Interactive_Architectural_Design_Optimization_with_Model-based_Methods/links/5b7f697d299bf1d5a723c54d/Efficient-Visual-and-Interactive-Architectural-Design-Optimization-with-Model-based-Methods.pdf",
+      "title": "Efficient, Visual, and Interactive Architectural Design Optimization with Model-based Methods",
+      "authors": "T Wortmann",
+      "year": "2018",
+      "cited_by": 7,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5339747615197070850&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Architecture and Movement: The Dynamic Experience of Buildings and Landscapes",
+      "id": "6815989958394393847",
+      "url": "https://books.google.com/books?hl=en&lr=&id=tnXfBQAAQBAJ&oi=fnd&pg=PP1&ots=MOvhe7muZh&sig=YGqX6mRMf4jTavLAmCTqpgZUTmo",
+      "title": "Architecture and Movement: The Dynamic Experience of Buildings and Landscapes",
+      "authors": "PB Jones, M Meagher",
+      "year": "2014",
+      "cited_by": 4,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6815989958394393847&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Architectural theories of the environment: posthuman territory",
+      "id": "16041517863171848492",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2011-0-07764-7&isbn=9781136190582&format=googlePreviewPdf",
+      "title": "Architectural theories of the environment: posthuman territory",
+      "authors": "AL Harrison",
+      "year": "2013",
+      "cited_by": 47,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16041517863171848492&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The city of tomorrow: Sensors, networks, hackers, and the future of urban life",
+      "id": "7866677753249135678",
+      "url": "https://books.google.com/books?hl=en&lr=&id=R3pJDAAAQBAJ&oi=fnd&pg=PP1&ots=t4SEmSBFxk&sig=SEltObbb_TnSEIOtTMpH4-RFb74",
+      "title": "The city of tomorrow: Sensors, networks, hackers, and the future of urban life",
+      "authors": "C Ratti, M Claudel",
+      "year": "2016",
+      "cited_by": 101,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7866677753249135678&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Doing disability differently: An alternative handbook on architecture, dis/ability and designing for everyday life",
+      "id": "11672071152101001298",
+      "url": "https://www.taylorfrancis.com/books/9781315777559",
+      "title": "Doing disability differently: An alternative handbook on architecture, dis/ability and designing for everyday life",
+      "authors": "J Boys",
+      "year": "2014",
+      "cited_by": 67,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11672071152101001298&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Theaster Gates's Dorchester Projects in Chicago",
+      "id": "3384718561415663149",
+      "url": "https://journals.sagepub.com/doi/abs/10.1177/0096144214563507",
+      "title": "Theaster Gates's Dorchester Projects in Chicago",
+      "authors": "K Reinhardt",
+      "year": "2015",
+      "cited_by": 12,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3384718561415663149&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Smelling, pulling, and looking: unpacking similarities and differences in dog and human city life",
+      "id": "13229241905265246883",
+      "url": "https://dl.acm.org/citation.cfm?id=2837013",
+      "title": "Smelling, pulling, and looking: unpacking similarities and differences in dog and human city life",
+      "authors": "F Aspling, O Juhlin, E Chiodo",
+      "year": "2015",
+      "cited_by": 10,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13229241905265246883&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Infrastructures of liberal life: From modernity and progress to resilience and ruins",
+      "id": "271111842242352380",
+      "url": "https://rgs-ibg.onlinelibrary.wiley.com/doi/pdf/10.1111/gec3.12377",
+      "title": "Infrastructures of liberal life: From modernity and progress to resilience and ruins",
+      "authors": "S Wakefield",
+      "year": "2018",
+      "cited_by": 16,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=271111842242352380&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Chapter Thirteen Dimensions of the future city",
+      "id": "924327511835796069",
+      "url": "https://books.google.com/books?hl=en&lr=&id=CF6aCwAAQBAJ&oi=fnd&pg=PA162&ots=KirBRw0ZMs&sig=Y8phuRyRF5KMhCp41VdliAK713w",
+      "title": "Chapter Thirteen Dimensions of the future city",
+      "authors": "M Claudel, C Ratti",
+      "year": "2016",
+      "cited_by": 4,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=924327511835796069&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Urban acupuncture 2.0: urban management tool inspired by social media",
+      "id": "10153900335528649988",
+      "url": "https://dl.acm.org/citation.cfm?id=3014124",
+      "title": "Urban acupuncture 2.0: urban management tool inspired by social media",
+      "authors": "M Petrova, A Nenko, K Sukharev",
+      "year": "2016",
+      "cited_by": 4,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10153900335528649988&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Introduction: What Is Cosmopolitical Design?",
+      "id": "4432639095826075366",
+      "url": "https://www.taylorfrancis.com/books/e/9781315545721/chapters/10.4324/9781315545721-8",
+      "title": "Introduction: What Is Cosmopolitical Design?",
+      "authors": "A Yaneva",
+      "year": "2017",
+      "cited_by": 5,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4432639095826075366&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "\u0130STANBUL TEKN\u0130K \u00dcN\u0130VERS\u0130TES\u0130\u2605 FEN B\u0130L\u0130MLER\u0130 ENST\u0130T\u00dcS\u00dc",
+      "id": "192618216799834556",
+      "url": "https://www.researchgate.net/profile/Ashal_Tyurkay/publication/333668003_Mimari_tasarimda_detaylarin_performans_degerlendirmesine_yonelik_bir_analiz_araci_onerisi_An_analysis_tool_for_performance_evaluation_of_architectural_details_A_proposal/links/5cfcc0e4299bf13a38489936/Mimari-tasarimda-detaylarin-performans-degerlendirmesine-yoenelik-bir-analiz-araci-oenerisi-An-analysis-tool-for-performance-evaluation-of-architectural-details-A-proposal.pdf",
+      "title": "\u0130STANBUL TEKN\u0130K \u00dcN\u0130VERS\u0130TES\u0130\u2605 FEN B\u0130L\u0130MLER\u0130 ENST\u0130T\u00dcS\u00dc",
+      "authors": "MTD PERFORMANS, DYB\u0130RAA \u00d6NER\u0130S\u0130",
+      "year": "2017",
+      "cited_by": 11,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=192618216799834556&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Landscape Architecture and Digital Technologies: Re-conceptualising design and making",
+      "id": "13133710427378733808",
+      "url": "https://www.taylorfrancis.com/books/9781315713526",
+      "title": "Landscape Architecture and Digital Technologies: Re-conceptualising design and making",
+      "authors": "J Walliss, H Rahmann",
+      "year": "2016",
+      "cited_by": 39,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13133710427378733808&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Designing with thermal comfort indices in outdoor sites",
+      "id": "16681727985969540409",
+      "url": "http://anzasca.net/wp-content/uploads/2015/12/107_Walls_Parker_Walliss_ASA2015.pdf",
+      "title": "Designing with thermal comfort indices in outdoor sites",
+      "authors": "W Walls, N Parker, J Walliss",
+      "year": "2015",
+      "cited_by": 6,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16681727985969540409&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Development of a building information modelling (BIM)-based real-time data integration system using a building management system (BMS)",
+      "id": "10746971766994046781",
+      "url": "https://link.springer.com/chapter/10.1007/978-3-319-50346-2_7",
+      "title": "Development of a building information modelling (BIM)-based real-time data integration system using a building management system (BMS)",
+      "authors": "MU Khalid, MK Bashir, D Newport",
+      "year": "2017",
+      "cited_by": 5,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10746971766994046781&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Environmental Design, Systems Thinking, and Human Agency: McHarg's Ecological Method and Steinitz and Rogers's Interdisciplinary Education Experiment",
+      "id": "9344433676578924869",
+      "url": "http://lj.uwpress.org/content/36/2/37.short",
+      "title": "Environmental Design, Systems Thinking, and Human Agency: McHarg's Ecological Method and Steinitz and Rogers's Interdisciplinary Education Experiment",
+      "authors": "MK Carlsson",
+      "year": "2017",
+      "cited_by": 5,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9344433676578924869&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "A Study on the Effects of BIM Adoption and Methods of Implementationin Landscape Architecture through an Analysis of Overseas Cases",
+      "id": "11003733003504381441",
+      "url": "http://www.koreascience.or.kr/article/JAKO201711656576570.page",
+      "title": "A Study on the Effects of BIM Adoption and Methods of Implementationin Landscape Architecture through an Analysis of Overseas Cases",
+      "authors": "BY Kim, YH Son",
+      "year": "2017",
+      "cited_by": 3,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11003733003504381441&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Reading landscape design representations as an interplay of validity, readability and interactivity: a framework for visual content analysis",
+      "id": "766844695024862899",
+      "url": "https://journals.sagepub.com/doi/abs/10.1177/1470357218779103",
+      "title": "Reading landscape design representations as an interplay of validity, readability and interactivity: a framework for visual content analysis",
+      "authors": "K Raaphorst, G Roeleveld, I Duchhart\u2026",
+      "year": "2018",
+      "cited_by": 3,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=766844695024862899&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Computational terrain modeling with distance functions for large scale landscape design",
+      "id": "14554425276843612798",
+      "url": "https://gispoint.de/fileadmin/user_upload/paper_gis_open/DLA_2019/537663024.pdf",
+      "title": "Computational terrain modeling with distance functions for large scale landscape design",
+      "authors": "I Hurkxkens, M Bernard",
+      "year": "2019",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14554425276843612798&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Onsite Analysis: Developing a Flexible Software Field-kit for Landscape Architecture and Spatial Design",
+      "id": "11436244080395619235",
+      "url": "https://gispoint.de/fileadmin/user_upload/paper_gis_open/DLA_2017/537629027.pdf",
+      "title": "Onsite Analysis: Developing a Flexible Software Field-kit for Landscape Architecture and Spatial Design",
+      "authors": "J Melsom, L Fraguada, I Hurkxkens",
+      "year": "2017",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11436244080395619235&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Whispering tales: using augmented reality to enhance cultural landscapes and Indigenous values",
+      "id": "3971375789615216719",
+      "url": "https://journals.sagepub.com/doi/abs/10.1177/1177180119860266",
+      "title": "Whispering tales: using augmented reality to enhance cultural landscapes and Indigenous values",
+      "authors": "B Marques, J McIntosh\u2026",
+      "year": "2019",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3971375789615216719&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Time, trial and thresholds: unfolding the iterative nature of design in a dryland river rehabilitation",
+      "id": "90365434799783300",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/18626033.2018.1476025",
+      "title": "Time, trial and thresholds: unfolding the iterative nature of design in a dryland river rehabilitation",
+      "authors": "S Moosavi",
+      "year": "2018",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=90365434799783300&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "A multifunctional computational approach to waterfront design",
+      "id": "3806295605933465878",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/00038628.2017.1383229",
+      "title": "A multifunctional computational approach to waterfront design",
+      "authors": "YJ Grobman, R Kozlovsky, H Levy",
+      "year": "2017",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3806295605933465878&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Gaps and futures in working between ecology and design for constructed ecologies",
+      "id": "13685729933350133487",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0169204614001972",
+      "title": "Gaps and futures in working between ecology and design for constructed ecologies",
+      "authors": "MJ Grose",
+      "year": "2014",
+      "cited_by": 28,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13685729933350133487&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Effects of local and landscape factors on exotic vegetation in the riparian zone of a regulated river: implications for reservoir conservation",
+      "id": "6925195501369333475",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0169204616301098",
+      "title": "Effects of local and landscape factors on exotic vegetation in the riparian zone of a regulated river: implications for reservoir conservation",
+      "authors": "C Chen, S Wu, CD Meurk, M Ma, J Zhao\u2026",
+      "year": "2017",
+      "cited_by": 14,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6925195501369333475&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Journal of Urban Ecology: Linking and promoting research and practice in the evolving discipline of urban ecology",
+      "id": "7407605929842500120",
+      "url": "https://academic.oup.com/jue/article-abstract/1/1/juv003/1830827",
+      "title": "Journal of Urban Ecology: Linking and promoting research and practice in the evolving discipline of urban ecology",
+      "authors": "MJ McDonnell",
+      "year": "2015",
+      "cited_by": 10,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7407605929842500120&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Landscape practice in the Middle East between local and global aspirations",
+      "id": "11652679368655896195",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/01426397.2015.1078888",
+      "title": "Landscape practice in the Middle East between local and global aspirations",
+      "authors": "S Moosavi, J Makhzoumi, M Grose",
+      "year": "2016",
+      "cited_by": 9,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11652679368655896195&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "River rehabilitation as an opportunity for ecological landscape design",
+      "id": "12983065694596069681",
+      "url": "https://www.research-collection.ethz.ch/handle/20.500.11850/105368",
+      "title": "River rehabilitation as an opportunity for ecological landscape design",
+      "authors": "A Gret-Regamey, B Weibel\u2026",
+      "year": "2016",
+      "cited_by": 9,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12983065694596069681&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Managing deforestation in a tropical compact city (Part B) Urban ecological approaches to landscape design",
+      "id": "15280095724024498346",
+      "url": "https://www.emeraldinsight.com/doi/abs/10.1108/SASBE-08-2015-0023",
+      "title": "Managing deforestation in a tropical compact city (Part B) Urban ecological approaches to landscape design",
+      "authors": "YH Hwang, Y Feng, PY Tan",
+      "year": "2016",
+      "cited_by": 6,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15280095724024498346&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Applying ecological knowledge to the innovative design of sustainable agroecosystems",
+      "id": "5739350054708475956",
+      "url": "https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/1365-2664.13173",
+      "title": "Applying ecological knowledge to the innovative design of sustainable agroecosystems",
+      "authors": "ET Berthet, V Bretagnolle, S Lavorel\u2026",
+      "year": "2019",
+      "cited_by": 6,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5739350054708475956&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Constructed ecologies: Critical reflections on ecology with design",
+      "id": "2222912193557056388",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2014-0-37646-5&isbn=9781315712543&format=googlePreviewPdf",
+      "title": "Constructed ecologies: Critical reflections on ecology with design",
+      "authors": "M Grose",
+      "year": "2017",
+      "cited_by": 6,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2222912193557056388&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Regenerative Development as an Integrative Paradigm and Methodology for Landscape Sustainability",
+      "id": "7115306019054090399",
+      "url": "https://www.mdpi.com/2071-1050/10/6/1910",
+      "title": "Regenerative Development as an Integrative Paradigm and Methodology for Landscape Sustainability",
+      "authors": "L Gibbons, S Cloutier, P Coseo, A Barakat",
+      "year": "2018",
+      "cited_by": 8,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7115306019054090399&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Inverse problem-solving helps us to collect the needed data: a reply to Falcy",
+      "id": "7541170178422992847",
+      "url": "https://www.cell.com/trends/ecology-evolution/fulltext/S0169-5347(15)00094-4",
+      "title": "Inverse problem-solving helps us to collect the needed data: a reply to Falcy",
+      "authors": "MJ Grose",
+      "year": "2015",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7541170178422992847&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The Politics of Parametricism: Digital Technologies in Architecture",
+      "id": "13828380248906480744",
+      "url": "https://books.google.com/books?hl=en&lr=&id=IPwQCgAAQBAJ&oi=fnd&pg=PP1&ots=1kdIyicekR&sig=h49aL7di4a_C1glDUfB8mT-946s",
+      "title": "The Politics of Parametricism: Digital Technologies in Architecture",
+      "authors": "M Poole, M Shvartzberg",
+      "year": "2015",
+      "cited_by": 22,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13828380248906480744&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Colaboraci\u00f3n, cooperaci\u00f3n, disensi\u00f3n. Modos de abordar el trabajo en grupo en la era de la fabricaci\u00f3n digital",
+      "id": "11633366871484894582",
+      "url": "https://upcommons.upc.edu/handle/2117/109591",
+      "title": "Colaboraci\u00f3n, cooperaci\u00f3n, disensi\u00f3n. Modos de abordar el trabajo en grupo en la era de la fabricaci\u00f3n digital",
+      "authors": "F Gonz\u00e1lez de Canales\u2026",
+      "year": "2017",
+      "cited_by": 3,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11633366871484894582&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Soft Living Architecture: An Alternative View of Bio-informed Practice",
+      "id": "15180838323802749182",
+      "url": "https://books.google.com/books?hl=en&lr=&id=eEttDwAAQBAJ&oi=fnd&pg=PP1&ots=uoVNCN0Tky&sig=xZs9ei8MBEJHVMjr3Cj9Wqg3io8",
+      "title": "Soft Living Architecture: An Alternative View of Bio-informed Practice",
+      "authors": "R Armstrong",
+      "year": "2018",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15180838323802749182&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "A Phenomenological Framework of Architectural Paradigms for the User-Centered Design of Virtual Environments",
+      "id": "1187256440891605637",
+      "url": "https://www.mdpi.com/2414-4088/2/4/80",
+      "title": "A Phenomenological Framework of Architectural Paradigms for the User-Centered Design of Virtual Environments",
+      "authors": "M Gladden",
+      "year": "2018",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=1187256440891605637&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Digital Architecture Beyond Computers: Fragments of a Cultural History of Computational Design",
+      "id": "5235281354134545983",
+      "url": "https://books.google.com/books?hl=en&lr=&id=7WBVDwAAQBAJ&oi=fnd&pg=PR3&ots=4LwpwjViFw&sig=b_C0_9fo2KqbNTi-2xEe0att_d4",
+      "title": "Digital Architecture Beyond Computers: Fragments of a Cultural History of Computational Design",
+      "authors": "R Bottazzi",
+      "year": "2018",
+      "cited_by": 4,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5235281354134545983&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Simulation and Architecture: Mapping Building Information Modeling",
+      "id": "14129279956257383195",
+      "url": "https://link.springer.com/article/10.1007/s00048-019-00224-9",
+      "title": "Simulation and Architecture: Mapping Building Information Modeling",
+      "authors": "N Bredella",
+      "year": "2019",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14129279956257383195&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Designing Imperfection: The Semiotics of the Pixel",
+      "id": "5836987149738153535",
+      "url": "https://iris.unito.it/handle/2318/1678284",
+      "title": "Designing Imperfection: The Semiotics of the Pixel",
+      "authors": "M Leone",
+      "year": "2018"
+    },
+    {
+      "label": "FACULTY OF ARCHITECTURE AND DESIGN, SOUTH-WEST JIAOTONG UNIVERSITY, CHENGDU, PEOPLE'S REPUBLIC OF CHINA",
+      "id": "wOo3LumK-xMJ",
+      "url": "https://academicjournal.ru/images/PDF/2019/Academy-7-46/parametric-randomness.pdf",
+      "title": "FACULTY OF ARCHITECTURE AND DESIGN, SOUTH-WEST JIAOTONG UNIVERSITY, CHENGDU, PEOPLE'S REPUBLIC OF CHINA",
+      "authors": "MV Viktorovich-PhD",
+      "year": "culture"
+    },
+    {
+      "label": "\u0645\u0633\u062a\u0648\u062f\u0639 \u0627\u0644\u0645\u0639\u0631\u0641\u0629 \u0627\u0644\u062f\u064a\u0646\u0627\u0645\u064a\u0643\u064a \u0644\u062d\u0631\u0643\u0629 \u062a\u0639\u062f\u062f\u064a\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0629 \u0627\u0644\u0623\u0634\u0643\u0627\u0644 \u0627\u0644\u0645\u0648\u0633\u0637\u0629 (\u0627\u0644\u0628\u0627\u0631\u0627\u0645\u064a\u062a\u0631\u0633\u064a\u0632\u0645) \u0641\u064a \u0627\u0644\u062a\u0635\u0645\u064a\u0645 \u0627\u0644\u062f\u0627\u062e\u0644\u064a\u200e",
+      "id": "eIvJSdHoW7kJ",
+      "url": "https://www.iasj.net/iasj?func=article&aId=141202",
+      "title": "\u0645\u0633\u062a\u0648\u062f\u0639 \u0627\u0644\u0645\u0639\u0631\u0641\u0629 \u0627\u0644\u062f\u064a\u0646\u0627\u0645\u064a\u0643\u064a \u0644\u062d\u0631\u0643\u0629 \u062a\u0639\u062f\u062f\u064a\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0640\u0629 \u0627\u0644\u0623\u0634\u0643\u0627\u0644 \u0627\u0644\u0645\u0648\u0633\u0637\u0629 (\u0627\u0644\u0628\u0627\u0631\u0627\u0645\u064a\u062a\u0631\u0633\u064a\u0632\u0645) \u0641\u064a \u0627\u0644\u062a\u0635\u0645\u064a\u0645 \u0627\u0644\u062f\u0627\u062e\u0644\u064a\u200e",
+      "authors": "\u062d\u0627\u0631\u062b \u0623\u0633\u0639\u062f \u0639\u0628\u062f \u0627\u0644\u0631\u0632\u0627\u0642 \u0627\u0644\u0633\u0639\u064a\u062f\u064a",
+      "year": "2018\u200e"
+    },
+    {
+      "label": "On Insignificance: The Loss of Meaning in the Post-Material Age",
+      "id": "tQ48SrDWy1IJ",
+      "url": "https://books.google.com/books?hl=en&lr=&id=9Aa5DwAAQBAJ&oi=fnd&pg=PT7&ots=csnqO-n9pl&sig=MpTX0NFU8CF0FO7-u8StyLA5TKY",
+      "title": "On Insignificance: The Loss of Meaning in the Post-Material Age",
+      "authors": "M Leone",
+      "year": "2019"
+    },
+    {
+      "label": "Architecture and interaction: human computer interaction in space and place",
+      "id": "17899675947937569447",
+      "url": "https://books.google.com/books?hl=en&lr=&id=IAVkDAAAQBAJ&oi=fnd&pg=PR5&ots=h_aiMaOwUi&sig=aGajdHwp-GyuSW3hDJQR2jxB13c",
+      "title": "Architecture and interaction: human computer interaction in space and place",
+      "authors": "NS Dalton, H Schn\u00e4delbach, M Wiberg, T Varoudis",
+      "year": "2016",
+      "cited_by": 18,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17899675947937569447&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Studying space use: bringing HCI tools to architectural projects",
+      "id": "10500383605548221431",
+      "url": "https://dl.acm.org/citation.cfm?id=3026055",
+      "title": "Studying space use: bringing HCI tools to architectural projects",
+      "authors": "H Verma, HS Alavi, D Lalanne",
+      "year": "2017",
+      "cited_by": 14,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10500383605548221431&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Human-building interaction under various indoor temperatures through neural-signal electroencephalogram (EEG) methods",
+      "id": "17020391907741092698",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0360132317305620",
+      "title": "Human-building interaction under various indoor temperatures through neural-signal electroencephalogram (EEG) methods",
+      "authors": "X Shan, EH Yang, J Zhou, VWC Chang",
+      "year": "2018",
+      "cited_by": 7,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17020391907741092698&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "CELIO: An application development framework for interactive spaces",
+      "id": "15963076367074028844",
+      "url": "https://arxiv.org/abs/1710.01772",
+      "title": "CELIO: An application development framework for interactive spaces",
+      "authors": "YB Shrinivasan, Y Zhang",
+      "year": "2017",
+      "cited_by": 2,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15963076367074028844&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "An approach to user interactions with IoT-enabled spaces",
+      "id": "3121936360143719702",
+      "url": "https://ieeexplore.ieee.org/abstract/document/8000050/",
+      "title": "An approach to user interactions with IoT-enabled spaces",
+      "authors": "D Gra\u010danin, M Handosa, HG Elmongui\u2026",
+      "year": "2017",
+      "cited_by": 2,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3121936360143719702&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Designing Places for Reflection",
+      "id": "18256170906401518494",
+      "url": "https://link.springer.com/chapter/10.1007/978-3-319-94659-7_6",
+      "title": "Designing Places for Reflection",
+      "authors": "M Ghajargar, M Wiberg, E Stolterman",
+      "year": "2019",
+      "cited_by": 2,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=18256170906401518494&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Reconfigurable spaces and places in smart built environments: A service centric approach",
+      "id": "17068330889001184683",
+      "url": "https://link.springer.com/chapter/10.1007/978-3-319-92285-0_63",
+      "title": "Reconfigurable spaces and places in smart built environments: A service centric approach",
+      "authors": "D Gra\u010danin, M Eltoweissy, L Cheng\u2026",
+      "year": "2018",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17068330889001184683&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "EARLY VIEW",
+      "id": "17086463283653009169",
+      "url": "http://web.usm.my/jcdc/earlyView/JCDC%20Early%20View_Masoome%20Amini.pdf",
+      "title": "EARLY VIEW",
+      "authors": "M Amini, M Mahdavinejad, M Bemanian",
+      "year": "2018"
+    },
+    {
+      "label": "Human-building interaction: Sketches and grounds for a research program",
+      "id": "e5bUWtKZw_8J",
+      "url": "https://interactions.acm.org/archive/view/july-august-2019/human-building-interaction",
+      "title": "Human-building interaction: Sketches and grounds for a research program",
+      "authors": "H Alavi, E Churchill, M Wiberg, D Lalanne\u2026",
+      "year": "2019"
+    },
+    {
+      "label": "Virtual Reality for Immersive Data Interaction",
+      "id": "QDQAYc6XwZAJ",
+      "url": "https://go.gale.com/ps/i.do?id=GALE%7CA598128841&sid=googleScholar&v=2.1&it=r&linkaccess=abs&issn=20955405&p=AONE&sw=w",
+      "title": "Virtual Reality for Immersive Data Interaction",
+      "authors": "P Fricker, L Huiyan, T Xiaojie",
+      "year": "2019"
+    },
+    {
+      "label": "Virtual prototyping of physical space-The value of presence, place and direct communication in prototyping",
+      "id": "J0cQZO64KpgJ",
+      "url": "http://muep.mau.se/handle/2043/25239",
+      "title": "Virtual prototyping of physical space-The value of presence, place and direct communication in prototyping",
+      "authors": "A Rehnberg",
+      "year": "2018"
+    },
+    {
+      "label": "GIS-based landscape design research",
+      "id": "5746580021715119725",
+      "url": "https://superheroscitech.tudelft.nl/index.php/abe/article/view/1018",
+      "title": "GIS-based landscape design research",
+      "authors": "S Nijhuis",
+      "year": "2017",
+      "cited_by": 14,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5746580021715119725&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "GIS-based landscape design research: Exploring aspects of visibility in landscape architectonic compositions",
+      "id": "10461979408144379667",
+      "url": "https://link.springer.com/chapter/10.1007/978-3-319-08299-8_13",
+      "title": "GIS-based landscape design research: Exploring aspects of visibility in landscape architectonic compositions",
+      "authors": "S Nijhuis",
+      "year": "2014",
+      "cited_by": 10,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10461979408144379667&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Portraying urban landscape: A quantitative analysis system applied in fifteen metropolises in China",
+      "id": "14794998278891506927",
+      "url": "https://www.sciencedirect.com/science/article/pii/S2210670718320055",
+      "title": "Portraying urban landscape: A quantitative analysis system applied in fifteen metropolises in China",
+      "authors": "A Zhang, C Xia, J Chu, J Lin, W Li, J Wu",
+      "year": "2019",
+      "cited_by": 6,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14794998278891506927&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Applications of GIS in landscape design research",
+      "id": "11486682521526109231",
+      "url": "https://journals.open.tudelft.nl/index.php/rius/article/view/1367",
+      "title": "Applications of GIS in landscape design research",
+      "authors": "S Nijhuis",
+      "year": "2016",
+      "cited_by": 2,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11486682521526109231&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "GIS-applications in landscape design and research",
+      "id": "7473454016740929349",
+      "url": "https://library.wur.nl/WebQuery/wurpubs/fulltext/452919#page=149",
+      "title": "GIS-applications in landscape design and research",
+      "authors": "S NIJHUIS",
+      "year": "2016"
+    },
+    {
+      "label": "A DESIGN STUDY INTO BEHAVIOR AND PREFERENCES OF TOURISTS IN AMSTERDAM",
+      "id": "AEgHEC2tfywJ",
+      "url": "http://edepot.wur.nl/426507",
+      "title": "A DESIGN STUDY INTO BEHAVIOR AND PREFERENCES OF TOURISTS IN AMSTERDAM",
+      "authors": "L Elsinga",
+      "year": "2017"
+    },
+    {
+      "label": "Drawing time",
+      "id": "2972658694059916946",
+      "url": "https://www.bouwkunst.ahk.nl/fileadmin/download/avb/actueel/nvd-propshortmarch11.pdf",
+      "title": "Drawing time",
+      "authors": "N van Dooren",
+      "year": "2011"
+    },
+    {
+      "label": "The Artist's Landscape",
+      "id": "r1taHKqtcQIJ",
+      "url": "https://link.springer.com/chapter/10.1007/978-94-024-1183-6_11",
+      "title": "The Artist's Landscape",
+      "authors": "M Antrop, V Van Eetvelde",
+      "year": "2017"
+    },
+    {
+      "label": "More than meets the eye: a critical semiotic analysis of landscape design visualizations",
+      "id": "6983454639444822430",
+      "url": "https://library.wur.nl/WebQuery/wurpubs/fulltext/470766",
+      "title": "More than meets the eye: a critical semiotic analysis of landscape design visualizations",
+      "authors": "K Raaphorst",
+      "year": "2019"
+    },
+    {
+      "label": "Sensing and Experiencing the Landscape",
+      "id": "EnrtukmJEroJ",
+      "url": "https://link.springer.com/chapter/10.1007/978-94-024-1183-6_6",
+      "title": "Sensing and Experiencing the Landscape",
+      "authors": "M Antrop, V Van Eetvelde",
+      "year": "2017"
+    },
+    {
+      "label": "Pedagogical foundations: deploying digital techniques in design/research practice",
+      "id": "16568525728940274248",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/18626033.2015.968421",
+      "title": "Pedagogical foundations: deploying digital techniques in design/research practice",
+      "authors": "J Walliss, Z Hong, H Rahmann\u2026",
+      "year": "2014",
+      "cited_by": 14,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16568525728940274248&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Landscape theory in design",
+      "id": "15213419494758307020",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2013-0-17439-4&isbn=9781315470764&format=googlePreviewPdf",
+      "title": "Landscape theory in design",
+      "authors": "S Herrington",
+      "year": "2016",
+      "cited_by": 8,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=15213419494758307020&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Issues of learner-centered studio classes in landscape architectural education",
+      "id": "5208746440259458278",
+      "url": "http://www.koreascience.or.kr/article/JAKO201509139906887.page",
+      "title": "Issues of learner-centered studio classes in landscape architectural education",
+      "authors": "AY Kim",
+      "year": "2015",
+      "cited_by": 2,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5208746440259458278&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Reflecting Time in Computer-aided Landscape Design and Analysis: Developing an Application for Modelling Seasonality and Resiliency in Small Scale\u00a0\u2026",
+      "id": "13474849544184225736",
+      "url": "http://gispoint.de/fileadmin/user_upload/paper_gis_open/DLA_2016/537612025.pdf",
+      "title": "Reflecting Time in Computer-aided Landscape Design and Analysis: Developing an Application for Modelling Seasonality and Resiliency in Small Scale\u00a0\u2026",
+      "authors": "N Tebyanian",
+      "year": "2016",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=13474849544184225736&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Saudi culture and the potential introduction of digital design techniques: influences and interactions",
+      "id": "12384444728028950269",
+      "url": "https://opus.lib.uts.edu.au/handle/10453/90050",
+      "title": "Saudi culture and the potential introduction of digital design techniques: influences and interactions",
+      "authors": "WSA Qattan",
+      "year": "2016"
+    },
+    {
+      "label": "[CITATION][C]",
+      "id": "bPu5kSNHoqoJ",
+      "title": "[CITATION][C]",
+      "authors": "Y Zeng",
+      "year": "2017"
+    },
+    {
+      "label": "Functions and Roles of Digital Landscape Architectural Drawing",
+      "id": "3228375306622695572",
+      "url": "http://www.koreascience.or.kr/article/JAKO201814955686106.page",
+      "title": "Functions and Roles of Digital Landscape Architectural Drawing",
+      "authors": "MJ Lee",
+      "year": "2018",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3228375306622695572&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Digital cosmopoiesis in architectural pedagogy: An analysis through Frascari",
+      "id": "exd6r6dREswJ",
+      "url": "https://www.ingentaconnect.com/contentone/intellect/drtp/2019/00000004/00000002/art00002",
+      "title": "Digital cosmopoiesis in architectural pedagogy: An analysis through Frascari",
+      "authors": "Y Putra",
+      "year": "2019"
+    },
+    {
+      "label": "Visualization, participation and rhetoric: The discursive power of landscape design representations in participatory processes",
+      "id": "15835605961810124052",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/18626033.2019.1673569",
+      "title": "Visualization, participation and rhetoric: The discursive power of landscape design representations in participatory processes",
+      "authors": "K Raaphorst, W van der Knaap\u2026",
+      "year": "2019"
+    },
+    {
+      "label": "The Green Grasshopper: Approaches to Teaching Computational Design Methods in Landscape Architecture",
+      "id": "8423144651455974976",
+      "url": "https://gispoint.de/fileadmin/user_upload/paper_gis_open/DLA_2018/537642043.pdf",
+      "title": "The Green Grasshopper: Approaches to Teaching Computational Design Methods in Landscape Architecture",
+      "authors": "P Belesky",
+      "year": "2018",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=8423144651455974976&as_sdt=40000005&sciodt=0,22&hl=en"
+    }
+  ],
+  "links": [
+    {
+      "source": "11244293858113798874",
+      "target": "8476807844307919048"
+    },
+    {
+      "source": "7734411929509306183",
+      "target": "11244293858113798874"
+    },
+    {
+      "source": "3538236727389985683",
+      "target": "11244293858113798874"
+    },
+    {
+      "source": "3831639673457127331",
+      "target": "11244293858113798874"
+    },
+    {
+      "source": "2981428655877438499",
+      "target": "11244293858113798874"
+    },
+    {
+      "source": "2933923163944750679",
+      "target": "11244293858113798874"
+    },
+    {
+      "source": "18406641731304936948",
+      "target": "11244293858113798874"
+    },
+    {
+      "source": "11593615735529873550",
+      "target": "11244293858113798874"
+    },
+    {
+      "source": "938285620772532416",
+      "target": "11244293858113798874"
+    },
+    {
+      "source": "6625024565000359248",
+      "target": "11244293858113798874"
+    },
+    {
+      "source": "1985113819836296545",
+      "target": "11244293858113798874"
+    },
+    {
+      "source": "7680592228252568088",
+      "target": "8476807844307919048"
+    },
+    {
+      "source": "10881085281107066117",
+      "target": "7680592228252568088"
+    },
+    {
+      "source": "10881085281107066117",
+      "target": "13828380248906480744"
+    },
+    {
+      "source": "12798093957460660945",
+      "target": "7680592228252568088"
+    },
+    {
+      "source": "12798093957460660945",
+      "target": "13298417023162186480"
+    },
+    {
+      "source": "12798093957460660945",
+      "target": "16041517863171848492"
+    },
+    {
+      "source": "16686552515626699286",
+      "target": "7680592228252568088"
+    },
+    {
+      "source": "17631908195474930437",
+      "target": "7680592228252568088"
+    },
+    {
+      "source": "1203226838820369386",
+      "target": "7680592228252568088"
+    },
+    {
+      "source": "103594326575137679",
+      "target": "7680592228252568088"
+    },
+    {
+      "source": "1944984241316034587",
+      "target": "7680592228252568088"
+    },
+    {
+      "source": "7016418567020193153",
+      "target": "7680592228252568088"
+    },
+    {
+      "source": "3540774304360858015",
+      "target": "7680592228252568088"
+    },
+    {
+      "source": "16692402039081143280",
+      "target": "7680592228252568088"
+    },
+    {
+      "source": "13298417023162186480",
+      "target": "8476807844307919048"
+    },
+    {
+      "source": "8183350149250071367",
+      "target": "13298417023162186480"
+    },
+    {
+      "source": "5526371405745974412",
+      "target": "13298417023162186480"
+    },
+    {
+      "source": "10584823769911105682",
+      "target": "13298417023162186480"
+    },
+    {
+      "source": "16553336782489732141",
+      "target": "13298417023162186480"
+    },
+    {
+      "source": "14368481292393226025",
+      "target": "13298417023162186480"
+    },
+    {
+      "source": "12258166919394478530",
+      "target": "13298417023162186480"
+    },
+    {
+      "source": "7906843352526234511",
+      "target": "13298417023162186480"
+    },
+    {
+      "source": "5339747615197070850",
+      "target": "13298417023162186480"
+    },
+    {
+      "source": "6815989958394393847",
+      "target": "13298417023162186480"
+    },
+    {
+      "source": "16041517863171848492",
+      "target": "8476807844307919048"
+    },
+    {
+      "source": "7866677753249135678",
+      "target": "16041517863171848492"
+    },
+    {
+      "source": "11672071152101001298",
+      "target": "16041517863171848492"
+    },
+    {
+      "source": "3384718561415663149",
+      "target": "16041517863171848492"
+    },
+    {
+      "source": "13229241905265246883",
+      "target": "16041517863171848492"
+    },
+    {
+      "source": "271111842242352380",
+      "target": "16041517863171848492"
+    },
+    {
+      "source": "924327511835796069",
+      "target": "16041517863171848492"
+    },
+    {
+      "source": "10153900335528649988",
+      "target": "16041517863171848492"
+    },
+    {
+      "source": "4432639095826075366",
+      "target": "16041517863171848492"
+    },
+    {
+      "source": "192618216799834556",
+      "target": "16041517863171848492"
+    },
+    {
+      "source": "13133710427378733808",
+      "target": "8476807844307919048"
+    },
+    {
+      "source": "13133710427378733808",
+      "target": "16568525728940274248"
+    },
+    {
+      "source": "16681727985969540409",
+      "target": "13133710427378733808"
+    },
+    {
+      "source": "10746971766994046781",
+      "target": "13133710427378733808"
+    },
+    {
+      "source": "9344433676578924869",
+      "target": "13133710427378733808"
+    },
+    {
+      "source": "11003733003504381441",
+      "target": "13133710427378733808"
+    },
+    {
+      "source": "766844695024862899",
+      "target": "13133710427378733808"
+    },
+    {
+      "source": "766844695024862899",
+      "target": "5746580021715119725"
+    },
+    {
+      "source": "14554425276843612798",
+      "target": "13133710427378733808"
+    },
+    {
+      "source": "11436244080395619235",
+      "target": "13133710427378733808"
+    },
+    {
+      "source": "3971375789615216719",
+      "target": "13133710427378733808"
+    },
+    {
+      "source": "90365434799783300",
+      "target": "13133710427378733808"
+    },
+    {
+      "source": "90365434799783300",
+      "target": "13685729933350133487"
+    },
+    {
+      "source": "3806295605933465878",
+      "target": "13133710427378733808"
+    },
+    {
+      "source": "13685729933350133487",
+      "target": "8476807844307919048"
+    },
+    {
+      "source": "6925195501369333475",
+      "target": "13685729933350133487"
+    },
+    {
+      "source": "7407605929842500120",
+      "target": "13685729933350133487"
+    },
+    {
+      "source": "11652679368655896195",
+      "target": "13685729933350133487"
+    },
+    {
+      "source": "12983065694596069681",
+      "target": "13685729933350133487"
+    },
+    {
+      "source": "15280095724024498346",
+      "target": "13685729933350133487"
+    },
+    {
+      "source": "5739350054708475956",
+      "target": "13685729933350133487"
+    },
+    {
+      "source": "2222912193557056388",
+      "target": "13685729933350133487"
+    },
+    {
+      "source": "7115306019054090399",
+      "target": "13685729933350133487"
+    },
+    {
+      "source": "7541170178422992847",
+      "target": "13685729933350133487"
+    },
+    {
+      "source": "13828380248906480744",
+      "target": "8476807844307919048"
+    },
+    {
+      "source": "11633366871484894582",
+      "target": "13828380248906480744"
+    },
+    {
+      "source": "15180838323802749182",
+      "target": "13828380248906480744"
+    },
+    {
+      "source": "1187256440891605637",
+      "target": "13828380248906480744"
+    },
+    {
+      "source": "5235281354134545983",
+      "target": "13828380248906480744"
+    },
+    {
+      "source": "14129279956257383195",
+      "target": "13828380248906480744"
+    },
+    {
+      "source": "5836987149738153535",
+      "target": "13828380248906480744"
+    },
+    {
+      "source": "wOo3LumK-xMJ",
+      "target": "13828380248906480744"
+    },
+    {
+      "source": "eIvJSdHoW7kJ",
+      "target": "13828380248906480744"
+    },
+    {
+      "source": "tQ48SrDWy1IJ",
+      "target": "13828380248906480744"
+    },
+    {
+      "source": "17899675947937569447",
+      "target": "8476807844307919048"
+    },
+    {
+      "source": "10500383605548221431",
+      "target": "17899675947937569447"
+    },
+    {
+      "source": "17020391907741092698",
+      "target": "17899675947937569447"
+    },
+    {
+      "source": "15963076367074028844",
+      "target": "17899675947937569447"
+    },
+    {
+      "source": "3121936360143719702",
+      "target": "17899675947937569447"
+    },
+    {
+      "source": "18256170906401518494",
+      "target": "17899675947937569447"
+    },
+    {
+      "source": "17068330889001184683",
+      "target": "17899675947937569447"
+    },
+    {
+      "source": "17086463283653009169",
+      "target": "17899675947937569447"
+    },
+    {
+      "source": "e5bUWtKZw_8J",
+      "target": "17899675947937569447"
+    },
+    {
+      "source": "QDQAYc6XwZAJ",
+      "target": "17899675947937569447"
+    },
+    {
+      "source": "J0cQZO64KpgJ",
+      "target": "17899675947937569447"
+    },
+    {
+      "source": "5746580021715119725",
+      "target": "8476807844307919048"
+    },
+    {
+      "source": "10461979408144379667",
+      "target": "5746580021715119725"
+    },
+    {
+      "source": "14794998278891506927",
+      "target": "5746580021715119725"
+    },
+    {
+      "source": "11486682521526109231",
+      "target": "5746580021715119725"
+    },
+    {
+      "source": "7473454016740929349",
+      "target": "5746580021715119725"
+    },
+    {
+      "source": "AEgHEC2tfywJ",
+      "target": "5746580021715119725"
+    },
+    {
+      "source": "2972658694059916946",
+      "target": "5746580021715119725"
+    },
+    {
+      "source": "r1taHKqtcQIJ",
+      "target": "5746580021715119725"
+    },
+    {
+      "source": "6983454639444822430",
+      "target": "5746580021715119725"
+    },
+    {
+      "source": "EnrtukmJEroJ",
+      "target": "5746580021715119725"
+    },
+    {
+      "source": "16568525728940274248",
+      "target": "8476807844307919048"
+    },
+    {
+      "source": "15213419494758307020",
+      "target": "16568525728940274248"
+    },
+    {
+      "source": "5208746440259458278",
+      "target": "16568525728940274248"
+    },
+    {
+      "source": "13474849544184225736",
+      "target": "16568525728940274248"
+    },
+    {
+      "source": "12384444728028950269",
+      "target": "16568525728940274248"
+    },
+    {
+      "source": "bPu5kSNHoqoJ",
+      "target": "16568525728940274248"
+    },
+    {
+      "source": "3228375306622695572",
+      "target": "16568525728940274248"
+    },
+    {
+      "source": "exd6r6dREswJ",
+      "target": "16568525728940274248"
+    },
+    {
+      "source": "15835605961810124052",
+      "target": "16568525728940274248"
+    },
+    {
+      "source": "8423144651455974976",
+      "target": "16568525728940274248"
+    }
+  ]
+};
+
+var link = svg.append("g")
+    .attr("class", "links")
+  .selectAll("line")
+  .data(graph.links)
+  .enter().append("line");
+
+var node = svg.append("g")
+    .attr("class", "nodes")
+  .selectAll("circle")
+  .data(graph.nodes)
+  .enter().append("circle")
+    .attr("r", 5)
+    .call(d3.drag()
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended));
+
+node.append("title")
+    .text(function(d) {
+        return d.authors ? d.title + ' - ' + d.authors : d.title
+    });
+
+node.on("click", function(d) {
+  window.open(d.url, '_blank');
+  d3.event.stopPropagation();
+});
+
+simulation
+    .nodes(graph.nodes)
+    .on("tick", ticked);
+
+simulation.force("link")
+    .links(graph.links);
+
+function ticked() {
+  link
+      .attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
+
+  node
+      .attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; });
+}
+
+function dragstarted(d) {
+  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+  d.fx = d.x;
+  d.fy = d.y;
+}
+
+function dragged(d) {
+  d.fx = d3.event.x;
+  d.fy = d3.event.y;
+}
+
+function dragended(d) {
+  if (!d3.event.active) simulation.alphaTarget(0);
+  d.fx = null;
+  d.fy = null;
+}
+
+</script>
