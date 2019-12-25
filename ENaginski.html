@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<style>
+
+.links line {
+  stroke: #999;
+  stroke-opacity: 0.8;
+  stroke-width: 2px;
+}
+
+.nodes circle {
+  stroke: black;
+  fill: white;
+  stroke-width: 1.5px;
+}
+
+#graph {
+  width: 99vw;
+  height: 99vh;
+}
+
+</style>
+<svg id="graph"></svg>
+<script>
+
+var width = $(window).width();
+var height = $(window).height();
+
+var svg = d3.select("svg")
+    .attr("height", height)
+    .attr("width", width);
+
+var color = d3.scaleOrdinal(d3.schemeCategory20c);
+
+var simulation = d3.forceSimulation()
+    .velocityDecay(0.6)
+    .force("link", d3.forceLink().id(function(d) { return d.id; }))
+    .force("charge", d3.forceManyBody())
+    .force("center", d3.forceCenter(width / 2, height / 2));
+
+var graph = {
+  "nodes": [
+    {
+      "label": "Portraiture and politics in revolutionary France",
+      "id": "7087273120150737568",
+      "url": "https://books.google.com/books?hl=en&lr=&id=-45VBAAAQBAJ&oi=fnd&pg=PP1&ots=waTAGuURPT&sig=YtoX0r2YOnwiuJwccOMDaARIHgw",
+      "title": "Portraiture and politics in revolutionary France",
+      "authors": "A Freund",
+      "year": "2014",
+      "cited_by": 15,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=7087273120150737568&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Sculpture and enlightenment",
+      "id": "4272197130184341934",
+      "title": "Sculpture and enlightenment"
+    },
+    {
+      "label": "What is an Event?",
+      "id": "14336503457506622880",
+      "url": "https://books.google.com/books?hl=en&lr=&id=BPgmDgAAQBAJ&oi=fnd&pg=PR7&ots=aow22S1ImX&sig=IPTLa42it2uzaJ9IkUNaFcjG9wY",
+      "title": "What is an Event?",
+      "authors": "R Wagner-Pacifici",
+      "year": "2017",
+      "cited_by": 56,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14336503457506622880&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "\u0418\u0441\u0442\u043e\u0440\u0438\u044f \u0438\u0441\u043a\u0443\u0441\u0441\u0442\u0432\u0430 \u0437\u0430\u043f\u0430\u0434\u043d\u043e\u0439 \u0415\u0432\u0440\u043e\u043f\u044b. \u041e\u0442 \u0410\u043d\u0442\u0438\u0447\u043d\u043e\u0441\u0442\u0438 \u0434\u043e \u043d\u0430\u0448\u0438\u0445 \u0434\u043d\u0435\u0439 7-\u0435 \u0438\u0437\u0434., \u043f\u0435\u0440. \u0438 \u0434\u043e\u043f. \u0423\u0447\u0435\u0431\u043d\u0438\u043a \u0434\u043b\u044f \u0421\u041f\u041e",
+      "id": "16209914352080963763",
+      "url": "https://books.google.com/books?hl=en&lr=&id=tCFZDwAAQBAJ&oi=fnd&pg=PA196&ots=GkaO6u6dsC&sig=VK-wPl3F3YqJp9ACtzdLg5HRIgE",
+      "title": "\u0418\u0441\u0442\u043e\u0440\u0438\u044f \u0438\u0441\u043a\u0443\u0441\u0441\u0442\u0432\u0430 \u0437\u0430\u043f\u0430\u0434\u043d\u043e\u0439 \u0415\u0432\u0440\u043e\u043f\u044b. \u041e\u0442 \u0410\u043d\u0442\u0438\u0447\u043d\u043e\u0441\u0442\u0438 \u0434\u043e \u043d\u0430\u0448\u0438\u0445 \u0434\u043d\u0435\u0439 7-\u0435 \u0438\u0437\u0434., \u043f\u0435\u0440. \u0438 \u0434\u043e\u043f. \u0423\u0447\u0435\u0431\u043d\u0438\u043a \u0434\u043b\u044f \u0421\u041f\u041e",
+      "authors": "\u0422 \u0418\u043b\u044c\u0438\u043d\u0430, \u041c \u0424\u043e\u043c\u0438\u043d\u0430",
+      "year": "2018",
+      "cited_by": 32,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16209914352080963763&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Framing Majismo: Art and Royal Identity in Eighteenth-Century Spain",
+      "id": "883565957343457643",
+      "url": "https://books.google.com/books?hl=en&lr=&id=kBwvCwAAQBAJ&oi=fnd&pg=PT10&ots=TSKUXtXwun&sig=WMZzMJFF9Qmf6gS_HrPg1vE_k40",
+      "title": "Framing Majismo: Art and Royal Identity in Eighteenth-Century Spain",
+      "authors": "T Zanardi",
+      "year": "2016",
+      "cited_by": 6,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=883565957343457643&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "The Dauphin and His Doubles: Visualizing Royal Imposture after the French Revolution",
+      "id": "16453699320844078183",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/00043079.2015.1074848",
+      "title": "The Dauphin and His Doubles: Visualizing Royal Imposture after the French Revolution",
+      "authors": "R Taws",
+      "year": "2016",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16453699320844078183&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Days of Glory?: Imaging Military Recruitment and the French Revolution",
+      "id": "12509531799634118993",
+      "url": "https://link.springer.com/content/pdf/10.1057/978-1-137-54294-6.pdf",
+      "title": "Days of Glory?: Imaging Military Recruitment and the French Revolution",
+      "authors": "V Mainz",
+      "year": "2016",
+      "cited_by": 3,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=12509531799634118993&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "'No Picture more Charming': The Family Portrait in Eighteenth-Century France",
+      "id": "4846855504486117578",
+      "url": "http://oro.open.ac.uk/50452/1/No%20Picture%20more%20Charming.pdf",
+      "title": "'No Picture more Charming': The Family Portrait in Eighteenth-Century France",
+      "authors": "E Barker",
+      "year": "2017",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=4846855504486117578&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "An Alternative Ancien R\u00e9gime? Elisabeth Vig\u00e9e-Lebrun in Russia",
+      "id": "7322824926774351115",
+      "url": "https://scholarcommons.usf.edu/etd/6157/",
+      "title": "An Alternative Ancien R\u00e9gime? Elisabeth Vig\u00e9e-Lebrun in Russia",
+      "authors": "EE Wilson",
+      "year": "2016"
+    },
+    {
+      "label": "Female Portraiture and Patronage in Marie Antoinette's Court: The Princesse de Lamballe",
+      "id": "11692253779625407273",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2017-0-61704-9&isbn=9781351061810&format=googlePreviewPdf",
+      "title": "Female Portraiture and Patronage in Marie Antoinette's Court: The Princesse de Lamballe",
+      "authors": "S Grant",
+      "year": "2018",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11692253779625407273&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Prison, Publicity, and the Carceral\" self\": Mirabeau between Ancien Regime and Revolution",
+      "id": "Z16EXJaZ43gJ",
+      "url": "https://scholarship.tricolib.brynmawr.edu/handle/10066/21926",
+      "title": "Prison, Publicity, and the Carceral\" self\": Mirabeau between Ancien Regime and Revolution",
+      "authors": "S Li",
+      "year": "2019"
+    },
+    {
+      "label": "The Invention of a Modern Medium",
+      "id": "16471537540046994018",
+      "url": "http://www.academia.edu/download/54931444/Drawing_The_Invention_of_a_Modern_Medium_Molarsky-Beck.pdf",
+      "title": "The Invention of a Modern Medium",
+      "authors": "E Lajer-Burcharth, EM Rudy",
+      "year": "2017"
+    },
+    {
+      "label": "Pietro Tacca's Quattro Mori and the Conditions of Slavery in Early Seicento Tuscany",
+      "id": "6197823734066733933",
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/00043079.2014.943121",
+      "title": "Pietro Tacca's Quattro Mori and the Conditions of Slavery in Early Seicento Tuscany",
+      "authors": "M Rosen",
+      "year": "2015",
+      "cited_by": 7,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=6197823734066733933&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Pietro Tacca and His Quattro Mori: The Beauty and Identity of the Slaves",
+      "id": "9101375898786268810",
+      "url": "http://search.proquest.com/openview/464b1e7bec01fc3c218df51797af08a0/1?pq-origsite=gscholar&cbl=556350",
+      "title": "Pietro Tacca and His Quattro Mori: The Beauty and Identity of the Slaves",
+      "authors": "SF Ostrow",
+      "year": "2015",
+      "cited_by": 5,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9101375898786268810&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Maritime Weaponry Between France and Algiers",
+      "id": "13752626951452622514",
+      "url": "https://www.academia.edu/download/60740235/Martin_and_Weiss_A_Tale_of_Two_Guns20190929-82037-16bld5r.pdf",
+      "title": "Maritime Weaponry Between France and Algiers",
+      "authors": "M Martin, G Weiss",
+      "year": "2019"
+    },
+    {
+      "label": "Slavery and Construction at the Royal Palace of Caserta",
+      "id": "17418086873774552503",
+      "url": "https://jsah.ucpress.edu/content/78/2/167.abstract",
+      "title": "Slavery and Construction at the Royal Palace of Caserta",
+      "authors": "RL Thomas",
+      "year": "2019"
+    },
+    {
+      "label": "Patron Saint of a World in Crisis: Early Modern Representations of St. Francis Xavier in Europe and Asia",
+      "id": "11065988693497379998",
+      "url": "http://d-scholarship.pitt.edu/27647/",
+      "title": "Patron Saint of a World in Crisis: Early Modern Representations of St. Francis Xavier in Europe and Asia",
+      "authors": "R Miller",
+      "year": "2016"
+    },
+    {
+      "label": "Fiabe inesauribili. Revisionismo e metamorfosi del femminile dal Seicento al terzo millennio",
+      "id": "12707474596102485577",
+      "url": "https://escholarship.org/uc/item/0hm689wz",
+      "title": "Fiabe inesauribili. Revisionismo e metamorfosi del femminile dal Seicento al terzo millennio",
+      "authors": "V Ardeni",
+      "year": "2019"
+    },
+    {
+      "label": "Livorno, Lapisl\u00e1zuli, geolog\u00eda y los tesoros del mar en 1604",
+      "id": "14504198303393275920",
+      "url": "http://revistas.uned.es/index.php/ETFVII/article/view/19778",
+      "title": "Livorno, Lapisl\u00e1zuli, geolog\u00eda y los tesoros del mar en 1604",
+      "authors": "H Baader",
+      "year": "2017"
+    },
+    {
+      "label": "Global Renaissance Art: Classroom, Academy, Museum, Canon",
+      "id": "1932295933484181382",
+      "url": "https://brill.com/downloadpdf/book/9789004355798/B9789004355798_011.pdf",
+      "title": "Global Renaissance Art: Classroom, Academy, Museum, Canon",
+      "authors": "L Markey",
+      "year": "2017"
+    },
+    {
+      "label": "Picturing Marie Leszczinska (1703-1768): Representing Queenship in Eighteenth-century France",
+      "id": "17991783186151005638",
+      "url": "https://content.taylorfrancis.com/books/download?dac=C2015-0-85171-0&isbn=9781351554145&format=googlePreviewPdf",
+      "title": "Picturing Marie Leszczinska (1703-1768): Representing Queenship in Eighteenth-century France",
+      "authors": "JG Germann",
+      "year": "2017",
+      "cited_by": 5,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=17991783186151005638&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Representing Duchess Anna Amalia's Bildung: A Visual Metamorphosis in Portraiture from Political to Personal in Eighteenth-century Germany",
+      "id": "262983407674483069",
+      "url": "https://www.taylorfrancis.com/books/9781315196770",
+      "title": "Representing Duchess Anna Amalia's Bildung: A Visual Metamorphosis in Portraiture from Political to Personal in Eighteenth-century Germany",
+      "authors": "CK Lindeman",
+      "year": "2017",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=262983407674483069&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Six Empress Elisabeth and the Painting of Modern Life",
+      "id": "1901370774072037131",
+      "url": "https://books.google.com/books?hl=en&lr=&id=8YtaDwAAQBAJ&oi=fnd&pg=PA131&ots=hw9LkKmG7K&sig=ObNgEovd1_xzuIvfSD82aD9kdzg",
+      "title": "Six Empress Elisabeth and the Painting of Modern Life",
+      "authors": "OG Florek",
+      "year": "2018"
+    },
+    {
+      "label": "Representing Rivalry on the Eve of Revolution: Ad\u00e9la\u00efde Labille-Guiard's Portrait of Madame Ad\u00e9la\u00efde and Elisabeth Vig\u00e9e-Lebrun's Portrait of Marie Antoinette with\u00a0\u2026",
+      "id": "IEOjUi9rDuYJ",
+      "url": "http://search.proquest.com/openview/3a7bd3b42e3810628a25f67e557cb4b5/1?pq-origsite=gscholar&cbl=18750&diss=y",
+      "title": "Representing Rivalry on the Eve of Revolution: Ad\u00e9la\u00efde Labille-Guiard's Portrait of Madame Ad\u00e9la\u00efde and Elisabeth Vig\u00e9e-Lebrun's Portrait of Marie Antoinette with\u00a0\u2026",
+      "authors": "EN Kirschner",
+      "year": "2018"
+    },
+    {
+      "label": "Silver, Flesh, & Holy Water: Colonial Conversions in the French Enlightenment",
+      "id": "8n-Mt6rkDd0J",
+      "url": "http://search.proquest.com/openview/bafcc5de067f9f4b60a51a9cee66e7ee/1?pq-origsite=gscholar&cbl=18750&diss=y",
+      "title": "Silver, Flesh, & Holy Water: Colonial Conversions in the French Enlightenment",
+      "authors": "D Linden",
+      "year": "2018"
+    },
+    {
+      "label": "Portraying The Royal Self: Maurice-Quentin De La Tour's 1761 Portrait Of Marie-Jos\u00e8phe Of Saxony And Her Son",
+      "id": "yMtFvFa3A1IJ",
+      "url": "https://muse.jhu.edu/article/682000/summary",
+      "title": "Portraying The Royal Self: Maurice-Quentin De La Tour's 1761 Portrait Of Marie-Jos\u00e8phe Of Saxony And Her Son",
+      "authors": "A Strasik",
+      "year": "2017"
+    },
+    {
+      "label": "Material Futures: Reproducing Revolution in P.-L. Debucourt's Almanach National",
+      "id": "2594484638842468463",
+      "url": "https://caa.tandfonline.com/doi/abs/10.1080/00043079.2010.10786126",
+      "title": "Material Futures: Reproducing Revolution in P.-L. Debucourt's Almanach National",
+      "authors": "R Taws",
+      "year": "2010",
+      "cited_by": 4,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=2594484638842468463&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "An Exploration in Representation and Reality: The Divide in Women's Portrayals During the French Revolution of 1789",
+      "id": "hKqIUbreZuIJ",
+      "url": "https://minds.wisconsin.edu/handle/1793/68374",
+      "title": "An Exploration in Representation and Reality: The Divide in Women's Portrayals During the French Revolution of 1789",
+      "authors": "B Yahr",
+      "year": "2013"
+    },
+    {
+      "label": "[CITATION][C]",
+      "id": "liZLabPnnfoJ",
+      "title": "[CITATION][C]",
+      "authors": "B Yahr",
+      "year": "2013"
+    },
+    {
+      "label": "The Ideal Citoyenne: Women, Class, & The French Revolution in Philibert Louis Debucourt's Fine-Art Prints",
+      "id": "8Ix523BCF58J",
+      "url": "https://digitalrepository.unm.edu/arth_etds/30/",
+      "title": "The Ideal Citoyenne: Women, Class, & The French Revolution in Philibert Louis Debucourt's Fine-Art Prints",
+      "authors": "K Martin",
+      "year": "2015"
+    },
+    {
+      "label": "Turin and the British in the Age of the Grand Tour",
+      "id": "9109634753488858321",
+      "url": "https://books.google.com/books?hl=en&lr=&id=YUUzDwAAQBAJ&oi=fnd&pg=PA17&ots=Yl0glNgb6h&sig=yOe9isKXHVYvBCgoNmapoR9eUow",
+      "title": "Turin and the British in the Age of the Grand Tour",
+      "authors": "P Bianchi, K Wolfe",
+      "year": "2017",
+      "cited_by": 2,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=9109634753488858321&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "METHODS/THEORY",
+      "id": "zFTfAV1Ayh8J",
+      "url": "https://academic.oup.com/ahr/article-abstract/123/2/678/4958375",
+      "title": "METHODS/THEORY",
+      "authors": "JG Princeton, C TILLIE, R Books, W DONIGER",
+      "year": "academic.oup.com"
+    },
+    {
+      "label": "List of publications on the economic and social history of Great Britain and Ireland published in 2017",
+      "id": "16466202372891403825",
+      "url": "https://onlinelibrary.wiley.com/doi/abs/10.1111/ehr.12782",
+      "title": "List of publications on the economic and social history of Great Britain and Ireland published in 2017",
+      "authors": "M Hale, G Raymond, C Wright",
+      "year": "2018"
+    },
+    {
+      "label": "Sentimentalism Made Strange: Shklovsky, Karamzin, Rousseau",
+      "id": "16565291143740007273",
+      "url": "https://academiccommons.columbia.edu/doi/10.7916/D85Q4VGZ",
+      "title": "Sentimentalism Made Strange: Shklovsky, Karamzin, Rousseau",
+      "authors": "AB Annunziata",
+      "year": "2013",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=16565291143740007273&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Doctoral Dissertations on Russia, the Soviet Union, Central Asia, and Eastern Europe Accepted by Universities in the United States and Canada, 2013.",
+      "id": "9836414028476713439",
+      "url": "https://www.cambridge.org/core/journals/slavic-review/article/doctoral-dissertations-on-russia-the-soviet-union-central-asia-and-eastern-europe-accepted-by-universities-in-the-united-states-and-canada-2013/02F8C09020614D0DD62AB49A0ABC6EDE",
+      "title": "Doctoral Dissertations on Russia, the Soviet Union, Central Asia, and Eastern Europe Accepted by Universities in the United States and Canada, 2013.",
+      "authors": "PK Thurston",
+      "year": "2014"
+    },
+    {
+      "label": "A History Built on Ruins: Venice and the Destruction of the Church of the Holy Apostles in...",
+      "id": "10827920599121141771",
+      "url": "https://muse.jhu.edu/article/493927/summary",
+      "title": "A History Built on Ruins: Venice and the Destruction of the Church of the Holy Apostles in...",
+      "authors": "J Israel",
+      "year": "2012",
+      "cited_by": 3,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10827920599121141771&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "[CITATION][C]",
+      "id": "11268272212618654118",
+      "title": "[CITATION][C]",
+      "authors": "CF Bruce",
+      "year": "2019",
+      "cited_by": 2,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11268272212618654118&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "BYZANTINE HERITAGE DEPICTED: THE AQUEDUCT OF VALENS IN THE HISTORICAL TOPOGRAPHY OF ISTANBUL",
+      "id": "tyj-d95u6oQJ",
+      "url": "http://etd.lib.metu.edu.tr/upload/12624395/index.pdf",
+      "title": "BYZANTINE HERITAGE DEPICTED: THE AQUEDUCT OF VALENS IN THE HISTORICAL TOPOGRAPHY OF ISTANBUL",
+      "authors": "FS I\u015eIK",
+      "year": "2019"
+    },
+    {
+      "label": "Politika Osmanskog Carstva prema nemuslimanskoj sakralnoj arhitekturi",
+      "id": "15430472390653416195",
+      "url": "https://zir.nsk.hr/islandora/object/ffzg%3A321",
+      "title": "Politika Osmanskog Carstva prema nemuslimanskoj sakralnoj arhitekturi",
+      "authors": "A Marinovi\u0107",
+      "year": "2019"
+    },
+    {
+      "label": "David, architecture, and the dichotomy of art",
+      "id": "11183528580892438075",
+      "url": "https://ir.uiowa.edu/etd/3325/",
+      "title": "David, architecture, and the dichotomy of art",
+      "authors": "HE Kraus",
+      "year": "2010",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=11183528580892438075&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "View From the Luxembourg: David and the French Landscape Tradition",
+      "id": "10493049299922190645",
+      "url": "https://muse.jhu.edu/article/576169/summary",
+      "title": "View From the Luxembourg: David and the French Landscape Tradition",
+      "authors": "HE Kraus",
+      "year": "2015",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=10493049299922190645&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Rome, Travel and the Sculpture Capital, C. 1770-1825",
+      "id": "14733437021368770267",
+      "url": "https://www.taylorfrancis.com/books/9781315088587",
+      "title": "Rome, Travel and the Sculpture Capital, C. 1770-1825",
+      "authors": "T Macsotay",
+      "year": "2017",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=14733437021368770267&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Historical Dictionary of Romantic Art and Architecture",
+      "id": "3110934358142560689",
+      "url": "https://books.google.com/books?hl=en&lr=&id=WAqfDwAAQBAJ&oi=fnd&pg=PR9&ots=CcF8-wK51l&sig=dFOS6-beaTs1NddYExh9WIDiKUk",
+      "title": "Historical Dictionary of Romantic Art and Architecture",
+      "authors": "AL Palmer",
+      "year": "2019",
+      "cited_by": 9,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=3110934358142560689&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Monuments",
+      "id": "5227861328199522295",
+      "url": "https://onlinelibrary.wiley.com/doi/abs/10.1002/9781118887226.wbcha072",
+      "title": "Monuments",
+      "authors": "M Delbeke",
+      "year": "2017",
+      "cited_by": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=5227861328199522295&as_sdt=40000005&sciodt=0,22&hl=en"
+    },
+    {
+      "label": "Architecture and the Spectator",
+      "id": "915771810786028296",
+      "url": "https://onlinelibrary.wiley.com/doi/abs/10.1002/9781118887226.wbcha037",
+      "title": "Architecture and the Spectator",
+      "authors": "C van Eck",
+      "year": "2017",
+      "cited_by": 4,
+      "cited_by_url": "https://scholar.google.com/scholar?cites=915771810786028296&as_sdt=40000005&sciodt=0,22&hl=en"
+    }
+  ],
+  "links": [
+    {
+      "source": "7087273120150737568",
+      "target": "4272197130184341934"
+    },
+    {
+      "source": "7087273120150737568",
+      "target": "2594484638842468463"
+    },
+    {
+      "source": "14336503457506622880",
+      "target": "7087273120150737568"
+    },
+    {
+      "source": "16209914352080963763",
+      "target": "7087273120150737568"
+    },
+    {
+      "source": "883565957343457643",
+      "target": "7087273120150737568"
+    },
+    {
+      "source": "16453699320844078183",
+      "target": "7087273120150737568"
+    },
+    {
+      "source": "12509531799634118993",
+      "target": "7087273120150737568"
+    },
+    {
+      "source": "4846855504486117578",
+      "target": "7087273120150737568"
+    },
+    {
+      "source": "7322824926774351115",
+      "target": "7087273120150737568"
+    },
+    {
+      "source": "11692253779625407273",
+      "target": "7087273120150737568"
+    },
+    {
+      "source": "Z16EXJaZ43gJ",
+      "target": "7087273120150737568"
+    },
+    {
+      "source": "16471537540046994018",
+      "target": "7087273120150737568"
+    },
+    {
+      "source": "6197823734066733933",
+      "target": "4272197130184341934"
+    },
+    {
+      "source": "9101375898786268810",
+      "target": "6197823734066733933"
+    },
+    {
+      "source": "13752626951452622514",
+      "target": "6197823734066733933"
+    },
+    {
+      "source": "17418086873774552503",
+      "target": "6197823734066733933"
+    },
+    {
+      "source": "11065988693497379998",
+      "target": "6197823734066733933"
+    },
+    {
+      "source": "12707474596102485577",
+      "target": "6197823734066733933"
+    },
+    {
+      "source": "14504198303393275920",
+      "target": "6197823734066733933"
+    },
+    {
+      "source": "1932295933484181382",
+      "target": "6197823734066733933"
+    },
+    {
+      "source": "17991783186151005638",
+      "target": "4272197130184341934"
+    },
+    {
+      "source": "262983407674483069",
+      "target": "17991783186151005638"
+    },
+    {
+      "source": "1901370774072037131",
+      "target": "17991783186151005638"
+    },
+    {
+      "source": "IEOjUi9rDuYJ",
+      "target": "17991783186151005638"
+    },
+    {
+      "source": "8n-Mt6rkDd0J",
+      "target": "17991783186151005638"
+    },
+    {
+      "source": "yMtFvFa3A1IJ",
+      "target": "17991783186151005638"
+    },
+    {
+      "source": "2594484638842468463",
+      "target": "4272197130184341934"
+    },
+    {
+      "source": "hKqIUbreZuIJ",
+      "target": "2594484638842468463"
+    },
+    {
+      "source": "liZLabPnnfoJ",
+      "target": "2594484638842468463"
+    },
+    {
+      "source": "8Ix523BCF58J",
+      "target": "2594484638842468463"
+    },
+    {
+      "source": "9109634753488858321",
+      "target": "4272197130184341934"
+    },
+    {
+      "source": "zFTfAV1Ayh8J",
+      "target": "9109634753488858321"
+    },
+    {
+      "source": "16466202372891403825",
+      "target": "9109634753488858321"
+    },
+    {
+      "source": "16565291143740007273",
+      "target": "4272197130184341934"
+    },
+    {
+      "source": "9836414028476713439",
+      "target": "16565291143740007273"
+    },
+    {
+      "source": "10827920599121141771",
+      "target": "4272197130184341934"
+    },
+    {
+      "source": "11268272212618654118",
+      "target": "10827920599121141771"
+    },
+    {
+      "source": "tyj-d95u6oQJ",
+      "target": "10827920599121141771"
+    },
+    {
+      "source": "15430472390653416195",
+      "target": "10827920599121141771"
+    },
+    {
+      "source": "11183528580892438075",
+      "target": "4272197130184341934"
+    },
+    {
+      "source": "10493049299922190645",
+      "target": "11183528580892438075"
+    },
+    {
+      "source": "14733437021368770267",
+      "target": "4272197130184341934"
+    },
+    {
+      "source": "3110934358142560689",
+      "target": "14733437021368770267"
+    },
+    {
+      "source": "5227861328199522295",
+      "target": "4272197130184341934"
+    },
+    {
+      "source": "915771810786028296",
+      "target": "5227861328199522295"
+    }
+  ]
+};
+
+var link = svg.append("g")
+    .attr("class", "links")
+  .selectAll("line")
+  .data(graph.links)
+  .enter().append("line");
+
+var node = svg.append("g")
+    .attr("class", "nodes")
+  .selectAll("circle")
+  .data(graph.nodes)
+  .enter().append("circle")
+    .attr("r", 5)
+    .call(d3.drag()
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended));
+
+node.append("title")
+    .text(function(d) {
+        return d.authors ? d.title + ' - ' + d.authors : d.title
+    });
+
+node.on("click", function(d) {
+  window.open(d.url, '_blank');
+  d3.event.stopPropagation();
+});
+
+simulation
+    .nodes(graph.nodes)
+    .on("tick", ticked);
+
+simulation.force("link")
+    .links(graph.links);
+
+function ticked() {
+  link
+      .attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
+
+  node
+      .attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; });
+}
+
+function dragstarted(d) {
+  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+  d.fx = d.x;
+  d.fy = d.y;
+}
+
+function dragged(d) {
+  d.fx = d3.event.x;
+  d.fy = d3.event.y;
+}
+
+function dragended(d) {
+  if (!d3.event.active) simulation.alphaTarget(0);
+  d.fx = null;
+  d.fy = null;
+}
+
+</script>
